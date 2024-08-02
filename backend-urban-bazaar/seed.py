@@ -21,3 +21,13 @@ for category, products in data.items():
 NUM_USERS = 10
 NUM_ORDERS = 20
 NUM_CONTACTS = 10        
+
+def generate_fake_users(num_users):
+    users = []
+    for _ in range(num_users):
+        name = fake.name()
+        email = fake.email()
+        password = bcrypt.generate_password_hash(fake.password()).decode('utf-8')
+        user = User(name=name, email=email, password=password)
+        users.append(user)
+    return users
