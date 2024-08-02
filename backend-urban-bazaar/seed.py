@@ -109,3 +109,9 @@ with app.app_context():
     db.create_all()  
 
     clear_tables() 
+
+    brands = generate_fake_brands()
+    db.session.add_all(brands)
+    db.session.commit()
+
+
