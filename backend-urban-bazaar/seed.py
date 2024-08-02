@@ -31,3 +31,23 @@ def generate_fake_users(num_users):
         user = User(name=name, email=email, password=password)
         users.append(user)
     return users
+
+def generate_fake_orders(num_orders, users, products):
+    orders = []
+    for _ in range(num_orders):
+        user = random.choice(users)
+        product = random.choice(products)
+        quantity = random.randint(1, 10)
+        price = product.price
+        total_price = product.price * quantity
+        order_date = fake.date_time_between(start_date='-1y', end_date='now')
+        order = Order(
+            user_id=user.id,
+            product_id=product.id,
+            quantity=quantity,
+            price=price,
+            total_price=total_price,
+            order_date=order_date
+        )
+        orders.append(order)
+    return orders    
