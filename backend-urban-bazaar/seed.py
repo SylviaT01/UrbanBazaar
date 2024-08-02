@@ -10,3 +10,7 @@ from models import User, Product, Order, Category, Checkout, Contact, Role, Bran
 def convert_price_to_float(price_str):
     numeric_part = re.sub(r'[^\d.,]', '', price_str).replace(',', '')
     return float(numeric_part)
+
+with open('data.json', 'r') as file:
+    data = json.load(file)    
+
