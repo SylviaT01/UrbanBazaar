@@ -5,7 +5,7 @@ import random
 from faker import Faker
 from datetime import datetime
 from app import db, create_app, bcrypt
-from models import User, Product, Order, Category, Checkout, Contact, Role, Brand
+from models import User, Product, Order, Category, Checkout, Contact, Role, Tag, Brand
 
 def convert_price_to_float(price_str):
     numeric_part = re.sub(r'[^\d.,]', '', price_str).replace(',', '')
@@ -21,6 +21,7 @@ for category, products in data.items():
 NUM_USERS = 10
 NUM_ORDERS = 20
 NUM_CONTACTS = 10        
+NUM_TAGS = 3
 
 def generate_fake_users(num_users):
     users = []
@@ -92,6 +93,15 @@ def generate_fake_brands():
     brands = [Brand(name=name) for name in brand_names]
     return brands
 
+def generate_fake_tags(products, num_tags):
+    tags = []
+    for _ in range(num_tags):
+        name = fake.word()
+        product = random.choice(products)
+        tag = Tag(name=name, product=product)
+        tags.append(tag)
+    return tags    
+
 def clear_tables():
     Order.query.delete()
     Checkout.query.delete()
@@ -101,6 +111,7 @@ def clear_tables():
     Contact.query.delete()
     Role.query.delete()
     Brand.query.delete()
+    Tag.query.delete()
     db.session.commit()
 
 app = create_app()
@@ -147,6 +158,10 @@ with app.app_context():
             )
             products.append(product)
             db.session.add(product)
+    db.session.commit()
+
+    tags = generate_fake_tags(products, NUM_TAGS)
+    db.session.add_all(tags)
     db.session.commit()
 
     orders = generate_fake_orders(NUM_ORDERS, users, products)
