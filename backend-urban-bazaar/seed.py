@@ -114,4 +114,8 @@ with app.app_context():
     db.session.add_all(brands)
     db.session.commit()
 
+    users = generate_fake_users(NUM_USERS)
+    db.session.add_all(users)
+    db.session.commit()
+
 
