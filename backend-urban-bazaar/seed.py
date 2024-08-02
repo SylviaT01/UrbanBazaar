@@ -126,4 +126,8 @@ with app.app_context():
     db.session.add_all(addresses)
     db.session.commit()
 
+    roles = generate_fake_roles(users)
+    db.session.add_all(roles)
+    db.session.commit()
+
 
