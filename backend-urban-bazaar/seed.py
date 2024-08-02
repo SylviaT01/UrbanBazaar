@@ -14,3 +14,6 @@ def convert_price_to_float(price_str):
 with open('data.json', 'r') as file:
     data = json.load(file)    
 
+for category, products in data.items():
+    for product in products:
+        product['price'] = convert_price_to_float(product['price'])
