@@ -17,3 +17,7 @@ with open('data.json', 'r') as file:
 for category, products in data.items():
     for product in products:
         product['price'] = convert_price_to_float(product['price'])
+
+NUM_USERS = 10
+NUM_ORDERS = 20
+NUM_CONTACTS = 10        
