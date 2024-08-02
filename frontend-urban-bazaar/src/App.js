@@ -10,6 +10,7 @@ import Contact from "./Pages/contact";
 import WishList from "./components/wishList";
 import ProductList from "./components/productList";
 import CartModal from "./components/cartModal";
+import NavItems from "./components/navItems";
 
 
 
@@ -17,6 +18,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <NavItems />
       <div className="flex-grow">
         <Routes>
           {/* <Route path="/login" element={<Login />} />
