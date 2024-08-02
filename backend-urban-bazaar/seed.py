@@ -51,3 +51,14 @@ def generate_fake_orders(num_orders, users, products):
         )
         orders.append(order)
     return orders    
+
+def generate_fake_contacts(num_contacts, users):
+    contacts = []
+    for _ in range(num_contacts):
+        name = fake.name()
+        email = fake.email()
+        message = fake.text(max_nb_chars=200)
+        user = random.choice(users)
+        contact = Contact(name=name, email=email, message=message, user=user)
+        contacts.append(contact)
+    return contacts    
