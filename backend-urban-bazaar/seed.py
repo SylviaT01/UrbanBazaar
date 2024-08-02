@@ -118,4 +118,12 @@ with app.app_context():
     db.session.add_all(users)
     db.session.commit()
 
+    contacts = generate_fake_contacts(NUM_CONTACTS, users)
+    db.session.add_all(contacts)
+    db.session.commit()
+
+    addresses = generate_fake_checkouts(users)
+    db.session.add_all(addresses)
+    db.session.commit()
+
 
