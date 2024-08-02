@@ -76,3 +76,13 @@ def generate_fake_checkouts(users):
         )
         addresses.append(address)
     return addresses    
+
+def generate_fake_roles(users):
+    roles = []
+    for user in users:
+        role = Role(
+            role=random.choice(['Admin', 'Customer']),
+            user=user
+        )
+        roles.append(role)
+    return roles    
