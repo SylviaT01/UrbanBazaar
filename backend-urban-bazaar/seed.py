@@ -25,6 +25,8 @@ NUM_ORDERS = 20
 NUM_CONTACTS = 10        
 NUM_TAGS = 3
 
+logging.basicConfig(level=logging.DEBUG)
+
 def generate_fake_users(num_users):
     users = []
     for _ in range(num_users):
