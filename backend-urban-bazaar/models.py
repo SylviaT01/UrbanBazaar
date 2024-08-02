@@ -52,3 +52,14 @@ class Order(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     user = db.relationship('User', back_populates='orders')
     product = db.relationship('Product', back_populates='orders')
+
+class checkout(db.Model):
+    __tablename__ = 'addresses'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    phone_number = db.Column(db.Integer, nullable=False)
+    city = db.Column(db.String(120), nullable=False)
+    street_address = db.Column(db.String(120), nullable=False)
+    apartment= db.Column(db.String(120), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='addresses') 
