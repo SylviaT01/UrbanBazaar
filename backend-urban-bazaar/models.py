@@ -20,3 +20,8 @@ class Category(db.Model):
     name = db.Column(db.String(120), nullable=False)
     products = db.relationship('Product', back_populates='category')
 
+class Brand (db.Model):
+    __tablename__ = 'brands'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    products = db.relationship('Product', back_populates='brand')
