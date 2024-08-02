@@ -130,4 +130,23 @@ with app.app_context():
     db.session.add_all(roles)
     db.session.commit()
 
+    products = []
+    for category_name, items in data.items():
+        category = Category(name=category_name)
+        db.session.add(category)
+        db.session.flush()
+        for item in items:
+            brand = random.choice(brands)
+            product = Product(
+                title=item["title"],
+                description=item.get("description", ""),
+                price=item["price"],
+                image_url=item["image_url"],
+                category_name=category_name,
+                category_id=category.id
+            )
+            products.append(product)
+            db.session.add(product)
+    db.session.commit()
+
 
