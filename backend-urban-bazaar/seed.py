@@ -149,4 +149,9 @@ with app.app_context():
             db.session.add(product)
     db.session.commit()
 
+    orders = generate_fake_orders(NUM_ORDERS, users, products)
+    db.session.add_all(orders)
+    db.session.commit()
+
+    print("Database seeded successfully.")
 
