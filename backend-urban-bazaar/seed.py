@@ -86,3 +86,8 @@ def generate_fake_roles(users):
         )
         roles.append(role)
     return roles    
+
+def generate_fake_brands():
+    brand_names = ['Apple', 'Samsung', 'Nike', 'Sony', 'LG']
+    brands = [Brand(name=name) for name in brand_names]
+    return brands
