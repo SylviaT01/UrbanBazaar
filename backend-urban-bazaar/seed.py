@@ -62,3 +62,17 @@ def generate_fake_contacts(num_contacts, users):
         contact = Contact(name=name, email=email, message=message, user=user)
         contacts.append(contact)
     return contacts    
+
+def generate_fake_checkouts(users):
+    addresses = []
+    for user in users:
+        address = Checkout(
+            name=fake.street_name(),
+            phone_number=fake.phone_number(),
+            city=fake.city(),
+            street_address=fake.street_address(),
+            apartment=fake.secondary_address(),
+            user=user
+        )
+        addresses.append(address)
+    return addresses    
