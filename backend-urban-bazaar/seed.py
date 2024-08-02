@@ -91,3 +91,16 @@ def generate_fake_brands():
     brand_names = ['Apple', 'Samsung', 'Nike', 'Sony', 'LG']
     brands = [Brand(name=name) for name in brand_names]
     return brands
+
+def clear_tables():
+    Order.query.delete()
+    Checkout.query.delete()
+    Product.query.delete()
+    User.query.delete()
+    Category.query.delete()
+    Contact.query.delete()
+    Role.query.delete()
+    Brand.query.delete()
+    db.session.commit()
+
+app = create_app()
