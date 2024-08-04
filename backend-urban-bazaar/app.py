@@ -332,3 +332,20 @@ def partial_update_product(id):
     db.session.commit()
 
     return jsonify({'message': 'Product partially updated successfully'})
+
+#Delete  products route only by admins
+@app.route('/products/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_product(id):
+    current_user = get_jwt_identity()
+    if not current_user['is_admin']:
+        return jsonify({'message': 'Permission denied'}), 403
+
+    product = Product.query.get(id)
+    if not product:
+        return jsonify({'message': 'Product not found'}), 404
+
+    db.session.delete(product)
+    db.session.commit()
+
+    return jsonify({'message': 'Product deleted successfully'})
