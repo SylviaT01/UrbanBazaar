@@ -462,3 +462,26 @@ def add_to_wishlist():
     db.session.commit()
 
     return jsonify({'message': 'Product added to wishlist successfully'})
+
+# Route to view wishlist
+@app.route('/wishlist', methods=['GET'])
+@jwt_required()
+def view_wishlist():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    wishlist_items = Wishlist.query.filter_by(user_id=user.id).all()
+    output = []
+
+    for item in wishlist_items:
+        product = Product.query.get(item.product_id)
+        product_data = {
+            'id': product.id,
+            'title': product.title,
+            'description': product.description,
+            'price': product.price,
+            'thumbnail': product.thumbnail
+        }
+        output.append(product_data)
+
+    return jsonify({'wishlist': output})
