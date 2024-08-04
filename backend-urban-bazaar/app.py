@@ -370,3 +370,26 @@ def add_to_cart():
     db.session.commit()
 
     return jsonify({'message': 'Product added to cart successfully'})
+
+# Route to view items in the shopping cart
+@app.route('/cart', methods=['GET'])
+@jwt_required()
+def view_cart():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    cart_items = ShoppingCart.query.filter_by(user_id=user.id).all()
+    output = []
+
+    for item in cart_items:
+        product = Product.query.get(item.product_id)
+        product_data = {
+            'id': product.id,
+            'title': product.title,
+            'quantity': item.quantity,
+            'price': item.price,
+            'thumbnail': product.thumbnail
+        }
+        output.append(product_data)
+
+    return jsonify({'cart': output})
