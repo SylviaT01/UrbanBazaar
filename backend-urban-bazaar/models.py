@@ -1,7 +1,24 @@
-from app import db
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import relationship
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+import json
+from sqlalchemy.types import TypeDecorator, TEXT
+
+db = SQLAlchemy()
+
+#a function for images and tags array to jsontype
+class JSONType(TypeDecorator):
+    impl = TEXT
+
+    def process_bind_param(self, value, dialect):
+        if value is not None:
+            return json.dumps(value)
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            return json.loads(value)
+        return value
+
 
 class User(db.Model):
     __tablename__ = 'users'
