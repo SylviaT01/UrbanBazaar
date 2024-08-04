@@ -124,9 +124,7 @@ class Wishlist(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-
-
-
+# ContactUs model to store user queries and feedback
 class Contact(db.Model):
     __tablename__ = 'contacts'
     id = db.Column(db.Integer, primary_key=True)
