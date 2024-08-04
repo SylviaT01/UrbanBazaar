@@ -485,3 +485,18 @@ def view_wishlist():
         output.append(product_data)
 
     return jsonify({'wishlist': output})
+# Route to remove product from wishlist
+@app.route('/wishlist/<int:product_id>', methods=['DELETE'])
+@jwt_required()
+def remove_from_wishlist(product_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    wishlist_item = Wishlist.query.filter_by(user_id=user.id, product_id=product_id).first()
+    if not wishlist_item:
+        return jsonify({'message': 'Product not found in wishlist'}), 404
+
+    db.session.delete(wishlist_item)
+    db.session.commit()
+
+    return jsonify({'message': 'Product removed from wishlist successfully'})
