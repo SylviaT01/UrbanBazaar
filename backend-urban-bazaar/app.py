@@ -229,3 +229,40 @@ def get_product(id):
         'thumbnail': product.thumbnail
     }
     return jsonify({'product': product_data})
+@app.route('/products', methods=['POST'])
+@jwt_required()
+def add_product():
+    current_user = get_jwt_identity()
+    if not current_user['is_admin']:
+        return jsonify({'message': 'Permission denied'}), 403
+
+    data = request.get_json()
+    new_product = Product(
+        title=data['title'],
+        description=data['description'],
+        category=data['category'],
+        price=data['price'],
+        discount_percentage=data['discountPercentage'],
+        rating=data['rating'],
+        stock=data['stock'],
+        tags=data['tags'],
+        brand=data['brand'],
+        sku=data['sku'],
+        weight=data['weight'],
+        width=data['dimensions']['width'],
+        height=data['dimensions']['height'],
+        depth=data['dimensions']['depth'],
+        warranty_information=data['warrantyInformation'],
+        shipping_information=data['shippingInformation'],
+        availability_status=data['availabilityStatus'],
+        return_policy=data['returnPolicy'],
+        minimum_order_quantity=data['minimumOrderQuantity'],
+        barcode=data['barcode'],
+        qr_code=data['qrCode'],
+        images=data['images'],
+        thumbnail=data['thumbnail']
+    )
+    db.session.add(new_product)
+    db.session.commit()
+
+    return jsonify({'message': 'Product created successfully'})
