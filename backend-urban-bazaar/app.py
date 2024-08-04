@@ -538,3 +538,21 @@ def get_reviews(product_id):
         output.append(review_data)
 
     return jsonify({'reviews': output})
+
+#Delete a review 
+@app.route('/reviews/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_review(id):
+    current_user = get_jwt_identity()
+    review = Review.query.get(id)
+    
+    if not review:
+        return jsonify({'message': 'Review not found'}), 404
+
+    if current_user['id'] != review.user_id and not current_user['is_admin']:
+        return jsonify({'message': 'Permission denied'}), 403
+
+    db.session.delete(review)
+    db.session.commit()
+
+    return jsonify({'message': 'Review deleted successfully'})
