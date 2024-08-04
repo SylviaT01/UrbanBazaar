@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Categories from './categories'; 
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -28,17 +29,11 @@ const ProductList = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-4">
         <h2 className="text-2xl font-bold mb-4">Categories</h2>
-        <div className="flex space-x-4">
-          {categories.map((category, index) => (
-            <button
-              key={index}
-              onClick={() => handleCategoryChange(category)}
-              className={`px-4 py-2 rounded-md ${selectedCategory === category ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
+        <Categories
+          categories={categories.map(cat => ({ id: cat, name: cat }))}
+          selectedCategory={selectedCategory}
+          onSelectCategory={handleCategoryChange}
+        />
       </div>
       <div className="grid grid-cols-3 gap-4">
         {filteredProducts.map((product) => (
