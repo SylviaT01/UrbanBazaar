@@ -425,3 +425,20 @@ def create_order():
     )
     db.session.add(new_order)
     db.session.commit()
+    
+    # Move items from cart to order
+    cart_items = ShoppingCart.query.filter_by(user_id=user.id).all()
+
+    for item in cart_items:
+        new_order_item = OrderItem(
+            order_id=new_order.id,
+            product_id=item.product_id,
+            quantity=item.quantity,
+            price=item.price
+        )
+        db.session.add(new_order_item)
+        db.session.delete(item)  # Remove item from cart after adding to order
+
+    db.session.commit()
+
+    return jsonify({'message': 'Order created successfully'})
