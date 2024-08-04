@@ -393,3 +393,18 @@ def view_cart():
         output.append(product_data)
 
     return jsonify({'cart': output})
+# Route to remove a product from the shopping cart
+@app.route('/cart/<int:product_id>', methods=['DELETE'])
+@jwt_required()
+def remove_from_cart(product_id):
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    cart_item = ShoppingCart.query.filter_by(user_id=user.id, product_id=product_id).first()
+    if not cart_item:
+        return jsonify({'message': 'Product not found in cart'}), 404
+
+    db.session.delete(cart_item)
+    db.session.commit()
+
+    return jsonify({'message': 'Product removed from cart successfully'})
