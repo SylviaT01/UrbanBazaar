@@ -10,13 +10,13 @@ export default function NavItems() {
       <div className="bg-blue-200 border-b border-gray-300">
         <div className="flex h-8 items-center justify-end px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-4">
-            <Link to="/join" className="text-gray-700 hover:text-blue-700">
+            <Link to="/join" className="text-gray-700 font-medium text-sm hover:text-blue-700">
               Join UrbanBazaar
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-blue-700">
+            <Link to="/about" className="text-gray-700 font-medium text-sm hover:text-blue-700">
               About us
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-700">
+            <Link to="/contact" className="text-gray-700 font-medium text-sm hover:text-blue-700">
               Get in Touch
             </Link>
           </div>
@@ -24,7 +24,7 @@ export default function NavItems() {
       </div>
 
       {/* Main Navbar */}
-      <div className="bg-slate-200 border-b border-gray-300">
+      <div className="bg-slate-100 border-b border-gray-300">
         <div className="flex justify-between h-16 items-center px-4 sm:px-6 lg:px-8">
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="text-blue-700 text-2xl font-bold">
@@ -45,12 +45,12 @@ export default function NavItems() {
           </div>
         </div>
         {/* Shop by Category and Brand */}
-        <div className="bg-slate-300 w-full">
+        <div className="bg-slate-200 h-8 w-full flex items-center">
           <div className="flex justify-start space-x-8 px-4 sm:px-6 lg:px-8">
-            <Link to="/products" className="text-gray-700 hover:text-blue-700">
+            <Link to="/products" className="text-gray-700 font-medium text-sm hover:text-blue-700">
               Shop by Category
             </Link>
-            <Link to="/shop-by-brand" className="text-gray-700 hover:text-blue-700">
+            <Link to="/shop-by-brand" className="text-gray-700 font-medium text-sm hover:text-blue-700">
               Shop by Brand
             </Link>
           </div>
