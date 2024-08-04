@@ -57,3 +57,16 @@ def login():
         return jsonify({'token': access_token})
 
     return jsonify({'message': 'Invalid credentials'}), 401
+
+# Admin route to assign admin role
+@app.route('/assign_admin/<int:user_id>', methods=['POST'])
+@jwt_required()
+@admin_required
+def assign_admin(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    user.is_admin = True
+    db.session.commit()
+    return jsonify({'message': f'{user.username} is now an admin'})
