@@ -500,3 +500,23 @@ def remove_from_wishlist(product_id):
     db.session.commit()
 
     return jsonify({'message': 'Product removed from wishlist successfully'})
+
+# Route to handle product reviews
+@app.route('/reviews', methods=['POST'])
+@jwt_required()
+def add_review():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    data = request.get_json()
+    new_review = Review(
+        product_id=data['product_id'],
+        rating=data['rating'],
+        comment=data['comment'],
+        reviewer_name=user.username,
+        reviewer_email=user.email
+    )
+    db.session.add(new_review)
+    db.session.commit()
+
+    return jsonify({'message': 'Review added successfully'})
