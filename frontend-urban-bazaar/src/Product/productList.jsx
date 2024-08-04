@@ -10,7 +10,7 @@ const ProductList = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
-    fetch('https://dummyjson.com/products?limit=0')
+    fetch('http://127.0.0.1:5000/products')
       .then(response => response.json())
       .then(data => {
         setProducts(data.products);
@@ -62,7 +62,7 @@ const ProductList = () => {
                             </div>
                         </div>
             <h3 className="font-medium text-md mb-1">{product.title}</h3>
-            <p className="text-gray-700 mb-2">$ {product.price}</p>
+            <p className="text-gray-700 mb-2">Ksh. {product.price}</p>
             <div className="flex items-center space-x-6">
             <button className="bg-slate-200 text-gray-600 px-2 py-2 rounded-md">Add to cart</button>
             <button className="bg-slate-200 text-gray-600 px-2 py-2 rounded-md">View Product</button>
