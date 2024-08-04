@@ -556,3 +556,18 @@ def delete_review(id):
     db.session.commit()
 
     return jsonify({'message': 'Review deleted successfully'})
+
+# Route for contact us form
+@app.route('/contact', methods=['POST'])
+def contact_us():
+    data = request.get_json()
+    new_contact = ContactUs(
+        name=data['name'],
+        email=data['email'],
+        subject=data['subject'],
+        message=data['message']
+    )
+    db.session.add(new_contact)
+    db.session.commit()
+
+    return jsonify({'message': 'Your message has been received. We will get back to you shortly.'})
