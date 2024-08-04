@@ -520,3 +520,21 @@ def add_review():
     db.session.commit()
 
     return jsonify({'message': 'Review added successfully'})
+
+
+# Route to get all reviews for a product
+@app.route('/reviews/<int:product_id>', methods=['GET'])
+def get_reviews(product_id):
+    reviews = Review.query.filter_by(product_id=product_id).all()
+    output = []
+
+    for review in reviews:
+        review_data = {
+            'rating': review.rating,
+            'comment': review.comment,
+            'reviewer_name': review.reviewer_name,
+            'date': review.date
+        }
+        output.append(review_data)
+
+    return jsonify({'reviews': output})
