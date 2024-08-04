@@ -442,3 +442,23 @@ def create_order():
     db.session.commit()
 
     return jsonify({'message': 'Order created successfully'})
+
+# Route to add product to wishlist
+@app.route('/wishlist', methods=['POST'])
+@jwt_required()
+def add_to_wishlist():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    data = request.get_json()
+    wishlist = Wishlist.query.filter_by(user_id=user.id).first()
+
+    if not wishlist:
+        wishlist = Wishlist(user_id=user.id, product_id=data['product_id'])
+        db.session.add(wishlist)
+    else:
+        wishlist.product_id = data['product_id']
+
+    db.session.commit()
+
+    return jsonify({'message': 'Product added to wishlist successfully'})
