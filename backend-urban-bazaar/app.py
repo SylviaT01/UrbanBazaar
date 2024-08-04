@@ -87,3 +87,25 @@ def create_user():
     db.session.commit()
 
     return jsonify({'message': 'User created successfully by admin'})
+
+# Route to view all users (Admin only)
+@app.route('/admin/users', methods=['GET'])
+@jwt_required()
+def view_users():
+    current_user = get_jwt_identity()
+    if not current_user['is_admin']:
+        return jsonify({'message': 'Admin access required'}), 403
+
+    users = User.query.all()
+    output = []
+
+    for user in users:
+        user_data = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'is_admin': user.is_admin
+        }
+        output.append(user_data)
+
+    return jsonify({'users': output})
