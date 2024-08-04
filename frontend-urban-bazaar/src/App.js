@@ -18,7 +18,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <NavItems />
+      {/* <NavItems /> */}
       <div className="flex-grow">
         <Routes>
           {/* <Route path="/login" element={<Login />} />
