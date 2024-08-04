@@ -31,7 +31,7 @@ def admin_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
-# User registration route (admin can create users)
+
 # User registration route
 @app.route('/register', methods=['POST'])
 def register():
@@ -46,3 +46,14 @@ def register():
     db.session.commit()
 
     return jsonify({'message': 'User registered successfully'})
+# User login route
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    user = User.query.filter_by(email=data['email']).first()
+
+    if user and bcrypt.check_password_hash(user.password, data['password']):
+        access_token = create_access_token(identity={'username': user.username, 'is_admin': user.is_admin})
+        return jsonify({'token': access_token})
+
+    return jsonify({'message': 'Invalid credentials'}), 401
