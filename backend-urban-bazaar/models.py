@@ -86,19 +86,19 @@ class ShoppingCart(db.Model):
     price = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
    
+# Order model to store order details
 class Order(db.Model):
-    __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
-    total_price = db.Column(db.Integer, nullable=False)
-    order_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    status = db.Column(db.String(20), nullable=False, default="unprocessed")  # New column
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    user = db.relationship('User', back_populates='orders')
-    product = db.relationship('Product', back_populates='orders')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    order_date = db.Column(db.DateTime, default=datetime.utcnow)
+    shipping_address = db.Column(db.String(255), nullable=False)
+    payment_method = db.Column(db.String(50), nullable=False)
+    order_total = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), default='Pending')
 
+    # Relationship to store order items
+    order_items = db.relationship('OrderItem', backref='order', lazy=True)
+    
 class checkout(db.Model):
     __tablename__ = 'addresses'
     id = db.Column(db.Integer, primary_key=True)
