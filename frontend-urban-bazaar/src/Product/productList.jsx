@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Categories from './categories'; 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import NavItems from "../components/navItems";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -28,6 +29,7 @@ const ProductList = () => {
     : products.filter(product => product.category === selectedCategory);
 
   return (
+    
     <div className="container mx-auto px-4 py-8">
       <div className="mb-4">
         <h2 className="text-xl font-semibold text-center uppercase">Products</h2>
@@ -69,6 +71,7 @@ const ProductList = () => {
         ))}
       </div>
     </div>
+    
   );
 };
 
