@@ -1,7 +1,22 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+import json
+from sqlalchemy.types import TypeDecorator, TEXT
 
 db = SQLAlchemy()
+
+class JSONType(TypeDecorator):
+    impl = TEXT
+
+    def process_bind_param(self, value, dialect):
+        if value is not None:
+            return json.dumps(value)
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            return json.loads(value)
+        return value
 
 # User model to store user information
 class User(db.Model):
@@ -26,7 +41,7 @@ class Product(db.Model):
     discount_percentage = db.Column(db.Float, nullable=True)
     rating = db.Column(db.Float, nullable=True)
     stock = db.Column(db.Integer, nullable=False)
-    tags = db.Column(db.ARRAY(db.String), nullable=True)
+    tags = db.Column(JSONType, nullable=True)  # Changed to JSONType
     brand = db.Column(db.String(50), nullable=False)
     sku = db.Column(db.String(100), nullable=False)
     weight = db.Column(db.Float, nullable=False)
@@ -40,7 +55,7 @@ class Product(db.Model):
     minimum_order_quantity = db.Column(db.Integer, nullable=True)
     barcode = db.Column(db.String(50), nullable=True)
     qr_code = db.Column(db.String(255), nullable=True)
-    images = db.Column(db.ARRAY(db.String), nullable=True)
+    images = db.Column(JSONType, nullable=True)  # Changed to JSONType
     thumbnail = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -116,4 +131,3 @@ class ContactUs(db.Model):
     email = db.Column(db.String(100), nullable=False)
     message = db.Column(db.Text, nullable=False)
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
-
