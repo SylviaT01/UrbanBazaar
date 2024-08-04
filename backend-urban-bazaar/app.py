@@ -229,6 +229,9 @@ def get_product(id):
         'thumbnail': product.thumbnail
     }
     return jsonify({'product': product_data})
+
+
+#Implements POST /products route to allow admins to add new products to the database
 @app.route('/products', methods=['POST'])
 @jwt_required()
 def add_product():
@@ -266,3 +269,66 @@ def add_product():
     db.session.commit()
 
     return jsonify({'message': 'Product created successfully'})
+
+# PATCH route to partially update a product
+@app.route('/products/<int:id>', methods=['PATCH'])
+@jwt_required()
+def partial_update_product(id):
+    current_user = get_jwt_identity()
+    if not current_user['is_admin']:
+        return jsonify({'message': 'Permission denied'}), 403
+
+    product = Product.query.get(id)
+    if not product:
+        return jsonify({'message': 'Product not found'}), 404
+
+    data = request.get_json()
+
+    if 'title' in data:
+        product.title = data['title']
+    if 'description' in data:
+        product.description = data['description']
+    if 'category' in data:
+        product.category = data['category']
+    if 'price' in data:
+        product.price = data['price']
+    if 'discountPercentage' in data:
+        product.discount_percentage = data['discountPercentage']
+    if 'rating' in data:
+        product.rating = data['rating']
+    if 'stock' in data:
+        product.stock = data['stock']
+    if 'tags' in data:
+        product.tags = data['tags']
+    if 'brand' in data:
+        product.brand = data['brand']
+    if 'sku' in data:
+        product.sku = data['sku']
+    if 'weight' in data:
+        product.weight = data['weight']
+    if 'dimensions' in data:
+        product.width = data['dimensions'].get('width', product.width)
+        product.height = data['dimensions'].get('height', product.height)
+        product.depth = data['dimensions'].get('depth', product.depth)
+    if 'warrantyInformation' in data:
+        product.warranty_information = data['warrantyInformation']
+    if 'shippingInformation' in data:
+        product.shipping_information = data['shippingInformation']
+    if 'availabilityStatus' in data:
+        product.availability_status = data['availabilityStatus']
+    if 'returnPolicy' in data:
+        product.return_policy = data['returnPolicy']
+    if 'minimumOrderQuantity' in data:
+        product.minimum_order_quantity = data['minimumOrderQuantity']
+    if 'barcode' in data:
+        product.barcode = data['barcode']
+    if 'qrCode' in data:
+        product.qr_code = data['qrCode']
+    if 'images' in data:
+        product.images = data['images']
+    if 'thumbnail' in data:
+        product.thumbnail = data['thumbnail']
+
+    db.session.commit()
+
+    return jsonify({'message': 'Product partially updated successfully'})
