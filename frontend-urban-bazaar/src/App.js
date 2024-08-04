@@ -8,7 +8,7 @@ import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import Contact from "./Pages/contact";
 import WishList from "./components/wishList";
-import ProductList from "./components/productList";
+import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
 

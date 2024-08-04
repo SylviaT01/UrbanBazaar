@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,9 +5,9 @@ import { faUser, faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-ico
 
 export default function NavItems() {
   return (
-    <nav className="bg-blue-100 border-b border-gray-300">
+    <nav className="bg-blue-100 border-b border-gray-300 relative ">
       {/* Top Links */}
-      <div className="absolute top-0 left-0 w-full bg-blue-200 border-b border-gray-300">
+      <div className="bg-blue-200 border-b border-gray-300">
         <div className="flex h-8 items-center justify-end px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-4">
             <Link to="/join" className="text-gray-700 hover:text-blue-700">
@@ -25,7 +24,7 @@ export default function NavItems() {
       </div>
 
       {/* Main Navbar */}
-      <div className="absolute top-8 left-0 w-full bg-slate-200 border-b border-gray-300">
+      <div className="bg-slate-200 border-b border-gray-300">
         <div className="flex justify-between h-16 items-center px-4 sm:px-6 lg:px-8">
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="text-blue-700 text-2xl font-bold">
@@ -46,9 +45,9 @@ export default function NavItems() {
           </div>
         </div>
         {/* Shop by Category and Brand */}
-        <div className="bg-slate-300 py-2 w-full">
+        <div className="bg-slate-300 w-full">
           <div className="flex justify-start space-x-8 px-4 sm:px-6 lg:px-8">
-            <Link to="/shop-by-category" className="text-gray-700 hover:text-blue-700">
+            <Link to="/products" className="text-gray-700 hover:text-blue-700">
               Shop by Category
             </Link>
             <Link to="/shop-by-brand" className="text-gray-700 hover:text-blue-700">
