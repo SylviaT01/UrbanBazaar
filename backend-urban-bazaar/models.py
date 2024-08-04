@@ -19,18 +19,18 @@ class JSONType(TypeDecorator):
             return json.loads(value)
         return value
 
-
+# User model to store user information
 class User(db.Model):
-    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-    orders = db.relationship('Order', back_populates='user', cascade='all, delete-orphan')
-    addresses = db.relationship('Address', back_populates='user')
-    products = association_proxy('orders', 'product', creator=lambda product_obj: Order(product=product_obj))
-    contacts = relationship('Contact', back_populates='user')
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
+    # Relationships to other models
+    shopping_carts = db.relationship('ShoppingCart', backref='user', lazy=True)
+    orders = db.relationship('Order', backref='user', lazy=True)
+    wishlist = db.relationship('Wishlist', backref='user', lazy=True)
 
 class Product(db.Model):
     __tablename__ = 'products'
