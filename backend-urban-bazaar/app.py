@@ -349,3 +349,24 @@ def delete_product(id):
     db.session.commit()
 
     return jsonify({'message': 'Product deleted successfully'})
+
+# Route to add a product to the shopping cart
+@app.route('/cart', methods=['POST'])
+@jwt_required()
+def add_to_cart():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    data = request.get_json()
+    shopping_cart = ShoppingCart.query.filter_by(user_id=user.id).first()
+
+    if not shopping_cart:
+        shopping_cart = ShoppingCart(user_id=user.id, product_id=data['product_id'], quantity=data['quantity'], price=data['price'])
+        db.session.add(shopping_cart)
+    else:
+        shopping_cart.quantity += data['quantity']  # Update quantity if item is already in the cart
+        shopping_cart.price += data['price'] * data['quantity']
+
+    db.session.commit()
+
+    return jsonify({'message': 'Product added to cart successfully'})
