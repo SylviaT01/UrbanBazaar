@@ -98,7 +98,14 @@ class Order(db.Model):
 
     # Relationship to store order items
     order_items = db.relationship('OrderItem', backref='order', lazy=True)
-    
+# OrderItem model to store individual items within an order
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
 class checkout(db.Model):
     __tablename__ = 'addresses'
     id = db.Column(db.Integer, primary_key=True)
