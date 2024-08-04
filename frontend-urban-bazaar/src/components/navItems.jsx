@@ -48,7 +48,7 @@ export default function NavItems() {
         {/* Shop by Category and Brand */}
         <div className="bg-slate-300 py-2 w-full">
           <div className="flex justify-start space-x-8 px-4 sm:px-6 lg:px-8">
-            <Link to="/shop-by-category" className="text-gray-700 hover:text-blue-700">
+            <Link to="/products" className="text-gray-700 hover:text-blue-700">
               Shop by Category
             </Link>
             <Link to="/shop-by-brand" className="text-gray-700 hover:text-blue-700">
