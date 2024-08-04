@@ -408,3 +408,20 @@ def remove_from_cart(product_id):
     db.session.commit()
 
     return jsonify({'message': 'Product removed from cart successfully'})
+
+# Route to create an order from the shopping cart
+@app.route('/orders', methods=['POST'])
+@jwt_required()
+def create_order():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    data = request.get_json()
+    new_order = Order(
+        user_id=user.id,
+        shipping_address=data['shipping_address'],
+        payment_method=data['payment_method'],
+        order_total=data['order_total']
+    )
+    db.session.add(new_order)
+    db.session.commit()
