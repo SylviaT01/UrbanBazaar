@@ -597,3 +597,7 @@ def view_contact_submissions():
 
     return jsonify({'submissions': output})
 
+
+#Enable Flask application to run in debug mode
+if __name__ == '__main__':
+    app.run(debug=True)
