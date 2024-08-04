@@ -32,19 +32,34 @@ class User(db.Model):
     orders = db.relationship('Order', backref='user', lazy=True)
     wishlist = db.relationship('Wishlist', backref='user', lazy=True)
 
+# Product model to store product information
 class Product(db.Model):
-    __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
-    description = db.Column(db.String(255))
-    image_url = db.Column(db.String(255))
-    price = db.Column(db.Integer, nullable=False)
-    category_name = db.Column(db.String(120), nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    category = db.relationship('Category', back_populates='products')
-    tags = db.relationship('Tags')
-    orders = db.relationship('Order', back_populates='product', cascade='all, delete-orphan')
-    users = association_proxy('orders', 'user', creator=lambda user_obj: Order(user=user_obj))
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    discount_percentage = db.Column(db.Float, nullable=True)
+    rating = db.Column(db.Float, nullable=True)
+    stock = db.Column(db.Integer, nullable=False)
+    tags = db.Column(JSONType, nullable=True)  # Changed to JSONType
+    brand = db.Column(db.String(50), nullable=False)
+    sku = db.Column(db.String(100), nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    width = db.Column(db.Float, nullable=True)
+    height = db.Column(db.Float, nullable=True)
+    depth = db.Column(db.Float, nullable=True)
+    warranty_information = db.Column(db.String(255), nullable=True)
+    shipping_information = db.Column(db.String(255), nullable=True)
+    availability_status = db.Column(db.String(50), nullable=False)
+    return_policy = db.Column(db.String(255), nullable=True)
+    minimum_order_quantity = db.Column(db.Integer, nullable=True)
+    barcode = db.Column(db.String(50), nullable=True)
+    qr_code = db.Column(db.String(255), nullable=True)
+    images = db.Column(JSONType, nullable=True)  # Changed to JSONType
+    thumbnail = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 class Order(db.Model):
     __tablename__ = 'orders'
