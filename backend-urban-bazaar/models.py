@@ -60,6 +60,11 @@ class Product(db.Model):
     thumbnail = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # Relationships to other models
+    reviews = db.relationship('Review', backref='product', lazy=True)
+    cart_items = db.relationship('ShoppingCart', backref='product', lazy=True)
+    wishlist_items = db.relationship('Wishlist', backref='product', lazy=True)
+
 
 class Order(db.Model):
     __tablename__ = 'orders'
