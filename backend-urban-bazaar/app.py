@@ -109,3 +109,20 @@ def view_users():
         output.append(user_data)
 
     return jsonify({'users': output})
+
+# Route to delete a user (Admin only)
+@app.route('/admin/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    current_user = get_jwt_identity()
+    if not current_user['is_admin']:
+        return jsonify({'message': 'Admin access required'}), 403
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({'message': 'User deleted successfully'})
