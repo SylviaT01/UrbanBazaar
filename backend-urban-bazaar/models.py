@@ -65,6 +65,17 @@ class Product(db.Model):
     cart_items = db.relationship('ShoppingCart', backref='product', lazy=True)
     wishlist_items = db.relationship('Wishlist', backref='product', lazy=True)
 
+# Review model to store product reviews
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text, nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    reviewer_name = db.Column(db.String(100), nullable=False)
+    reviewer_email = db.Column(db.String(100), nullable=False)
+
+    # Foreign Key to link with Product
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 
 class Order(db.Model):
     __tablename__ = 'orders'
