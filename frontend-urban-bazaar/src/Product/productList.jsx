@@ -41,12 +41,7 @@ const ProductList = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0 bg-blue-50 z-100 px-4 py-4 mb-0">
         {filteredProducts.map((product) => (
-          <div key={product.id} className="bg-white p-4 rounded-lg shadow-md">
-            {/* <img 
-              src={product.images[0]}
-              alt={product.title} 
-              className="w-full h-48 object-cover rounded-md mb-4" 
-            /> */}
+          <div key={product.id} className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white  aos-init">
             <div className="flex-grow border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
                             <div className="w-full h-full flex justify-center items-center">
                                 <div className="w-[200px] mx-auto flex justify-center items-center">
@@ -64,9 +59,12 @@ const ProductList = () => {
                                 </div>
                             </div>
                         </div>
-            <h3 className="text-lg font-bold mb-2">{product.title}</h3>
-            <p className="text-gray-700 mb-2">Ksh {product.price}</p>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md">Add to cart</button>
+            <h3 className="font-medium text-md mb-1">{product.title}</h3>
+            <p className="text-gray-700 mb-2">$ {product.price}</p>
+            <div className="flex items-center space-x-6">
+            <button className="bg-slate-200 text-gray-600 px-2 py-2 rounded-md">Add to cart</button>
+            <button className="bg-slate-200 text-gray-600 px-2 py-2 rounded-md">View Product</button>
+            </div>
           </div>
         ))}
       </div>
