@@ -70,3 +70,20 @@ def assign_admin(user_id):
     user.is_admin = True
     db.session.commit()
     return jsonify({'message': f'{user.username} is now an admin'})
+
+# Admin route to create a new user
+@app.route('/admin/create_user', methods=['POST'])
+@jwt_required()
+@admin_required
+def create_user():
+    data = request.get_json()
+    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+    new_user = User(
+        username=data['username'],
+        email=data['email'],
+        password=hashed_password
+    )
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'User created successfully by admin'})
