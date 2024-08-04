@@ -76,7 +76,16 @@ class Review(db.Model):
 
     # Foreign Key to link with Product
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-
+    
+# ShoppingCart model to store cart details for users
+class ShoppingCart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+   
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
