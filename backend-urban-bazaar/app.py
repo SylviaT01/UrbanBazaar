@@ -126,3 +126,25 @@ def delete_user(user_id):
     db.session.commit()
 
     return jsonify({'message': 'User deleted successfully'})
+
+
+# Route to update user profile
+@app.route('/profile', methods=['PATCH'])
+@jwt_required()
+def update_profile():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+
+    data = request.get_json()
+
+    if 'username' in data:
+        user.username = data['username']
+    if 'email' in data:
+        user.email = data['email']
+    if 'password' in data:
+        hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+        user.password = hashed_password
+
+    db.session.commit()
+
+    return jsonify({'message': 'Profile updated successfully'})
