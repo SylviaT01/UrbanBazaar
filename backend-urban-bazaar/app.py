@@ -571,3 +571,29 @@ def contact_us():
     db.session.commit()
 
     return jsonify({'message': 'Your message has been received. We will get back to you shortly.'})
+
+# Route to view all Contact Us submissions (Admin only)
+@app.route('/admin/contact_us', methods=['GET'])
+@jwt_required()
+def view_contact_submissions():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(username=current_user['username']).first()
+    
+    if not user.is_admin:
+        return jsonify({'message': 'Admin access required'}), 403
+
+    submissions = ContactUs.query.all()
+    output = []
+
+    for submission in submissions:
+        submission_data = {
+            'id': submission.id,
+            'name': submission.name,
+            'email': submission.email,
+            'message': submission.message,
+            'submittedAt': submission.submitted_at
+        }
+        output.append(submission_data)
+
+    return jsonify({'submissions': output})
+
