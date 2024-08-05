@@ -31,5 +31,12 @@ const Orders = () => {
         setIsDarkMode((prevMode) => !prevMode);
         document.body.classList.toggle("dark-mode", !isDarkMode);
 
-    };  
+    }; 
+
+    useEffect(() => {
+        fetch("http://127.0.0.1:5000/order")
+          .then((response) => response.json())
+          .then((data) => setOrders(data))
+          .catch((error) => console.error("Error fetching orders:", error));
+      }, []);
 }; 
