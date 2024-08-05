@@ -71,9 +71,34 @@ const Orders = () => {
                 className="flex-grow bg-transparent border-none outline-none"
               />
             </div>
+            <div className="flex absolute right-2 z-0 gap-5 items-center self-start bottom-[9px] min-w-[240px] w-[285px]"></div>
           </div>
+        </div>
+      </div>
+      <div className="flex gap-4">
+        <div className="flex gap-5 items-start px-2.5 pt-2.5 pb-4 min-h-[50px]">
+          <DarkModeToggle
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
+          />
+          <div className="flex gap-5 items-center w-6">
+            <img
+              src={bell}
+              className="object-contain self-stretch my-auto w-6 aspect-square"
+              alt="Notifications"
+            />
+          </div>
+        </div>
+        <div className="flex gap-2.5 justify-center items-center self-start px-1 py-1.5 min-h-[43px]">
+          <img
+            src={profile1}
+            className="object-contain self-stretch my-auto w-8 rounded-full aspect-square"
+            alt="Profile"
+          />
         </div>
       </div>
     </div>
   );
 };
+
+export default Orders;
