@@ -31,4 +31,8 @@ function Checkout() {
                   Add New Address
                 </label>
               </div>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <input type="text" placeholder="First Name" className="border p-2 rounded w-full" />
+                <input type="text" placeholder="Last Name" className="border p-2 rounded w-full" />
+              </div>
 
