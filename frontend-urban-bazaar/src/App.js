@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import Contact from "./Pages/contact";
@@ -11,11 +7,16 @@ import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
-
-
+import DashboardAdmin from "./Pages/DashboardAdmin";
+import AllProducts from "./components/AllProducts";
+import AddProducts from "./components/AddProducts";
+import Orders from "./components/Orders";
+import Reviews from "./components/Reviews";
+import Customers from "./components/Customers";
+import Payments from "./components/Payments";
+import Dashboard from "./components/DashboardAdmin";
 
 function AppContent() {
-
   return (
     <div className="min-h-screen flex flex-col">
       <NavItems />
@@ -29,6 +30,15 @@ function AppContent() {
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
+          <Route path="/dashboard" element={<DashboardAdmin />}>
+            <Route path="dashboardAdmin" element={<Dashboard />} />
+            <Route path="products/all" element={<AllProducts />} />
+            <Route path="products/add" element={<AddProducts />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="reviews" element={<Reviews />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="payments" element={<Payments />} />
+          </Route>
         </Routes>
       </div>
     </div>
@@ -38,7 +48,7 @@ function AppContent() {
 function App() {
   return (
     <Router>
-          <AppContent />
+      <AppContent />
     </Router>
   );
 }
