@@ -23,3 +23,7 @@ const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
     );
   };
 
+  const Orders = () => {
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [orders, setOrders] = useState([]);
+  }  
