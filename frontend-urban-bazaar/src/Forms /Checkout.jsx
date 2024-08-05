@@ -85,5 +85,20 @@ function Checkout() {
             </div>
           </div>
         </div>
+
+        <div className="bg-white p-6 rounded-md shadow-md">
+          <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
+          <form>
+            <div className="flex items-center mb-4">
+              <input
+                type="radio"
+                id="mpesa"
+                name="paymentMethod"
+                value="mpesa"
+                checked={paymentMethod === 'mpesa'}
+                onChange={() => handlePaymentMethodChange('mpesa')}
+                className="mr-2"
+              />
+              
       
 
