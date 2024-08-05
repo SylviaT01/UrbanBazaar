@@ -99,6 +99,28 @@ function Checkout() {
                 onChange={() => handlePaymentMethodChange('mpesa')}
                 className="mr-2"
               />
-              
+              <label htmlFor="mpesa" className="flex items-center">
+                <span className="text-green-500 mr-2">M-Pesa</span>
+                <span className="icon-[fluent--location-16-filled] text-green-500"></span>
+              </label>
+            </div>
+            {paymentMethod === 'mpesa' && (
+              <div className="mb-4">
+                <input type="text" placeholder="Phone Number" className="border p-2 rounded w-full" />
+              </div>
+            )}
+            <div className="flex justify-between mb-4">
+              <span>Order Total:</span>
+              <span>$70.44</span>
+            </div>
+            <div className="flex justify-between">
+              <button type="button" className="bg-gray-300 text-gray-700 py-2 px-4 rounded">
+                Cancel
+              </button>
+              <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+                Confirm Payment
+              </button>
+            </div>
+
       
 
