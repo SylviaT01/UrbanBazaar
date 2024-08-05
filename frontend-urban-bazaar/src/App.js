@@ -12,6 +12,7 @@ import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
 import TopPicks from "./Product/top-picks.jsx";
+import WeeklyOffers from "./Product/weekly-offers.jsx";
 
 
 
@@ -31,6 +32,7 @@ function AppContent() {
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/toppicks" element={<TopPicks />} />
+          <Route path="/weeklyoffers" element={<WeeklyOffers />} />
         </Routes>
       </div>
     </div>
