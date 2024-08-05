@@ -121,6 +121,20 @@ function Checkout() {
                 Confirm Payment
               </button>
             </div>
+            <div className="flex items-center mt-4">
+              <input
+                type="radio"
+                id="payless"
+                name="paymentMethod"
+                value="payless"
+                checked={paymentMethod === 'payless'}
+                onChange={() => handlePaymentMethodChange('payless')}
+                className="mr-2"
+              />
+              <label htmlFor="payless" className="flex items-center">
+                <span className="text-red-500 mr-2">PayLess</span>
+                <span className="icon-[fluent--location-16-filled] text-red-500"></span>
+              </label>
 
       
 
