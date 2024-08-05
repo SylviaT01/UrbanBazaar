@@ -1,9 +1,64 @@
 import React from 'react';
 import { Parallax } from 'react-parallax';
-import AboutUsParallax from '../assets/AboutUsParallax.jpg'
+import { FaCheckCircle } from "react-icons/fa";
+import AboutUsParallax from '../assets/AboutUsParallax.jpg';
+import AboutUsImage1 from '../assets/AboutUsImage1.jpg';
 
 
 const AboutUs = () => {
+    const values = [
+        {
+            id: 1,
+            icon: <FaCheckCircle />,
+            title: "Customer-Centric",
+            text: "We place our customers at the heart of everything we do. Our goal is to understand and anticipate their needs, ensuring a seamless and satisfying shopping experience.",
+        },
+        {
+            id: 2,
+            icon: <FaCheckCircle />,
+            title: "Integrity",
+            text: "We uphold the highest standards of integrity in all our actions. We believe in being honest, transparent, and ethical in every aspect of our business.",
+        },
+        {
+            id: 3,
+            icon: <FaCheckCircle />,
+            title: "Quality",
+            text: "Quality is at the core of our offerings.We strive to provide high-quality products and services that meet and exceed the expectations of our customers.",
+        },
+        {
+            id: 4,
+            icon: <FaCheckCircle />,
+            title: "Innovation",
+            text: "We are committed to continuous innovation, leveraging the latest technologies to enhance our platform and deliver the best possible experience for our users.",
+        },
+        {
+            id: 5,
+            icon: <FaCheckCircle />,
+            title: "Convenince",
+            text: "We aim to make shopping as convenient as possible by providing a wide range of products, easy-to-use interfaces, and efficient services.",
+        },
+        {
+            id: 6,
+            icon: <FaCheckCircle />,
+            title: "Community",
+            text: "We believe in fostering a strong sense of community. UrbanBazaar is dedicated to supporting and giving back to the communities we serve.",
+        },
+        {
+            id: 7,
+            icon: <FaCheckCircle />,
+            title: "Sustainability",
+            text: "We are committed to sustainable practices that protect our planet. We strive to reduce our environmental footprint and promote eco-friendly products and solutions.",
+        },
+        {
+            id: 8,
+            icon: <FaCheckCircle />,
+            title: "Excellence",
+            text: "We pursue excellence in everything we do. From customer service to product selection, we are dedicated to achieving the highest standards of quality and performance.",
+        },
+
+
+
+    ]
     return (
         <div className='bg-gray-200'>
             <div className='header'>
@@ -26,9 +81,41 @@ const AboutUs = () => {
                 <p className="tracking-widest font-semibold uppercase text-xl p-5 text-black">
                     Welcome to UrbanBazaar!
                 </p>
-                <p className='text-4xl px-[20rem] pb-5 font-extralight'>UrbanBazaar is the fastest-growing e-commerce platform in the region, quickly becoming the #1 choice for online shopping. We provide a wide range of products to millions of customers from convenient locations, ensuring a seamless shopping experience. With our extensive catalog and user-friendly interface, UrbanBazaar is revolutionizing the way people shop online.</p>
+                <p className='text-xl px-[20rem] pb-2 font-extralight'>UrbanBazaar is the fastest-growing e-commerce platform in the region, quickly becoming the #1 choice for online shopping. We provide a wide range of products to millions of customers from convenient locations, ensuring a seamless shopping experience. With our extensive catalog and user-friendly interface, UrbanBazaar is revolutionizing the way people shop online.</p>
             </div>
+            <section className="grid grid-cols-1 md:grid-cols-2 p-2 md:p-10">
+                <div className="w-full h-full p-4 ">
+                    <img src={AboutUsImage1} alt="Woman shopping" />
+                </div>
+                <div className="p-8  my-8 text-center">
+                    <h2 className="text-lg capitalize font-bold">Our Mission</h2>
+                    <div className="h-1 mt-2 w-224 bg-[#75c4e9]" />
+                    <p className="text-xl  mt-8 leading-8 font-extralight">
+                        UrbanBazaar aims to help our customers find what they need quickly and easily by offering a wide selection of products at affordable prices. We are committed to providing high-quality individual customer care and ensuring a convenient shopping experience for everyone.
+                    </p>
+                </div>
+            </section>
+            <div className="py-8">
+                <div className="container mx-auto flex justify-center items-center flex-col">
+                    <h2 className="text-lg font-semibold mb-4">Our Values</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        {values.map((value) => (
+                            <div
+                                key={value.id}
+                                className="bg-slate-100 hover:scale-105 duration-300 ease-linear shadow-lg py-2 px-4 flex justify-center flex-col text-center items-center gap-4 mx-8  md:mx-0 rounded-lg"
+                            >
+                                <div className="w-20 h-20 flex items-center justify-center bg-slate-100 rounded-full mb-4 border border-blue-200">
+                                    <span className="text-4xl text-blue-300">{value.icon}</span>
+                                </div>
+                                <h3 className="text-md font-medium">{value.title}</h3>
+                                <p className="text-black font-extralight text-sm">{value.text}</p>
+                            </div>
+                        ))}
+                    </div>
 
+
+                </div>
+            </div>
         </div>
     )
 }
