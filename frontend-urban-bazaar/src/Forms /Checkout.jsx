@@ -43,4 +43,13 @@ function Checkout() {
                 <input type="text" placeholder="City" className="border p-2 rounded w-full" />
                 <input type="text" placeholder="Zip" className="border p-2 rounded w-full" />
               </div>
+              <div className="flex justify-between">
+                <button type="button" className="bg-gray-300 text-gray-700 py-2 px-4 rounded">
+                  Cancel
+                </button>
+                <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+                  Proceed
+                </button>
+              </div>
+            </form>
 
