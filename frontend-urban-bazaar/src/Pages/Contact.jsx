@@ -3,6 +3,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 //import { UserContext } from "./context/userContext";
 import { useNavigate } from "react-router-dom";
+import shelf from '../assets/shelf.jpg';
+
+//import email from "../assets/email.svg"
 //import Footer from "./footer";
 
 const Contact = () => {
@@ -78,7 +81,7 @@ const Contact = () => {
                       htmlFor="name"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                      Name
+                        Enter your name
                     </label>
                     <Field
                       id="name"
@@ -98,7 +101,7 @@ const Contact = () => {
                       htmlFor="email"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                      Email
+                        Enter your email
                     </label>
                     <Field
                       id="email"
@@ -119,7 +122,7 @@ const Contact = () => {
                       htmlFor="phone"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                      Phone Number
+                     Enter your phone number
                     </label>
                     <Field
                       id="phone"
@@ -139,7 +142,7 @@ const Contact = () => {
                       htmlFor="message"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                      Message
+                      Enter your message
                     </label>
                     <Field
                       id="message"
@@ -175,41 +178,46 @@ const Contact = () => {
             )}
           </div>
           {/* Contact Information */}
-          <div className="w-full md:w-1/2 p-8 bg-gray-50 rounded"style={{
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: 'cover', 
-        backgroundPosition: 'center',}}>
-            <div className="flex flex-col gap-6">
+          
+          <div className="w-full md:w-1/2 p-8 bg-gray-50 rounded opacity-70"style={{
+            backgroundImage: `url(${shelf})`,
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center', 
+            
+            }}><div/>
+        
+            <div className="flex flex-col gap-10">
               <div>
                 <h3 className="font-bold text-lg text-gray-800">RETURN ADDRESS FOR ONLINE ORDERS</h3>
 
 
                 <p>
-                  Bilha Towers Ground Floor, Shop Number 45KE
+                <span class="icon-[fluent--location-16-filled]"  style={{width: '28px', height: '28px' ,color: '#7DC8EF' }}></span> Bilha Towers Ground Floor, Shop Number 45KE
                 </p>
 
 
                 <p >
-                  Postal Address P.O. Box 1852-00621, Village Market Nairobi, Kenya
+                <span class="icon-[fluent--location-16-filled]"  style={{width: '28px', height: '28px' ,color: '#7DC8EF' }}></span>Postal Address P.O. Box 1852-00621, Village Market Nairobi, Kenya
                 </p>
 
 
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-800">
-                  Phone Number
+                 Phone Number
                 </h3>
                 <p className="text-blue-600 underline underline-offset-2">
-                  +254 712 345 678
+                <span class="icon-[fluent--call-add-20-filled]"  style={{ width: '28px', height: '28px',color: '#7DC8EF' }}></span>+254 712 345 678
                 </p>
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-800">
                   Email Address
                 </h3>
+                
                 <p className="text-blue-600 underline underline-offset-2">
-                  urbanbazaar@gmail.com
-                </p>
+                <span class="icon-[marketeq--email-open]"style={{ width: '28px', height: '28px'}}></span> urbanbazaar@gmail.com
+                </p> 
               </div>
             </div>
           </div>

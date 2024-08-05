@@ -6,6 +6,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@iconify/react": "^5.0.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -43,8 +44,14 @@
     ]
   },
   "devDependencies": {
+    "@iconify-icons/mdi": "^1.2.48",
+    "@iconify-icons/tabler": "^1.2.95",
+    "@iconify-json/mdi": "^1.1.68",
+    "@iconify/json": "^2.2.234",
+    "@iconify/tailwind": "^1.1.2",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.40",
-    "tailwindcss": "^3.4.7"
+    "tailwindcss": "^3.4.7",
+    "tailwindcss-iconify": "^0.0.3"
   }
 }

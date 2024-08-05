@@ -20,14 +20,14 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      < Login />
-      <SignUp />
-      <Contact />
+      {/* < Login /> */}
+      {/* <SignUp />
+      <Contact /> */}
       <div className="flex-grow">
         <Routes>
           <Route path="/login" element={<Login />} />
-          {/* <Route path="/signup" element={<SignUp />} /> */}
-          <Route path="/Contact" element={<Contact />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/contact" element={<Contact />} />
           {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} /> */}
           {/* <Route path="/" element={<Home />} />
