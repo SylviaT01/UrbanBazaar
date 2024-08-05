@@ -97,6 +97,18 @@ const Orders = () => {
           />
         </div>
       </div>
+      <div className="mt-7 ml-28 text-2xl font-bold tracking-tight leading-loose text-gray-800">
+        Orders
+      </div>
+      <div className="flex flex-col mt-5 w-full max-w-[1240px] max-md:max-w-full">
+        <div className="max-md:max-w-full">
+          <div className="flex gap-5 max-md:flex-col">
+            <div className="flex flex-col w-[22%] max-md:ml-0 max-md:w-full">
+              <div className="flex flex-col text-base font-medium tracking-widest whitespace-nowrap min-h-[570px] max-md:mt-10"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
