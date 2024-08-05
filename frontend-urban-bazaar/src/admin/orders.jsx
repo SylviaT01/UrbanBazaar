@@ -39,4 +39,13 @@ const Orders = () => {
           .then((data) => setOrders(data))
           .catch((error) => console.error("Error fetching orders:", error));
       }, []);
+
+      return (
+        <div
+          className={`flex overflow-hidden flex-col items-center px-20 pb-8 ${
+            isDarkMode ? "bg-gray-800" : "bg-sky-50"
+          } max-md:px-5`}
+        >
+        </div>
+      )
 }; 
