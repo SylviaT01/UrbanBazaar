@@ -11,6 +11,7 @@ import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
+import AddProductPage from "./components/AddProducts.jsx";
 
 
 
@@ -29,6 +30,7 @@ function AppContent() {
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
+          <Route path="/addproducts" element={<AddProductPage />} />
         </Routes>
       </div>
     </div>
