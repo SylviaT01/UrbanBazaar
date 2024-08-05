@@ -9,7 +9,7 @@ import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import slide1 from '../assets/slide1.jpg';
 import slide2 from '../assets/slide2.jpg';
 import slide3 from '../assets/slide3.jpg';
-// import WeeklyOffers from '../Product/weekly-offers';
+import WeeklyOffers from '../Product/weekly-offers';
 
 const Home = () => {
     const sliderRef = useRef(null);
@@ -127,6 +127,12 @@ const Home = () => {
                 <div className="flex justify-center py-4">
                     <Link to="/products" className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md ">
                         View All Categories
+                    </Link>
+                </div>
+                <WeeklyOffers />
+                <div className="flex justify-center py-4">
+                    <Link to="/weeklyoffers" className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md ">
+                        View All Offers
                     </Link>
                 </div>
 
