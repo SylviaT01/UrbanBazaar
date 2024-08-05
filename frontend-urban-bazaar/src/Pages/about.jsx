@@ -11,9 +11,6 @@ import Convenience from '../assets/Convenience.svg';
 import Excellence from '../assets/Excellence.svg';
 import Community from '../assets/Community.svg';
 
-
-
-
 const AboutUs = () => {
     const values = [
         {
