@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -8,6 +9,7 @@ import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import slide1 from '../assets/slide1.jpg';
 import slide2 from '../assets/slide2.jpg';
 import slide3 from '../assets/slide3.jpg';
+// import WeeklyOffers from '../Product/weekly-offers';
 
 const Home = () => {
     const sliderRef = useRef(null);
@@ -47,7 +49,7 @@ const Home = () => {
 
                     const categoryImages = uniqueCategoryProducts.map(product => ({
                         category: product.category,
-                        imageUrl: product.images[0] 
+                        imageUrl: product.images[0]
                     }));
 
                     setCategoryImages(categoryImages);
@@ -74,56 +76,64 @@ const Home = () => {
     };
 
     return (
-        <div className="relative">
-            <div className="flex items-center justify-center">
-                <div className="w-full max-w-full overflow-hidden relative">
-                    <div className="slider-container h-full">
-                        <Slider ref={sliderRef} {...settings}>
-                            <div className='relative'>
-                                <img src={slide1} alt="Woman after shopping" className="w-full h-[400px] object-cover" />
-                            </div>
-                            <div className='relative'>
-                                <img src={slide2} alt="Enjoy the view" className="w-full h-[400px] object-cover" />
-                            </div>
-                            <div className="relative">
-                                <img src={slide3} alt="Smile after shopping" className="w-full h-[400px] object-cover" />
-                            </div>
-                        </Slider>
-                        <button onClick={goToPrevSlide} className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10">
-                            <GoChevronLeft />
-                        </button>
-                        <button onClick={goToNextSlide} className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10">
-                            <GoChevronRight />
-                        </button>
+        <section>
+            <div className="relative">
+                <div className="flex items-center justify-center">
+                    <div className="w-full max-w-full overflow-hidden relative">
+                        <div className="slider-container h-full">
+                            <Slider ref={sliderRef} {...settings}>
+                                <div className='relative'>
+                                    <img src={slide1} alt="Woman after shopping" className="w-full h-[400px] object-cover" />
+                                </div>
+                                <div className='relative'>
+                                    <img src={slide2} alt="Enjoy the view" className="w-full h-[400px] object-cover" />
+                                </div>
+                                <div className="relative">
+                                    <img src={slide3} alt="Smile after shopping" className="w-full h-[400px] object-cover" />
+                                </div>
+                            </Slider>
+                            <button onClick={goToPrevSlide} className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10">
+                                <GoChevronLeft />
+                            </button>
+                            <button onClick={goToNextSlide} className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10">
+                                <GoChevronRight />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Category Cards */}
-            <div className="absolute bottom-[-70%] left-0 w-full flex justify-center bg-transparent">
-                <div className="relative w-full max-w-screen-xl flex gap-[30px] py-4 px-6 overflow-x-auto">
-                    {categoryImages.map((category, index) => (
-                        <div
-                            key={index}
-                            className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white aos-init"
-                        >
-                            <div className="flex-grow border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
-                                <div className="w-full h-full flex justify-center items-center">
-                                    <div className="w-[200px] mx-auto flex justify-center items-center">
-                                        <img
-                                            src={category.imageUrl}
-                                            alt={category.category}
-                                            className="w-full h-full object-cover"
-                                        />
+                <div className="w-full flex justify-center bg-transparent">
+                    <div className="relative w-full max-w-screen-xl flex gap-[30px] py-4 px-6 overflow-x-auto">
+                        {categoryImages.map((category, index) => (
+                            <div
+                                key={index}
+                                className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white aos-init"
+                            >
+                                <div className="flex-grow border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
+                                    <div className="w-full h-full flex justify-center items-center">
+                                        <div className="w-[200px] mx-auto flex justify-center items-center">
+                                            <img
+                                                src={category.imageUrl}
+                                                alt={category.category}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
+                                <h3 className="font-medium text-sm mb-1 capitalize">{category.category}</h3>
                             </div>
-                            <h3 className="font-medium text-sm mb-1 capitalize">{category.category}</h3>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
+                <div className="flex justify-center py-4">
+                    <Link to="/products" className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md ">
+                        View All Categories
+                    </Link>
+                </div>
+
             </div>
-        </div>
+        </section>
+
+
     );
 };
 
