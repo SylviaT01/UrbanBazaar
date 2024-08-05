@@ -11,6 +11,7 @@ import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
+import TopPicks from "./Product/top-picks.jsx";
 
 
 
@@ -29,6 +30,7 @@ function AppContent() {
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
+          <Route path="/toppicks" element={<TopPicks />} />
         </Routes>
       </div>
     </div>
