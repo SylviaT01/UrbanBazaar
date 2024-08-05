@@ -102,8 +102,8 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-                <div className=" w-full flex justify-center bg-transparent">
-                    <div className=" w-full max-w-screen-xl flex gap-[30px] py-4 px-6 overflow-x-auto">
+                <div className="w-full flex justify-center bg-transparent">
+                    <div className="relative w-full max-w-screen-xl flex gap-[30px] py-4 px-6 overflow-x-auto">
                         {categoryImages.map((category, index) => (
                             <div
                                 key={index}
@@ -130,7 +130,6 @@ const Home = () => {
                         View All Categories
                     </Link>
                 </div>
-                <div>
                 <WeeklyOffers />
                 <div className="flex justify-center py-4">
                     <Link to="/weeklyoffers" className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md ">
@@ -143,8 +142,6 @@ const Home = () => {
                         View Top Picks
                     </Link>
                 </div>
-                </div>
-
             </div>
         </section>
 
