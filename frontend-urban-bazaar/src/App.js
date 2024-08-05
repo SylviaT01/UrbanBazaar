@@ -13,6 +13,7 @@ import {
 import Login from "./Forms /login";
 import SignUp from "./Forms /signup";
 import Contact from "./Pages/Contact"; 
+import Checkout from "./Forms /Checkout";
 
 
 
@@ -28,6 +29,7 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/checkout" element={<Checkout />} />
           {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} /> */}
           {/* <Route path="/" element={<Home />} />
