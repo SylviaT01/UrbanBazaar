@@ -135,6 +135,23 @@ function Checkout() {
                 <span className="text-red-500 mr-2">PayLess</span>
                 <span className="icon-[fluent--location-16-filled] text-red-500"></span>
               </label>
+              </div>
+            <div className="flex items-center mt-4">
+              <input
+                type="radio"
+                id="paypal"
+                name="paymentMethod"
+                value="paypal"
+                checked={paymentMethod === 'paypal'}
+                onChange={() => handlePaymentMethodChange('paypal')}
+                className="mr-2"
+              />
+              <label htmlFor="paypal" className="flex items-center">
+                <span className="text-blue-500 mr-2">PayPal</span>
+                <span className="icon-[fluent--location-16-filled] text-blue-500"></span>
+              </label>
+            </div>
+          </form> 
 
       
 
