@@ -52,4 +52,38 @@ function Checkout() {
                 </button>
               </div>
             </form>
+           <div className="w-1/2">
+            <h2 className="text-lg font-semibold mb-4">Place your order</h2>
+            <button className="bg-blue-500 text-white py-2 px-4 w-full rounded mb-4">
+              Place Order
+            </button>
+            <p className="text-sm text-gray-600 mb-4">
+              By placing your order, you agree to our company's Privacy Policy and Conditions of Use.
+            </p>
+            <div className="bg-gray-100 p-4 rounded">
+              <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
+              <div className="flex justify-between mb-2">
+                <span>Items (3)</span>
+                <span>$64.23</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Shipping & Handling</span>
+                <span>$5.99</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Before Tax</span>
+                <span>$70.22</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Tax Collected</span>
+                <span>$0.22</span>
+              </div>
+              <div className="flex justify-between font-semibold">
+                <span>Order Total</span>
+                <span>$70.44</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      
 
