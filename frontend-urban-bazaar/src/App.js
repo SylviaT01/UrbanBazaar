@@ -9,9 +9,10 @@ import {
 // import Contact from "./Pages/contact";
 // import WishList from "./components/wishList";
 // import ProductList from "./components/productList";
-// import CartModal from "./components/cartModal";
-import Login from "./Forms /login"
-
+// import CartModal from "./componentscartModal";
+import Login from "./Forms /login";
+import SignUp from "./Forms /signup";
+import Contact from "./Pages/Contact"; 
 
 
 
@@ -20,10 +21,13 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col">
       < Login />
+      <SignUp />
+      <Contact />
       <div className="flex-grow">
         <Routes>
-          <Route path="/login" element={<Login />} /> 
-          
+          <Route path="/login" element={<Login />} />
+          {/* <Route path="/signup" element={<SignUp />} /> */}
+          <Route path="/Contact" element={<Contact />} />
           {/* <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} /> */}
           {/* <Route path="/" element={<Home />} />
