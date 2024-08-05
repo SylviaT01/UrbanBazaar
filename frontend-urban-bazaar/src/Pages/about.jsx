@@ -1,57 +1,66 @@
 import React from 'react';
 import { Parallax } from 'react-parallax';
-import { FaCheckCircle } from "react-icons/fa";
 import AboutUsParallax from '../assets/AboutUsParallax.jpg';
 import AboutUsImage1 from '../assets/AboutUsImage1.jpg';
+import CustomerCentric from '../assets/customer-centric.svg';
+import Integrity from '../assets/Integrity.svg';
+import Quality from '../assets/Quality.svg';
+import Innovation from '../assets/innovation.svg';
+import Sustainability from '../assets/Sustainability.svg';
+import Convenience from '../assets/Convenience.svg';
+import Excellence from '../assets/Excellence.svg';
+import Community from '../assets/Community.svg';
+
+
 
 
 const AboutUs = () => {
     const values = [
         {
             id: 1,
-            icon: <FaCheckCircle />,
+            icon: <img src={CustomerCentric} alt="customer-centric"/>,
             title: "Customer-Centric",
             text: "We place our customers at the heart of everything we do. Our goal is to understand and anticipate their needs, ensuring a seamless and satisfying shopping experience.",
         },
         {
             id: 2,
-            icon: <FaCheckCircle />,
+            icon: <img src={Integrity} alt="integrity"/>,
             title: "Integrity",
             text: "We uphold the highest standards of integrity in all our actions. We believe in being honest, transparent, and ethical in every aspect of our business.",
         },
         {
             id: 3,
-            icon: <FaCheckCircle />,
+            icon: <img src={Quality} alt="quality"/>,
             title: "Quality",
             text: "Quality is at the core of our offerings.We strive to provide high-quality products and services that meet and exceed the expectations of our customers.",
         },
         {
             id: 4,
-            icon: <FaCheckCircle />,
+            icon: <img src={Innovation} alt="innovation"/>,
             title: "Innovation",
             text: "We are committed to continuous innovation, leveraging the latest technologies to enhance our platform and deliver the best possible experience for our users.",
         },
         {
             id: 5,
-            icon: <FaCheckCircle />,
+            icon: <img src={Convenience} alt="convenience"/>,
             title: "Convenince",
             text: "We aim to make shopping as convenient as possible by providing a wide range of products, easy-to-use interfaces, and efficient services.",
         },
         {
             id: 6,
-            icon: <FaCheckCircle />,
+            icon: <img src={Community} alt="community"/>,
             title: "Community",
             text: "We believe in fostering a strong sense of community. UrbanBazaar is dedicated to supporting and giving back to the communities we serve.",
         },
         {
             id: 7,
-            icon: <FaCheckCircle />,
+            icon: <img src={Sustainability} alt="sustainability"/>,
             title: "Sustainability",
             text: "We are committed to sustainable practices that protect our planet. We strive to reduce our environmental footprint and promote eco-friendly products and solutions.",
         },
         {
             id: 8,
-            icon: <FaCheckCircle />,
+            icon: <img src={Excellence} alt="excellence"/>,
             title: "Excellence",
             text: "We pursue excellence in everything we do. From customer service to product selection, we are dedicated to achieving the highest standards of quality and performance.",
         },
