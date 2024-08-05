@@ -76,7 +76,9 @@ const ProductList = () => {
               </div>
             </div>
             <h3 className="font-medium text-sm mb-1">{product.title}</h3>
-            <p className="text-gray-700 mb-2">$ {product.price}</p>
+            <p className="text-gray-700 mb-2 ">Ksh. {Math.round((product.price * (100-product.discountPercentage))/ 100)}</p>
+            <p className="text-gray-700 mb-2 line-through">Ksh. {product.price}</p>
+            
             <div className="flex items-center space-x-6">
               <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">Add to cart</button>
               <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">View Product</button>
