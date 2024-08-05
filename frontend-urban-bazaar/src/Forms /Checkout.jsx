@@ -35,4 +35,12 @@ function Checkout() {
                 <input type="text" placeholder="First Name" className="border p-2 rounded w-full" />
                 <input type="text" placeholder="Last Name" className="border p-2 rounded w-full" />
               </div>
+              <div className="mb-4">
+                <input type="text" placeholder="Street Address" className="border p-2 rounded w-full" />
+              </div>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <input type="text" placeholder="Apartment Number" className="border p-2 rounded w-full" />
+                <input type="text" placeholder="City" className="border p-2 rounded w-full" />
+                <input type="text" placeholder="Zip" className="border p-2 rounded w-full" />
+              </div>
 
