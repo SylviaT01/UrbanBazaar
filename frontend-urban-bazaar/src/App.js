@@ -7,6 +7,10 @@ import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
+import TopPicks from "./Product/top-picks.jsx";
+import WeeklyOffers from "./Product/weekly-offers.jsx";
+import Footer from "./components/Footer.jsx";
+import ProductDetails from "./Product/productDetails.jsx";
 import DashboardAdmin from "./Pages/DashboardAdmin";
 import UserProfile from "./Pages/UserProfileDashboard";
 import AllProducts from "./admin/AllProducts";
@@ -16,7 +20,6 @@ import Orders from "./admin/Orders";
 import Customers from "./admin/Customers";
 import Payments from "./admin/Payments";
 import Dashboard from "./admin/DashboardAdmin";
-
 import Navbar from "./admin/navbar";
 
 // Dummy components for User Profile
@@ -38,6 +41,9 @@ function AppContent() {
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
+          <Route path="/toppicks" element={<TopPicks />} />
+          <Route path="/weeklyoffers" element={<WeeklyOffers />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/dashboard" element={<DashboardAdmin />}>
             <Route path="dashboardAdmin" element={<Dashboard />} />
             <Route path="products/all" element={<AllProducts />} />
@@ -56,6 +62,7 @@ function AppContent() {
           </Route>
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }
