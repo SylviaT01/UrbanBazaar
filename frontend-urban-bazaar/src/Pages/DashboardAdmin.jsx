@@ -7,6 +7,7 @@ import payments from "../assets/payments.svg";
 import product from "../assets/product.svg";
 import profile from "../assets/Profile.svg";
 import reviews from "../assets/reviews.svg";
+
 const Dashboard = () => {
   const [isProductsOpen, setProductsOpen] = useState(false);
 
@@ -95,7 +96,7 @@ const Dashboard = () => {
 
             <li className="mb-4">
               <NavLink
-                to="orders"
+                to="/orders"
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
@@ -143,6 +144,19 @@ const Dashboard = () => {
               >
                 <img src={payments} className="mr-3" alt="payments" />
                 Payments
+              </NavLink>
+            </li>
+            <li className="mb-4">
+              <NavLink
+                to="payments"
+                className={({ isActive }) =>
+                  isActive
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
+                }
+              >
+                <img src={logout} className="mr-3" alt="logout" />
+                Logout
               </NavLink>
             </li>
           </ul>
