@@ -17,7 +17,7 @@ const TopPicksFour = () => {
           // Filter products by rating and limit to 4 items
           const filteredProducts = products
             .filter(product => product.rating > 4.8)
-            .slice(0, 4); // Limit to 4 items
+            .slice(-4); // Limit to 4 items
 
           setTopProducts(filteredProducts);
         } else {
