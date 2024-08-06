@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-
+import mpesa from "../assets/mpesa.png"
+import pesapal from "../assets/pesapal.png"
+import Paypal from "../assets/Paypal.png"
 function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState('');
 
@@ -9,7 +11,7 @@ function Checkout() {
 
   return (
     <div className="bg-gray-100 p-8 min-h-screen">
-      <div className="container mx-auto bg-white p-6 rounded-md shadow-md">
+      <div className="container mx-auto bg-checkoutGreen p-6 rounded-md shadow-md">
         <div className="flex justify-between mb-4">
           <div className="flex items-center">
             <div className="bg-black text-white rounded-full w-6 h-6 flex items-center justify-center">1</div>
@@ -52,7 +54,8 @@ function Checkout() {
                 </button>
               </div>
             </form>
-           <div className="w-1/2">
+          </div>
+          <div className="w-1/2">
             <h2 className="text-lg font-semibold mb-4">Place your order</h2>
             <button className="bg-blue-500 text-white py-2 px-4 w-full rounded mb-4">
               Place Order
@@ -86,11 +89,15 @@ function Checkout() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-md shadow-md">
+        <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6">
           <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
-          <form>
+          <form className="mx-auto max-w-sm space-y-8">
             <div className="flex items-center mb-4">
-              <input
+              
+              <section className="flex flex-col rounded-none max-w-[731px]">          
+               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-full rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
+                <div className="flex gap-6 my-auto">
+                <input
                 type="radio"
                 id="mpesa"
                 name="paymentMethod"
@@ -98,18 +105,27 @@ function Checkout() {
                 checked={paymentMethod === 'mpesa'}
                 onChange={() => handlePaymentMethodChange('mpesa')}
                 className="mr-2"
-              />
-              <label htmlFor="mpesa" className="flex items-center">
-                <span className="text-green-500 mr-2">M-Pesa</span>
-                <span className="icon-[fluent--location-16-filled] text-green-500"></span>
-              </label>
+                />
+                  <h2 className="my-auto text-2xl font-light text-black">M-Pesa</h2>
+                  <img src={mpesa} alt="M-pesa" />
+                </div>
+               </div>
+              </section>
             </div>
             {paymentMethod === 'mpesa' && (
               <div className="mb-4">
                 <input type="text" placeholder="Phone Number" className="border p-2 rounded w-full" />
+                <div className="flex justify-between gap-4">
+                <button type="button" className="bg-gray-300 text-gray-700 py-2 px-4 rounded">
+                Cancel
+              </button>
+              <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+                Confirm Payment
+              </button>
+                </div>
               </div>
             )}
-            <div className="flex justify-between mb-4">
+            <div className="flex justify-between">
               <span>Order Total:</span>
               <span>$70.44</span>
             </div>
@@ -122,22 +138,39 @@ function Checkout() {
               </button>
             </div>
             <div className="flex items-center mt-4">
-              <input
+              
+             < section className="flex flex-col rounded-none max-w-[731px]">          
+               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-full rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
+                <div className="flex gap-6 my-auto">
+                <input
                 type="radio"
-                id="payless"
+                id="pesapal"
                 name="paymentMethod"
-                value="payless"
-                checked={paymentMethod === 'payless'}
-                onChange={() => handlePaymentMethodChange('payless')}
+                value="pesapal"
+                checked={paymentMethod === 'pesapal'}
+                onChange={() => handlePaymentMethodChange('pesapal')}
                 className="mr-2"
-              />
-              <label htmlFor="payless" className="flex items-center">
-                <span className="text-red-500 mr-2">PayLess</span>
-                <span className="icon-[fluent--location-16-filled] text-red-500"></span>
-              </label>
-              </div>
+                />
+                  <h2 className="my-auto text-2xl font-light text-black">Pesapal</h2>
+                  <img src={pesapal} alt="Pesapal" />
+                </div>
+               </div>
+              </section>
+            </div>
+
+            {paymentMethod === 'payless' && (
+              <div className="mb-4">
+              <input type="text" placeholder="Phone Number" className="border p-2 rounded w-full" />
+              <button type="button" className="bg-gray-300 text-gray-700 py-2 px-4 rounded">
+              Cancel
+            </button>
+            <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+              Confirm Payment
+            </button>
+            </div>
+          )}
             <div className="flex items-center mt-4">
-              <input
+              {/* <input
                 type="radio"
                 id="paypal"
                 name="paymentMethod"
@@ -149,9 +182,31 @@ function Checkout() {
               <label htmlFor="paypal" className="flex items-center">
                 <span className="text-blue-500 mr-2">PayPal</span>
                 <span className="icon-[fluent--location-16-filled] text-blue-500"></span>
-              </label>
+              </label> */}
+              <section className="flex flex-col rounded-none max-w-[731px]">          
+               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-full rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
+                <div className="flex gap-6 my-auto">
+                <input
+                type="radio"
+                id="paypal"
+                name="paymentMethod"
+                value="paypal"
+                checked={paymentMethod === 'paypal'}
+                onChange={() => handlePaymentMethodChange('paypal')}
+                className="mr-2"
+                />
+                  <h2 className="my-auto text-2xl font-light text-black">Paypal</h2>
+                  <img src={Paypal} alt="Paypal" />
+                </div>
+               </div>
+              </section>
+
             </div>
-          </form> 
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-      
-
+export default Checkout;

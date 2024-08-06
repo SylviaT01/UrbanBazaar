@@ -192,7 +192,7 @@ const Contact = () => {
 
 
                 <p>
-                <span class="icon-[fluent--location-16-filled]"  style={{width: '28px', height: '28px' ,color: '#7DC8EF' }}></span> Bilha Towers Ground Floor, Shop Number 45KE
+                <span class="icon-[fluent--location-16-filled]"  style={{width: '20px', height: '20px' ,color: '#7DC8EF' }}></span> Bilha Towers Ground Floor, Shop Number 45KE
                 </p>
 
 
