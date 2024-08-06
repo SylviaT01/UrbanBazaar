@@ -6,6 +6,8 @@ const WeeklyOffers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/products")
@@ -46,6 +48,18 @@ const WeeklyOffers = () => {
     product.title.toLowerCase().includes(searchQuery)
   );
 
+  // Calculate current products based on page number
+  const indexOfLastProduct = currentPage * itemsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -70,7 +84,7 @@ const WeeklyOffers = () => {
       </div>
       <hr className="my-8 border-t-2 border-gray-300" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
-        {filteredProducts.map((product) => (
+        {currentProducts.map((product) => (
           <div
             key={product.id}
             className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white aos-init"
@@ -116,6 +130,19 @@ const WeeklyOffers = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="flex justify-center mt-8">
+        <div className="flex space-x-2">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={`px-4 py-2 border rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
