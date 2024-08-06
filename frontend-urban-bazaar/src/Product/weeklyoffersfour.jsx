@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/swiper-bundle.min.css"; // Make sure to include Swiper CSS
 
 const WeeklyOffersFour = () => {
   const [topProducts, setTopProducts] = useState([]);

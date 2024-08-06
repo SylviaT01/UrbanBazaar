@@ -10,7 +10,7 @@ import slide1 from "../assets/slide1.jpg";
 import slide2 from "../assets/slide2.jpg";
 import slide3 from "../assets/slide3.jpg";
 import WeeklyOffersFour from "../Product/weeklyoffersfour";
-import TopPicks from "../Product/top-picks";
+import TopPicksFour from "../Product/top-picksfour";
 
 const Home = () => {
   const sliderRef = useRef(null);
@@ -167,12 +167,12 @@ const Home = () => {
             </div>
             <div className="4-items">
               <h1>Top picks</h1>
-              <TopPicks />
+              <TopPicksFour />
             </div>
 
             <div className="flex justify-center py-4">
               <Link
-                to="/weeklyoffers"
+                to="/toppicks"
                 className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md "
               >
                 View Top Picks

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-
-const TopPicks = () => {
+const TopPicksFour = () => {
   const [topProducts, setTopProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,7 +14,11 @@ const TopPicks = () => {
         const products = data.products;
 
         if (Array.isArray(products)) {
-          const filteredProducts = products.filter(product => product.rating > 4.8);
+          // Filter products by rating and limit to 4 items
+          const filteredProducts = products
+            .filter(product => product.rating > 4.8)
+            .slice(0, 4); // Limit to 4 items
+
           setTopProducts(filteredProducts);
         } else {
           setError('Expected an array of products under "products" key');
@@ -80,4 +83,4 @@ const TopPicks = () => {
   );
 };
 
-export default TopPicks;
+export default TopPicksFour;
