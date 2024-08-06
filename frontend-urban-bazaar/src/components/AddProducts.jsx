@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 
 function AddProductPage() {
   const [image, setImage] = useState(null);
+  const [additionalImages, setAdditionalImages] = useState([null, null]);
 
   const handleImageChange = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleAdditionalImageChange = (e, index) => {
+    const newImages = [...additionalImages];
+    newImages[index] = URL.createObjectURL(e.target.files[0]);
+    setAdditionalImages(newImages);
   };
 
   const handleDrop = (e) => {
@@ -61,29 +68,58 @@ function AddProductPage() {
             placeholder="Tags"
           />
           <label className="block mb-2">Product Image:</label>
-          <div
-            className="mb-4 border py-2 px-4 border-black w-full rounded-md h-32 flex items-center justify-center"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            style={{ borderStyle: 'dashed', cursor: 'pointer' }}
-          >
-            <input
-              className="hidden"
-              type="file"
-              accept="image/*"
-              id="imageUpload"
-              onChange={handleImageChange}
-            />
-            <label
-              htmlFor="imageUpload"
-              className="w-full h-full flex items-center justify-center cursor-pointer"
+          <div className="flex space-x-4">
+            <div
+              className="mb-4 border py-2 px-4 border-black w-32 h-32 flex items-center justify-center"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              style={{ borderStyle: 'dashed', cursor: 'pointer' }}
             >
-              {image ? (
-                <img src={image} alt="Product" className="max-h-full max-w-full" />
-              ) : (
-                <span>Drag and drop or click to browse</span>
-              )}
-            </label>
+              <input
+                className="hidden"
+                type="file"
+                accept="image/*"
+                id="imageUpload"
+                onChange={handleImageChange}
+              />
+              <label
+                htmlFor="imageUpload"
+                className="w-full h-full flex items-center justify-center cursor-pointer"
+              >
+                {image ? (
+                  <img src={image} alt="Product" className="max-h-full max-w-full" />
+                ) : (
+                  <span>Drag and drop or click to browse</span>
+                )}
+              </label>
+            </div>
+            <div className="flex space-x-4">
+              {additionalImages.map((img, index) => (
+                <div
+                  key={index}
+                  className="mb-4 border py-2 px-4 border-black w-32 h-32 flex items-center justify-center"
+                  style={{ borderStyle: 'dashed', cursor: 'pointer' }}
+                >
+                  <input
+                    className="hidden"
+                    type="file"
+                    accept="image/*"
+                    id={`additionalImageUpload${index}`}
+                    onChange={(e) => handleAdditionalImageChange(e, index)}
+                  />
+                  <label
+                    htmlFor={`additionalImageUpload${index}`}
+                    className="w-full h-full flex items-center justify-center cursor-pointer"
+                  >
+                    {img ? (
+                      <img src={img} alt={`Additional Product ${index + 1}`} className="max-h-full max-w-full" />
+                    ) : (
+                      <span>Click to upload</span>
+                    )}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
           <label className="block mb-2">Publish Category:</label>
           <input
