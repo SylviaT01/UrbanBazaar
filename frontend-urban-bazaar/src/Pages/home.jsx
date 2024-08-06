@@ -120,7 +120,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="absolute top-[4%] w-full flex justify-center bg-transparent z-20">
+        <div className="absolute top-[15%] w-full flex justify-center bg-transparent z-20">
           <div className="w-full max-w-screen-xl flex gap-[30px] py-4 px-6 overflow-x-auto">
             {categoryImages.map((category, index) => (
               <div
@@ -146,7 +146,7 @@ const Home = () => {
           </div>
         </div>
         <div className="pt-[200px]">
-          <div className="flex justify-center py-12 mt-12">
+          <div className="flex justify-center py-10 mt-12">
             <Link
               to="/products"
               className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md "
@@ -155,7 +155,7 @@ const Home = () => {
             </Link>
           </div>
           <div className="4-items">
-            <h1 className="mb-4 ">Weekly Offers</h1>
+            <h1 className="mb-2 flex justify-center text-xl font-semibold">Weekly Offers</h1>
             <WeeklyOffersFour />
             <div className="flex justify-center py-4">
               <Link
@@ -166,10 +166,9 @@ const Home = () => {
               </Link>
             </div>
             <div className="4-items">
-              <h1>Top picks</h1>
+              <h1 className="mb-2 flex justify-center text-xl font-semibold">Top picks</h1>
               <TopPicksFour />
             </div>
-
             <div className="flex justify-center py-4">
               <Link
                 to="/toppicks"
