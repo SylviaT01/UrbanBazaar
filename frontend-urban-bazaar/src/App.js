@@ -7,9 +7,6 @@ import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
-<<<<<<< HEAD
-import AddProductPage from "./components/AddProducts.jsx";
-=======
 import DashboardAdmin from "./Pages/DashboardAdmin";
 import UserProfile from "./Pages/UserProfileDashboard";
 import AllProducts from "./components/AllProducts";
@@ -20,7 +17,6 @@ import Payments from "./components/Payments";
 import Dashboard from "./components/DashboardAdmin";
 import Orders from "./admin/orders";
 import Navbar from "./admin/navbar";
->>>>>>> 0483938dc72ee092c8be1922d897410d443d8646
 
 // Dummy components for User Profile
 const DashboardUser = () => <div>Dashboard Content</div>;
@@ -41,9 +37,6 @@ function AppContent() {
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
-<<<<<<< HEAD
-          <Route path="/addproducts" element={<AddProductPage />} />
-=======
           <Route path="/orders" element={<Orders />} />
           <Route path="/DashboardAdmin" element={<Dashboard />} />
           <Route path="/dashboard" element={<DashboardAdmin />}>
@@ -62,11 +55,6 @@ function AppContent() {
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="profile" element={<UpdateProfile />} />
           </Route>
-<<<<<<< Updated upstream
-
->>>>>>> 0483938dc72ee092c8be1922d897410d443d8646
-=======
->>>>>>> Stashed changes
         </Routes>
       </div>
     </div>
