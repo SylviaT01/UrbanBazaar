@@ -70,7 +70,7 @@ function AddProductPage() {
           <label className="block mb-2">Product Image:</label>
           <div className="flex space-x-4">
             <div
-              className="mb-4 border py-2 px-4 border-black w-32 h-32 flex items-center justify-center"
+              className="mb-4 border py-2 px-4 border-black w-60 h-60 flex items-center justify-center"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               style={{ borderStyle: 'dashed', cursor: 'pointer' }}
@@ -89,7 +89,7 @@ function AddProductPage() {
                 {image ? (
                   <img src={image} alt="Product" className="max-h-full max-w-full" />
                 ) : (
-                  <span>Drag and drop or click to browse</span>
+                  <span className='text-md'>Drag and drop or click to browse</span>
                 )}
               </label>
             </div>
@@ -97,7 +97,7 @@ function AddProductPage() {
               {additionalImages.map((img, index) => (
                 <div
                   key={index}
-                  className="mb-4 border py-2 px-4 border-black w-32 h-32 flex items-center justify-center"
+                  className="mb-4 border py-2 px-4 border-black w-30 h-30 flex items-center justify-center"
                   style={{ borderStyle: 'dashed', cursor: 'pointer' }}
                 >
                   <input
@@ -128,6 +128,11 @@ function AddProductPage() {
             placeholder="Publish Category"
           />
         </div>
+      </div>
+      <div className="flex justify-center mt-8">
+        <button className="bg-blue-500 text-white py-2 px-6 rounded-md">
+          Add Products
+        </button>
       </div>
     </div>
   );
