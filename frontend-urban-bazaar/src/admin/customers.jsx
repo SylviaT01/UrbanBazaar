@@ -157,6 +157,55 @@ const Customer = () => {
                         </tbody>
                       </table>
                     </div>
+                    <div className="shrink-0 mt-9 max-w-full h-px w-[915px] max-md:mr-1.5" />
+                    <div className="flex flex-wrap gap-5 justify-between mt-9 mr-7 ml-5 font-medium max-md:mr-2.5 max-md:max-w-full">
+                      <div className="text-sm tracking-normal text-gray-400">
+                        Showing data {indexOfFirstUser + 1} to {indexOfLastUser}{" "}
+                        of {users.length} entries
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          className={`px-3 py-1 rounded ${
+                            currentPage === 1
+                              ? "bg-neutral-300"
+                              : "bg-neutral-100"
+                          }`}
+                          onClick={() =>
+                            currentPage > 1 && paginate(currentPage - 1)
+                          }
+                          disabled={currentPage === 1}
+                        >
+                          &lt;
+                        </button>
+                        {[...Array(totalPages).keys()].map((number) => (
+                          <button
+                            key={number + 1}
+                            className={`px-3 py-1 rounded ${
+                              currentPage === number + 1
+                                ? "text-white bg-indigo-600"
+                                : "bg-neutral-100"
+                            }`}
+                            onClick={() => paginate(number + 1)}
+                          >
+                            {number + 1}
+                          </button>
+                        ))}
+                        <button
+                          className={`px-3 py-1 rounded ${
+                            currentPage === totalPages
+                              ? "bg-neutral-300"
+                              : "bg-neutral-100"
+                          }`}
+                          onClick={() =>
+                            currentPage < totalPages &&
+                            paginate(currentPage + 1)
+                          }
+                          disabled={currentPage === totalPages}
+                        >
+                          &gt;
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -167,3 +216,5 @@ const Customer = () => {
     </div>
   );
 };
+
+export default Customer;
