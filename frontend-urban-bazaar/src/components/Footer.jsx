@@ -19,7 +19,7 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer className="text-black py-8 bg-blue-100">
+        <footer className="text-black py-4 bg-blue-100">
             <div className="container mx-auto px-10">
                 <div className="flex justify-between items-center">
                     <Link to="/">
