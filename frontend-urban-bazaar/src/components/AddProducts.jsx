@@ -29,11 +29,11 @@ function AddProductPage() {
       <h2 className="text-2xl mb-4">General Information</h2>
       <div className="grid grid-cols-2 gap-8">
         <div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 mb-4">
             <div className="w-1/2">
               <label className="block mb-2">Product name:</label>
               <input
-                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Product Name"
               />
@@ -41,7 +41,7 @@ function AddProductPage() {
             <div className="w-1/2">
               <label className="block mb-2">Brand:</label>
               <input
-                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Brand"
               />
@@ -49,15 +49,15 @@ function AddProductPage() {
           </div>
           <label className="block mb-2">Description:</label>
           <input
-            className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[100px]"
+            className="border py-2 px-4 border-gray-300 rounded-md w-full h-[100px] mb-4"
             type="text"
             placeholder="Description"
           />
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 mb-4">
             <div className="w-1/2">
               <label className="block mb-2">Price:</label>
               <input
-                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Price"
               />
@@ -65,7 +65,7 @@ function AddProductPage() {
             <div className="w-1/2">
               <label className="block mb-2">Discount:</label>
               <input
-                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Discount"
               />
@@ -75,14 +75,14 @@ function AddProductPage() {
         <div>
           <label className="block mb-2">Tags:</label>
           <input
-            className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+            className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px] mb-4"
             type="text"
             placeholder="Tags"
           />
           <label className="block mb-2">Product Image:</label>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 mb-4">
             <div
-              className="mb-4 border py-2 px-4 border-black w-60 h-60 flex items-center justify-center"
+              className="border py-2 px-4 border-black w-60 h-60 flex items-center justify-center"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               style={{ borderStyle: 'dashed', cursor: 'pointer' }}
@@ -109,7 +109,7 @@ function AddProductPage() {
               {additionalImages.map((img, index) => (
                 <div
                   key={index}
-                  className="mb-4 border py-2 px-4 border-black w-30 h-30 flex items-center justify-center"
+                  className="border py-2 px-4 border-black w-30 h-30 flex items-center justify-center"
                   style={{ borderStyle: 'dashed', cursor: 'pointer' }}
                 >
                   <input
@@ -135,7 +135,7 @@ function AddProductPage() {
           </div>
           <label className="block mb-2">Publish Category:</label>
           <input
-            className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+            className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px] mb-4"
             type="text"
             placeholder="Publish Category"
           />
