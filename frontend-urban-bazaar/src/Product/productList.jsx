@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Categories from './categories';
 import SearchBar from './searchBar';
 import SortBar from './sortBar';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -111,13 +110,7 @@ const ProductList = () => {
             <div className="flex-grow border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
               <div className="w-full h-full flex justify-center items-center">
                 <div className="w-[200px] mx-auto flex justify-center items-center">
-                  <Swiper spaceBetween={30} navigation pagination={{ clickable: true }}>
-                    {product.images.map((image, imageIndex) => (
-                      <SwiperSlide key={imageIndex}>
-                        <img src={image} alt={`Product avatar ${imageIndex + 1}`} className="max-h-[300px] object-cover" />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
+                  <img src={product.images[0]} alt={product.title} className="max-h-[300px] object-cover" />
                 </div>
               </div>
             </div>
@@ -126,7 +119,7 @@ const ProductList = () => {
             <p className="text-gray-700 mb-2 line-through">Ksh. {product.price}</p>
             <div className="flex items-center space-x-6">
               <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">Add to cart</button>
-              <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">View Product</button>
+              <Link to={`/products/${product.id}`} className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">View Product</Link>
             </div>
           </div>
         ))}

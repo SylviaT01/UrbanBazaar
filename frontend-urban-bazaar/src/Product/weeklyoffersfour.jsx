@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Link } from 'react-router-dom';
 
 const WeeklyOffersFour = () => {
   const [topProducts, setTopProducts] = useState([]);
@@ -90,9 +91,7 @@ const WeeklyOffersFour = () => {
             <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">
               Add to cart
             </button>
-            <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">
-              View Product
-            </button>
+            <Link to={`/products/${product.id}`} className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">View Product</Link>
           </div>
         </div>
       ))}

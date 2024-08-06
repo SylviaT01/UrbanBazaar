@@ -14,6 +14,7 @@ import NavItems from "./components/navItems";
 import TopPicks from "./Product/top-picks.jsx";
 import WeeklyOffers from "./Product/weekly-offers.jsx";
 import Footer from "./components/Footer.jsx";
+import ProductDetails from "./Product/productDetails.jsx";
 
 
 
@@ -34,6 +35,7 @@ function AppContent() {
           <Route path="/products" element={<ProductList />} />
           <Route path="/toppicks" element={<TopPicks />} />
           <Route path="/weeklyoffers" element={<WeeklyOffers />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
         </Routes>
       </div>
       <Footer />
