@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart, faShoppingCart, faSearch } from '@fortawesome/free-solid-svg-icons';
+import logo from '../assets/logo.svg';
 
 export default function NavItems() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,22 +43,26 @@ export default function NavItems() {
       <div className="bg-slate-100 border-b border-gray-300">
         <div className="flex justify-between h-16 items-center px-4 sm:px-6 lg:px-8">
           <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="text-blue-700 text-2xl font-bold">
-              UrbanBazaar
+            <Link to="/" className="flex items-center">
+              <img
+                src={logo}
+                alt="UrbanBazaar Logo"
+                className="w-32 h-auto p-2"
+              />
             </Link>
           </div>
           <form onSubmit={handleSearchSubmit} className="flex items-center">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="px-2 py-1 border border-gray-300 rounded-md"
-              />
-              <button type="submit" className="ml-2">
-                <FontAwesomeIcon icon={faSearch} className="text-gray-700 text-lg" />
-              </button>
-            </form>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="px-2 py-1 border border-gray-300 rounded-md"
+            />
+            <button type="submit" className="ml-2">
+              <FontAwesomeIcon icon={faSearch} className="text-gray-700 text-lg" />
+            </button>
+          </form>
           <div className="flex items-center space-x-6">
             <Link to="/account" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
               <FontAwesomeIcon icon={faUser} className="text-lg" />
@@ -70,7 +75,7 @@ export default function NavItems() {
               <FontAwesomeIcon icon={faShoppingCart} className="text-lg border border-gray-400 rounded-full p-1" />
             </Link>
             {/* Search Bar */}
-            
+
           </div>
         </div>
         {/* Shop by Category and Brand */}
