@@ -71,7 +71,7 @@ const Orders = () => {
                   className="flex-grow bg-transparent border-none outline-none"
                 />
               </div>
-              <div className="flex absolute right-2 z-0 gap-5 items-center self-start bottom-[9px] min-w-[240px] w-[285px]"></div>
+              {/* <div className="flex absolute right-2 z-0 gap-5 items-center self-start bottom-[9px] min-w-[240px] w-[285px]"></div> */}
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ const Orders = () => {
         <div className="max-md:max-w-full">
           <div className="flex gap-5 max-md:flex-col">
             <div className="flex flex-col w-[22%] max-md:ml-0 max-md:w-full">
-              <div className="flex flex-col text-base font-medium tracking-widest whitespace-nowrap min-h-[570px] max-md:mt-10"></div>
+              {/* <div className="flex flex-col text-base font-medium tracking-widest whitespace-nowrap min-h-[570px] max-md:mt-10"></div> */}
             </div>
             <div className="flex flex-col ml-5 max-md:ml-0 max-md:w-full">
               <div className="flex flex-col items-center px-1.5 py-14 mx-auto w-full font-medium bg-white rounded max-md:mt-10 max-md:max-w-full">

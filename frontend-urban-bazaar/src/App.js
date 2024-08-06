@@ -7,6 +7,7 @@ import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
+<<<<<<< Updated upstream
 import DashboardAdmin from "./Pages/DashboardAdmin";
 import AllProducts from "./components/AllProducts";
 import AddProducts from "./components/AddProducts";
@@ -15,11 +16,16 @@ import Reviews from "./components/Reviews";
 import Customers from "./components/Customers";
 import Payments from "./components/Payments";
 import Dashboard from "./components/DashboardAdmin";
+=======
+import Orders from "./admin/orders";
+
+
+>>>>>>> Stashed changes
 
 function AppContent() {
   return (
     <div className="min-h-screen flex flex-col">
-      <NavItems />
+      {/* <NavItems /> */}
       <div className="flex-grow">
         <Routes>
           {/* <Route path="/login" element={<Login />} />
@@ -30,6 +36,7 @@ function AppContent() {
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
+<<<<<<< Updated upstream
           <Route path="/dashboard" element={<DashboardAdmin />}>
             <Route path="dashboardAdmin" element={<Dashboard />} />
             <Route path="products/all" element={<AllProducts />} />
@@ -39,6 +46,9 @@ function AppContent() {
             <Route path="customers" element={<Customers />} />
             <Route path="payments" element={<Payments />} />
           </Route>
+=======
+          <Route path="/orders" element={<Orders />} />
+>>>>>>> Stashed changes
         </Routes>
       </div>
     </div>
