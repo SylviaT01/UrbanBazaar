@@ -37,7 +37,7 @@ const Navbar = () => {
         isDarkMode ? "bg-gray-800" : "bg-sky-50"
       } max-md:px-5`}
     >
-      <div className="flex gap-5 justify-between px-5 pt-2 w-full bg-white max-w-[1240px] max-md:max-w-full items-center">
+      <div className="flex gap-5 justify-between px-5 pt-2 w-full bg-white max-w-[1440px] max-md:max-w-full items-center">
         <div className="flex gap-5 justify-between items-start self-start text-base tracking-widest leading-none whitespace-nowrap text-neutral-400 max-md:max-w-full">
           <img
             src={logo}
