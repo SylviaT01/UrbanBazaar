@@ -412,6 +412,28 @@ def remove_from_cart(product_id):
 
     return jsonify({'message': 'Product removed from cart successfully'})
 
+# Route to view all orders (Admin only)
+@app.route('/admin/orders', methods=['GET'])
+# @jwt_required()
+# @admin_required
+def get_all_orders():
+    orders = Order.query.all()
+    output = []
+
+    for order in orders:
+        order_data = {
+            'id': order.id,
+            'user_id': order.user_id,
+            'shipping_address': order.shipping_address,
+            'payment_method': order.payment_method,
+            'order_total': order.order_total,
+            'created_at': order.created_at,
+            'updated_at': order.updated_at
+        }
+        output.append(order_data)
+
+    return jsonify({'orders': output})
+
 # Route to create an order from the shopping cart
 @app.route('/orders', methods=['POST'])
 @jwt_required()
