@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
-import Contact from "./Pages/contact";
 import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
 import CartModal from "./components/cartModal";
@@ -21,6 +20,10 @@ import Customers from "./admin/Customers";
 import Payments from "./admin/Payments";
 import Dashboard from "./admin/DashboardAdmin";
 import Navbar from "./admin/navbar";
+import Login from "./Forms /login";
+import SignUp from "./Forms /signup";
+import Contacts from "./Pages/Contact";
+import Checkout from "./Forms /Checkout";
 
 // Dummy components for User Profile
 const DashboardUser = () => <div>Dashboard Content</div>;
@@ -35,8 +38,11 @@ function AppContent() {
       <Navbar />
       <div className="flex-grow">
         <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/contact" element={<Contacts />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
