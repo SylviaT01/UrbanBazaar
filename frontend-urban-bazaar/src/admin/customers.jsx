@@ -107,6 +107,59 @@ const Customer = () => {
                   </div>
                 </div>
               </div>
+              <div className="flex flex-col pt-7 pb-10 mt-5 w-full bg-white rounded-lg max-md:max-w-full">
+                <div className="flex flex-wrap gap-5 justify-between mr-7 ml-5 max-md:mr-2.5 max-md:max-w-full">
+                  <div className="flex flex-col">
+                    <div className="text-2xl font-semibold tracking-tight text-black">
+                      All Customers
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                              Id
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Username
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Email
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Password
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Is_Admin
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {currentUsers.map((user) => (
+                            <tr key={user.id}>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.id}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.username}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.email}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.password}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.is_admin}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
