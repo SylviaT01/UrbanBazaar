@@ -15,49 +15,49 @@ const AboutUs = () => {
     const values = [
         {
             id: 1,
-            icon: <img src={CustomerCentric} alt="customer-centric"/>,
+            icon: <img src={CustomerCentric} alt="customer-centric" />,
             title: "Customer-Centric",
             text: "We place our customers at the heart of everything we do. Our goal is to understand and anticipate their needs, ensuring a seamless and satisfying shopping experience.",
         },
         {
             id: 2,
-            icon: <img src={Integrity} alt="integrity"/>,
+            icon: <img src={Integrity} alt="integrity" />,
             title: "Integrity",
             text: "We uphold the highest standards of integrity in all our actions. We believe in being honest, transparent, and ethical in every aspect of our business.",
         },
         {
             id: 3,
-            icon: <img src={Quality} alt="quality"/>,
+            icon: <img src={Quality} alt="quality" />,
             title: "Quality",
             text: "Quality is at the core of our offerings.We strive to provide high-quality products and services that meet and exceed the expectations of our customers.",
         },
         {
             id: 4,
-            icon: <img src={Innovation} alt="innovation"/>,
+            icon: <img src={Innovation} alt="innovation" />,
             title: "Innovation",
             text: "We are committed to continuous innovation, leveraging the latest technologies to enhance our platform and deliver the best possible experience for our users.",
         },
         {
             id: 5,
-            icon: <img src={Convenience} alt="convenience"/>,
+            icon: <img src={Convenience} alt="convenience" />,
             title: "Convenince",
             text: "We aim to make shopping as convenient as possible by providing a wide range of products, easy-to-use interfaces, and efficient services.",
         },
         {
             id: 6,
-            icon: <img src={Community} alt="community"/>,
+            icon: <img src={Community} alt="community" />,
             title: "Community",
             text: "We believe in fostering a strong sense of community. UrbanBazaar is dedicated to supporting and giving back to the communities we serve.",
         },
         {
             id: 7,
-            icon: <img src={Sustainability} alt="sustainability"/>,
+            icon: <img src={Sustainability} alt="sustainability" />,
             title: "Sustainability",
             text: "We are committed to sustainable practices that protect our planet. We strive to reduce our environmental footprint and promote eco-friendly products and solutions.",
         },
         {
             id: 8,
-            icon: <img src={Excellence} alt="excellence"/>,
+            icon: <img src={Excellence} alt="excellence" />,
             title: "Excellence",
             text: "We pursue excellence in everything we do. From customer service to product selection, we are dedicated to achieving the highest standards of quality and performance.",
         },
@@ -108,16 +108,19 @@ const AboutUs = () => {
                         {values.map((value) => (
                             <div
                                 key={value.id}
-                                className="bg-slate-100 hover:scale-105 duration-300 ease-linear shadow-lg py-2 px-4 flex justify-center flex-col text-center items-center gap-4 mx-8  md:mx-0 rounded-lg"
+                                className="bg-slate-100 hover:scale-105 duration-300 ease-linear shadow-lg py-2 px-4 flex justify-start items-center gap-4 mx-8 md:mx-0 rounded-lg"
                             >
-                                <div className="w-20 h-20 flex items-center justify-center bg-slate-100 rounded-full mb-4 border border-blue-200">
+                                <div className="w-28 h-18 flex items-center justify-center bg-slate-100 rounded-full border border-blue-200 p-2">
                                     <span className="text-4xl text-blue-300">{value.icon}</span>
                                 </div>
-                                <h3 className="text-md font-medium">{value.title}</h3>
-                                <p className="text-black font-extralight text-sm">{value.text}</p>
+                                <div className="flex flex-col text-left">
+                                    <h3 className="text-sm font-medium">{value.title}</h3>
+                                    <p className="text-black font-extralight text-xs">{value.text}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
+
 
 
                 </div>
