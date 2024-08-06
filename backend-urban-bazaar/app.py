@@ -468,6 +468,23 @@ def create_order():
 
     return jsonify({'message': 'Order created successfully'})
 
+@app.route('/order', methods=['GET'])
+def get_orders():
+    orders = Order.query.all()
+    orders_data = [
+        {
+            'id': order.id,
+            'user_id': order.user_id,
+            'order_date': order.order_date,
+            'shipping_address': order.shipping_address,
+            'payment_method': order.payment_method,
+            'order_total': order.order_total,
+            'status': order.status
+        }
+        for order in orders
+    ]
+    return jsonify(orders_data)    
+
 # Route to add product to wishlist
 @app.route('/wishlist', methods=['POST'])
 @jwt_required()

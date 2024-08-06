@@ -85,6 +85,10 @@ import Reviews from "./components/Reviews";
 import Customers from "./components/Customers";
 import Payments from "./components/Payments";
 import Dashboard from "./components/DashboardAdmin";
+import Orders from "./admin/orders";
+import Dashboard from "./Pages/DashboardAdmin";
+import Navbar from "./admin/navbar";
+
 
 // Dummy components for User Profile
 const DashboardUser = () => <div>Dashboard Content</div>;
@@ -95,7 +99,8 @@ const UpdateProfile = () => <div>Update Profile Content</div>;
 function AppContent() {
   return (
     <div className="min-h-screen flex flex-col">
-      <NavItems />
+      {/* <NavItems /> */}
+      <Navbar />
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -104,7 +109,9 @@ function AppContent() {
           <Route path="/cart" element={<CartModal />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
-          <Route path="/dashboard" element={<DashboardAdmin />}>
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/DashboardAdmin" element={<Dashboard />} />
+            <Route path="/dashboard" element={<DashboardAdmin />}>
             <Route path="dashboardAdmin" element={<Dashboard />} />
             <Route path="products/all" element={<AllProducts />} />
             <Route path="products/add" element={<AddProducts />} />
@@ -120,6 +127,7 @@ function AppContent() {
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="profile" element={<UpdateProfile />} />
           </Route>
+
         </Routes>
       </div>
     </div>
