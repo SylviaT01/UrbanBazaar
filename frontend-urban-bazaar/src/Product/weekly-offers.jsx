@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from 'react-router-dom';
 
 const WeeklyOffers = () => {
@@ -49,12 +48,10 @@ const WeeklyOffers = () => {
     product.title.toLowerCase().includes(searchQuery)
   );
 
-  // Calculate current products based on page number
   const indexOfLastProduct = currentPage * itemsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -93,21 +90,7 @@ const WeeklyOffers = () => {
             <div className="flex-grow border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
               <div className="w-full h-full flex justify-center items-center">
                 <div className="w-[200px] mx-auto flex justify-center items-center">
-                  <Swiper
-                    spaceBetween={30}
-                    navigation
-                    pagination={{ clickable: true }}
-                  >
-                    {product.images.map((image, imageIndex) => (
-                      <SwiperSlide key={imageIndex}>
-                        <img
-                          src={image}
-                          alt={`Product avatar ${imageIndex + 1}`}
-                          className="max-h-[300px] object-cover"
-                        />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
+                  <img src={product.images[0]} alt={product.title} className="max-h-[300px] object-cover" />
                 </div>
               </div>
             </div>

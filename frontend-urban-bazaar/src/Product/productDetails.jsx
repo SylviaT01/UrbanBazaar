@@ -1,16 +1,21 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = React.useState(null);
+  const [selectedImage, setSelectedImage] = React.useState('');
 
   React.useEffect(() => {
     fetch(`http://127.0.0.1:5000/products/${id}`)
       .then(response => response.json())
-      .then(data => setProduct(data.product))
+      .then(data => {
+        setProduct(data.product);
+        // Set the first image as the default selected image
+        if (data.product.images.length > 0) {
+          setSelectedImage(data.product.images[0]);
+        }
+      })
       .catch(error => console.error('Error fetching product details:', error));
   }, [id]);
 
@@ -18,17 +23,31 @@ const ProductDetailPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="md:w-1/2">
-          <Swiper spaceBetween={30} navigation pagination={{ clickable: true }}>
-            {product.images.map((image, index) => (
-              <SwiperSlide key={index}>
-                <img src={image} alt={`Product ${index + 1}`} className="w-full h-auto object-cover" />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+      <div className="flex flex-row gap-8">
+        {/* Thumbnail images */}
+        <div className="w-1/8 flex flex-col space-y-4">
+          {product.images.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`Product Thumbnail ${index + 1}`}
+              className={`w-10 h-10 object-cover cursor-pointer rounded-lg shadow-md ${selectedImage === image ? 'border-2 border-blue-500' : ''}`}
+              onClick={() => setSelectedImage(image)}
+            />
+          ))}
         </div>
-        <div className="md:w-1/2">
+        
+        {/* Main product image */}
+        <div className="flex-1">
+          <img
+            src={selectedImage}
+            alt="Main Product"
+            className="w-50 h-50 image-cover rounded-lg shadow-md"
+          />
+        </div>
+
+        {/* Product details */}
+        <div className="w-1/2 flex flex-col space-y-4">
           <h1 className="text-3xl font-semibold mb-4">{product.title}</h1>
           <p className="text-lg text-gray-700 mb-2">Ksh. {Math.round((product.price * (100 - product.discountPercentage)) / 100)}</p>
           <p className="text-lg text-gray-500 line-through mb-4">Ksh. {product.price}</p>
