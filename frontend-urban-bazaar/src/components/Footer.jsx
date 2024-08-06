@@ -25,7 +25,7 @@ const Footer = () => {
                     <Link to="/">
                         <img src={logo} alt="UrbanBazaar Logo" className="h-16" />
                     </Link>
-                    <p className="text-gray-600 text-center">© 2024 URBANBAZAAR. ALL RIGHTS RESERVED.</p>
+                    <p className="text-gray-600 font-medium text-center">© 2024 URBANBAZAAR. ALL RIGHTS RESERVED.</p>
                     <div className="flex items-center gap-4">
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-blue-400">
                             <img src={instagramIcon} alt="Instagram" className="h-6 w-6" />
