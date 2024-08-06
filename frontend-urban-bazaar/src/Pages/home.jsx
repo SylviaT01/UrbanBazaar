@@ -482,7 +482,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-        {/* Overlapping div */}
         <div className="absolute top-[4%] w-full flex justify-center bg-transparent z-20">
           <div className="w-full max-w-screen-xl flex gap-[30px] py-4 px-6 overflow-x-auto">
             {categoryImages.map((category, index) => (
@@ -508,9 +507,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-        {/* Rest of the content */}
         <div className="pt-[200px]">
-          {/* This padding creates space below the absolute positioned div */}
           <div className="flex justify-center py-12 mt-12">
             <Link
               to="/products"

@@ -13,6 +13,7 @@ import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
 import TopPicks from "./Product/top-picks.jsx";
 import WeeklyOffers from "./Product/weekly-offers.jsx";
+import Footer from "./components/Footer.jsx";
 
 
 
@@ -35,6 +36,7 @@ function AppContent() {
           <Route path="/weeklyoffers" element={<WeeklyOffers />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }
