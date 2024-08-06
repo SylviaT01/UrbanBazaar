@@ -9,7 +9,7 @@ import { GoChevronRight, GoChevronLeft } from "react-icons/go";
 import slide1 from "../assets/slide1.jpg";
 import slide2 from "../assets/slide2.jpg";
 import slide3 from "../assets/slide3.jpg";
-import WeeklyOffers from "../Product/weekly-offers";
+import WeeklyOffersFour from "../Product/weeklyoffersfour";
 import TopPicks from "../Product/top-picks";
 
 const Home = () => {
@@ -156,7 +156,7 @@ const Home = () => {
           </div>
           <div className="4-items">
             <h1 className="mb-4 ">Weekly Offers</h1>
-            <WeeklyOffers />
+            <WeeklyOffersFour />
             <div className="flex justify-center py-4">
               <Link
                 to="/weeklyoffers"
