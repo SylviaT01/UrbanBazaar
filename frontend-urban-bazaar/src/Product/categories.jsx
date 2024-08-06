@@ -26,7 +26,7 @@ function Categories({ categories, selectedCategory, onSelectCategory }) {
                     onClick={toggleCategories}
                     data-aos= 'flip-left'
                 >
-                    View categories
+                    Categories
                 </button>
             </div>
             {showCategories && (
