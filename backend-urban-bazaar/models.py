@@ -125,7 +125,7 @@ class Wishlist(db.Model):
 
 
 # ContactUs model to store user queries and feedback
-class Contact(db.Model):
+class ContactUs(db.Model):
     __tablename__ = 'contacts'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
