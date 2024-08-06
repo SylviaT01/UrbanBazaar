@@ -88,6 +88,7 @@ import Dashboard from "./components/DashboardAdmin";
 import Orders from "./admin/orders";
 import Dashboard from "./Pages/DashboardAdmin";
 import Navbar from "./admin/navbar";
+import Customer from './admin/customers'
 
 
 // Dummy components for User Profile
@@ -110,6 +111,7 @@ function AppContent() {
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path='/customers' element={<Customer/>} />
           <Route path="/DashboardAdmin" element={<Dashboard />} />
             <Route path="/dashboard" element={<DashboardAdmin />}>
             <Route path="dashboardAdmin" element={<Dashboard />} />

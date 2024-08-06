@@ -483,7 +483,22 @@ def get_orders():
         }
         for order in orders
     ]
-    return jsonify(orders_data)    
+    return jsonify(orders_data)  
+
+@app.route('/user', methods=['GET'])
+def get_user():
+    users = User.query.all()
+    users_data = [
+        {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'password': user.password,
+            'is_admin': user.is_admin,
+        }
+        for user in users
+    ]
+    return jsonify(users_data)          
 
 # Route to add product to wishlist
 @app.route('/wishlist', methods=['POST'])
