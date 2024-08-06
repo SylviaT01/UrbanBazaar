@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function AddProductPage() {
   const [image, setImage] = useState(null);
@@ -85,7 +85,7 @@ function AddProductPage() {
               className="border py-2 px-4 border-black w-60 h-60 flex items-center justify-center"
               onDrop={handleDrop}
               onDragOver={handleDragOver}
-              style={{ borderStyle: 'dashed', cursor: 'pointer' }}
+              style={{ borderStyle: "dashed", cursor: "pointer" }}
             >
               <input
                 className="hidden"
@@ -99,9 +99,16 @@ function AddProductPage() {
                 className="w-full h-full flex items-center justify-center cursor-pointer"
               >
                 {image ? (
-                  <img src={image} alt="Product" className="max-h-full max-w-full" />
+                  <img
+                    src={image}
+                    alt="Product"
+                    className="max-h-full max-w-full"
+                  />
                 ) : (
-                  <span className='text-md'>Drag and drop or click to browse</span>
+                  <span className="text-md">
+                    Drag and drop <span className="text-blue-500">or</span>{" "}
+                    click to browse
+                  </span>
                 )}
               </label>
             </div>
@@ -110,7 +117,7 @@ function AddProductPage() {
                 <div
                   key={index}
                   className="border py-2 px-4 border-black w-30 h-30 flex items-center justify-center"
-                  style={{ borderStyle: 'dashed', cursor: 'pointer' }}
+                  style={{ borderStyle: "dashed", cursor: "pointer" }}
                 >
                   <input
                     className="hidden"
@@ -124,7 +131,11 @@ function AddProductPage() {
                     className="w-full h-full flex items-center justify-center cursor-pointer"
                   >
                     {img ? (
-                      <img src={img} alt={`Additional Product ${index + 1}`} className="max-h-full max-w-full" />
+                      <img
+                        src={img}
+                        alt={`Additional Product ${index + 1}`}
+                        className="max-h-full max-w-full"
+                      />
                     ) : (
                       <span>Click to upload</span>
                     )}
