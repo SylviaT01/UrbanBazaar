@@ -33,7 +33,7 @@ function AddProductPage() {
             <div className="w-1/2">
               <label className="block mb-2">Product name:</label>
               <input
-                className="mb-4 border py-2 px-4 border-black w-full"
+                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Product Name"
               />
@@ -41,7 +41,7 @@ function AddProductPage() {
             <div className="w-1/2">
               <label className="block mb-2">Brand:</label>
               <input
-                className="mb-4 border py-2 px-4 border-black w-full"
+                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Brand"
               />
@@ -49,7 +49,7 @@ function AddProductPage() {
           </div>
           <label className="block mb-2">Description:</label>
           <input
-            className="mb-4 border py-2 px-4 border-black w-full"
+            className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[100px]"
             type="text"
             placeholder="Description"
           />
@@ -57,7 +57,7 @@ function AddProductPage() {
             <div className="w-1/2">
               <label className="block mb-2">Price:</label>
               <input
-                className="mb-4 border py-2 px-4 border-gray-300 w-full rounded-md"
+                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Price"
               />
@@ -65,7 +65,7 @@ function AddProductPage() {
             <div className="w-1/2">
               <label className="block mb-2">Discount:</label>
               <input
-                className="mb-4 border py-2 px-4 border-black w-full"
+                className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Discount"
               />
@@ -75,7 +75,7 @@ function AddProductPage() {
         <div>
           <label className="block mb-2">Tags:</label>
           <input
-            className="mb-4 border py-2 px-4 border-black w-full"
+            className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
             type="text"
             placeholder="Tags"
           />
@@ -135,7 +135,7 @@ function AddProductPage() {
           </div>
           <label className="block mb-2">Publish Category:</label>
           <input
-            className="mb-4 border py-2 px-4 border-black w-full"
+            className="mb-4 border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
             type="text"
             placeholder="Publish Category"
           />
