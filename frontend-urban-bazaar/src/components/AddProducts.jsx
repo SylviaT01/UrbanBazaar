@@ -29,36 +29,48 @@ function AddProductPage() {
       <h2 className="text-2xl mb-4">General Information</h2>
       <div className="grid grid-cols-2 gap-8">
         <div>
-          <label className="block mb-2">Product name:</label>
-          <input
-            className="mb-4 border py-2 px-4 border-black w-full"
-            type="text"
-            placeholder="Product Name"
-          />
-          <label className="block mb-2">Brand:</label>
-          <input
-            className="mb-4 border py-2 px-4 border-black w-full"
-            type="text"
-            placeholder="Brand"
-          />
+          <div className="flex space-x-4">
+            <div className="w-1/2">
+              <label className="block mb-2">Product name:</label>
+              <input
+                className="mb-4 border py-2 px-4 border-black w-full"
+                type="text"
+                placeholder="Product Name"
+              />
+            </div>
+            <div className="w-1/2">
+              <label className="block mb-2">Brand:</label>
+              <input
+                className="mb-4 border py-2 px-4 border-black w-full"
+                type="text"
+                placeholder="Brand"
+              />
+            </div>
+          </div>
           <label className="block mb-2">Description:</label>
           <input
             className="mb-4 border py-2 px-4 border-black w-full"
             type="text"
             placeholder="Description"
           />
-          <label className="block mb-2">Price:</label>
-          <input
-            className="mb-4 border py-2 px-4 border-gray-300 w-full rounded-md"
-            type="text"
-            placeholder="Price"
-          />
-          <label className="block mb-2">Discount:</label>
-          <input
-            className="mb-4 border py-2 px-4 border-black w-full"
-            type="text"
-            placeholder="Discount"
-          />
+          <div className="flex space-x-4">
+            <div className="w-1/2">
+              <label className="block mb-2">Price:</label>
+              <input
+                className="mb-4 border py-2 px-4 border-gray-300 w-full rounded-md"
+                type="text"
+                placeholder="Price"
+              />
+            </div>
+            <div className="w-1/2">
+              <label className="block mb-2">Discount:</label>
+              <input
+                className="mb-4 border py-2 px-4 border-black w-full"
+                type="text"
+                placeholder="Discount"
+              />
+            </div>
+          </div>
         </div>
         <div>
           <label className="block mb-2">Tags:</label>
