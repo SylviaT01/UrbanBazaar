@@ -1,4 +1,22 @@
+import React, { useState } from 'react';
+
 function AddProductPage() {
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    setImage(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    setImage(URL.createObjectURL(file));
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="w-full relative bg-aliceblue h-[1024px] overflow-hidden text-left text-base text-black font-poppins p-8">
       <h2 className="text-2xl mb-4">General Information</h2>
@@ -24,7 +42,7 @@ function AddProductPage() {
           />
           <label className="block mb-2">Price:</label>
           <input
-            className="mb-4 border py-2 px-4 border-black w-full"
+            className="mb-4 border py-2 px-4 border-gray-300 w-full rounded-md"
             type="text"
             placeholder="Price"
           />
@@ -43,11 +61,30 @@ function AddProductPage() {
             placeholder="Tags"
           />
           <label className="block mb-2">Product Image:</label>
-          <input
-            className="mb-4 border py-2 px-4 border-black w-full"
-            type="text"
-            placeholder="Image URL"
-          />
+          <div
+            className="mb-4 border py-2 px-4 border-black w-full rounded-md h-32 flex items-center justify-center"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            style={{ borderStyle: 'dashed', cursor: 'pointer' }}
+          >
+            <input
+              className="hidden"
+              type="file"
+              accept="image/*"
+              id="imageUpload"
+              onChange={handleImageChange}
+            />
+            <label
+              htmlFor="imageUpload"
+              className="w-full h-full flex items-center justify-center cursor-pointer"
+            >
+              {image ? (
+                <img src={image} alt="Product" className="max-h-full max-w-full" />
+              ) : (
+                <span>Drag and drop or click to browse</span>
+              )}
+            </label>
+          </div>
           <label className="block mb-2">Publish Category:</label>
           <input
             className="mb-4 border py-2 px-4 border-black w-full"
