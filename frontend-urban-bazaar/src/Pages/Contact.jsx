@@ -61,7 +61,7 @@ const Contact = () => {
       <div className="w-full max-w-screen-lg bg-contactBlue shadow-md rounded-md overflow-hidden mb-8">
         <div className="md:flex">
           {/* Contact Form */}
-          <div className="w-full md:w-1/2 p-8">
+          <div className="w-full md:w-1/2 p-8 bg-[#DAEFFA]">
             <h1 className="text-2xl font-bold mb-6 text-gray-800">
               We'd love to here from you!
             </h1>
