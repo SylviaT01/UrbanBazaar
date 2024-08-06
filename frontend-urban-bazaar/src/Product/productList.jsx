@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import Categories from './categories';
-import SearchBar from './searchBar'; 
+import SearchBar from './searchBar';
+import SortBar from './sortBar';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
@@ -10,9 +10,10 @@ const ProductList = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
-  const pagesToShow = 3; 
+  const pagesToShow = 3;
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/products')
@@ -27,21 +28,40 @@ const ProductList = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
-    setCurrentPage(1); 
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (event) => {
+    setSortOption(event.target.value);
   };
 
   const filteredProducts = products
     .filter(product => selectedCategory === 'All' || product.category === selectedCategory)
     .filter(product => product.title.toLowerCase().includes(searchQuery));
 
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const sortedProducts = filteredProducts.sort((a, b) => {
+    switch (sortOption) {
+      case 'priceAsc':
+        return a.price - b.price;
+      case 'priceDesc':
+        return b.price - a.price;
+      case 'titleAsc':
+        return a.title.localeCompare(b.title);
+      case 'titleDesc':
+        return b.title.localeCompare(a.title);
+      default:
+        return 0;
+    }
+  });
+
+  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
-  const currentProducts = filteredProducts.slice(startIndex, startIndex + productsPerPage);
+  const currentProducts = sortedProducts.slice(startIndex, startIndex + productsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -55,7 +75,6 @@ const ProductList = () => {
     setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
   };
 
-  // Determine the range of pages to show
   const getPageRange = () => {
     const start = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
     const end = Math.min(totalPages, start + pagesToShow - 1);
@@ -74,10 +93,16 @@ const ProductList = () => {
             selectedCategory={selectedCategory}
             onSelectCategory={handleCategoryChange}
           />
-          <SearchBar
-            searchQuery={searchQuery}
-            onSearchChange={handleSearchChange}
-          />
+          <div className="flex flex-row justify-center items-center gap-4">
+            <SearchBar
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+            />
+            <SortBar
+              sortOption={sortOption}
+              onSortChange={handleSortChange}
+            />
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0 bg-blue-50 z-100 px-4 py-4 mb-0">
@@ -179,4 +204,3 @@ const ProductList = () => {
 };
 
 export default ProductList;
-
