@@ -29,3 +29,21 @@ const handleSelectReview = (reviewId) => {
       : [...prevSelectedReviews, reviewId]
   );
 };
+
+const handleDeleteSelected = () => {
+  fetch("http://127.0.0.1:5000/delete_reviews", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ review_ids: selectedReviews }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      setReviews((prevReviews) =>
+        prevReviews.filter((review) => !selectedReviews.includes(review.id))
+      );
+      setSelectedReviews([]);
+    })
+    .catch((error) => console.error("Error deleting reviews:", error));
+};
