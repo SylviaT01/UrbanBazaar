@@ -16,7 +16,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F0F9FF] py-20 ">
+    <div className="flex min-h-screen bg-[#F0F9FF] py-20">
       {/* Sidebar */}
       <aside className="ml-20 w-64 text-[#747474]">
         <nav className="p-4">

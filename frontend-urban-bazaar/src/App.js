@@ -9,16 +9,17 @@ import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
 import DashboardAdmin from "./Pages/DashboardAdmin";
 import UserProfile from "./Pages/UserProfileDashboard";
-import AllProducts from "./components/AllProducts";
-import AddProducts from "./components/AddProducts";
-//import Reviews from "./components/Reviews";
-//import Payments from "./components/Payments";
-//import Dashboard from "./components/DashboardAdmin";
+
+import AllProducts from "./admin/AllProducts";
+import AddProducts from "./admin/AddProducts";
+import Reviews from "./admin/Reviews";
+import Customers from "./components/Customers";
+import Payments from "./admin/Payments";
+import Dashboard from "./admin/DashboardAdmin";
+
 import Orders from "./admin/orders";
-import Dashboard from "./Pages/DashboardAdmin";
 import Navbar from "./admin/navbar";
 import Customer from './admin/customers'
-
 
 // Dummy components for User Profile
 const DashboardUser = () => <div>Dashboard Content</div>;
@@ -42,7 +43,7 @@ function AppContent() {
           <Route path="/orders" element={<Orders />} />
           {/* <Route path='/customers' element={<Customer/>} /> */}
           <Route path="/DashboardAdmin" element={<Dashboard />} />
-            <Route path="/dashboard" element={<DashboardAdmin />}>
+          <Route path="/dashboard" element={<DashboardAdmin />}>
             <Route path="dashboardAdmin" element={<Dashboard />} />
             <Route path="products/all" element={<AllProducts />} />
             <Route path="products/add" element={<AddProducts />} />
@@ -58,7 +59,6 @@ function AppContent() {
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="profile" element={<UpdateProfile />} />
           </Route>
-
         </Routes>
       </div>
     </div>
