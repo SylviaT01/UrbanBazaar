@@ -100,64 +100,27 @@ const UpdateProfileForm = () => {
             placeholder="Enter new password" 
           />
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <div className="mt-4">
+          <label className="block text-gray-700">Confirm Password</label>
+          <input 
+            type="password" 
+            name="confirmPassword" 
+            value={formData.confirmPassword} 
+            onChange={handleChange} 
+            className="mt-1 p-2 border rounded w-full" 
+            placeholder="Repeat new password" 
+          />
+        </div>
+        <div className="mt-6 text-center">
+          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Save Changes
+          </button>
+        </div>
       </form>
     </div>
-   
-  )  
+  );
 };
+
+
 
 export default UpdateProfileForm;
