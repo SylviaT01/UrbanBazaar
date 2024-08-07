@@ -11,7 +11,7 @@ const Reviews = () => {
   useEffect(() => {
     fetch("http://127.0.0.1:5000/review")
       .then((response) => response.json())
-      .then((data) => setReviews(data))
+      .then((data) => setReviews(data.reviews))
       .catch((error) => console.error("Error fetching reviews:", error));
   }, []);
 
