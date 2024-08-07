@@ -1,15 +1,18 @@
 import React from 'react';
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import RelatedProducts from './relatedProducts';
 import TopPicksFour from './top-picksfour';
+import { useCart } from '../contexts/cartContext'; // Import useCart context
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = React.useState(null);
   const [selectedImage, setSelectedImage] = React.useState('');
   const [relatedProducts, setRelatedProducts] = React.useState([]);
+  const [quantity, setQuantity] = React.useState(1); // State for quantity
+  const { addToCart, addToWishlist, notification } = useCart(); // Use useCart context
 
   React.useEffect(() => {
     fetch(`http://127.0.0.1:5000/products/${id}`)
@@ -30,6 +33,18 @@ const ProductDetailPage = () => {
       })
       .catch(error => console.error('Error fetching product details:', error));
   }, [id]);
+
+  const handleQuantityChange = (increment) => {
+    setQuantity((prevQuantity) => Math.max(1, prevQuantity + increment));
+  };
+
+  const handleAddToCart = () => {
+    addToCart({ ...product, quantity });
+  };
+
+  const handleAddToWishlist = () => {
+    addToWishlist(product);
+  };
 
   if (!product) return <div className="text-center py-8">Loading...</div>;
 
@@ -89,12 +104,30 @@ const ProductDetailPage = () => {
             <span className="font-normal text-red-500"> {product.stock}</span>
           </p>
 
-          <div className="flex flex-row gap-6 m-4">
-            <button className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400">Add to Cart</button>
-            <button className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 flex items-center">
+          <div className="flex flex-row gap-6 m-4 items-center">
+            <button
+              onClick={handleAddToCart}
+              className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleAddToWishlist}
+              className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 flex items-center"
+            >
               <FontAwesomeIcon icon={faHeart} className="mr-2" />
               Add to Wishlist
             </button>
+            <div className="flex items-center">
+              <button onClick={() => handleQuantityChange(-1)} className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400">-</button>
+              <input
+                type="text"
+                value={quantity}
+                readOnly
+                className="w-12 text-center mx-2 border rounded"
+              />
+              <button onClick={() => handleQuantityChange(1)} className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400">+</button>
+            </div>
           </div>
           <div className='flex flex-row justify-between space-x-4 mb-2'>
             <p className="text-gray-600 mb-2 text-sm">
@@ -141,6 +174,11 @@ const ProductDetailPage = () => {
           View Top Picks
         </Link>
       </div>
+      {notification && (
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-center bg-green-500 text-white p-4 rounded-lg shadow-lg">
+          {notification}
+        </div>
+      )}
     </div>
   );
 };

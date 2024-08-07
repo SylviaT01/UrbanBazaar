@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { CartProvider } from './contexts/cartContext.jsx';
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import WishList from "./components/wishList";
@@ -76,11 +77,11 @@ function AppContent() {
 
 function App() {
   return (
-    // <CartProvider>
-    <Router>
-      <AppContent />
-    </Router>
-    // </CartProvider>
+    <CartProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </CartProvider>
   );
 }
 
