@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const UpdateProfileForm = () => {
+const UpdateProfile = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -39,7 +39,6 @@ const UpdateProfileForm = () => {
               className="mt-1 p-2 border rounded w-full" 
               placeholder="Enter first name" 
             />
-          </div>
           </div>
           <div>
             <label className="block text-gray-700">Last Name</label>
@@ -121,6 +120,8 @@ const UpdateProfileForm = () => {
   );
 };
 
+export default UpdateProfile;
 
 
-export default UpdateProfileForm;
+
+
