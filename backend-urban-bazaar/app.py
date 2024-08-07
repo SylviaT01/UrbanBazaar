@@ -477,12 +477,11 @@ def get_all_orders():
         order_data = {
             'id': order.id,
             'user_id': order.user_id,
-            'user_email': order.user.email,  # Include the user's email
             'shipping_address': order.shipping_address,
             'payment_method': order.payment_method,
             'order_total': order.order_total,
             'created_at': order.order_date,
-            'status': order.status
+            'updated_at': order.updated_at
         }
         output.append(order_data)
 
