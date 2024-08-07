@@ -26,12 +26,13 @@ import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
 import UserDashboard from "./User/UserDashboard.jsx";
+import UpdateProfile from "./Forms /UpdateProfile.jsx";
 
 // Dummy components for User Profile
 
 const OrderHistory = () => <div>Order History Content</div>;
 const Wishlist = () => <div>Wishlist Content</div>;
-const UpdateProfile = () => <div>Update Profile Content</div>;
+
 
 function AppContent() {
   return (
