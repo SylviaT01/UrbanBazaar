@@ -62,7 +62,7 @@ const Customer = () => {
               className="object-contain shrink-0 w-24 aspect-[1.14]"
               alt="Members"
             />
-            <div className="flex flex-col items-start mt-1.5">
+            <div className="flex flex-col items-start mt-1.5 mr-16">
               <div className="text-sm tracking-normal text-neutral-400">
                 Members
               </div>
