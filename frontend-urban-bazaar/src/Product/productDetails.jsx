@@ -90,8 +90,8 @@ const ProductDetailPage = () => {
           </p>
 
           <div className="flex flex-row gap-6 m-4">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add to Cart</button>
-            <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 flex items-center">
+            <button className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400">Add to Cart</button>
+            <button className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-600 flex items-center">
               <FontAwesomeIcon icon={faHeart} className="mr-2" />
               Add to Wishlist
             </button>
