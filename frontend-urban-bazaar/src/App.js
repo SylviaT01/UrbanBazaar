@@ -34,8 +34,8 @@ const UpdateProfile = () => <div>Update Profile Content</div>;
 function AppContent() {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* <NavItems /> */}
-      <Navbar />
+      <NavItems />
+      {/* <Navbar /> */}
       <div className="flex-grow">
         <Routes>
           <Route path="/login" element={<Login />} />
