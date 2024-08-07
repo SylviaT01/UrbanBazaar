@@ -63,7 +63,7 @@ export default function NavItems() {
             </button>
           </form>
           <div className="flex items-center space-x-6">
-            <Link to="/account" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
+            <Link to="/userprofile" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
               <FontAwesomeIcon icon={faUser} className="text-lg" />
               <span className="ml-1">My Account</span>
             </Link>
