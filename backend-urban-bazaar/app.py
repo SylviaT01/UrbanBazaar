@@ -27,6 +27,7 @@ CORS(app)
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
+
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user['username']).first()
         if not user.is_admin:
@@ -93,11 +94,11 @@ def create_user():
 
 # Route to view all users (Admin only)
 @app.route('/admin/users', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def view_users():
-    current_user = get_jwt_identity()
-    if not current_user['is_admin']:
-        return jsonify({'message': 'Admin access required'}), 403
+    # current_user = get_jwt_identity()
+    # if not current_user['is_admin']:
+    #     return jsonify({'message': 'Admin access required'}), 403
 
     users = User.query.all()
     output = []
@@ -188,7 +189,7 @@ def get_products():
             'barcode': product.barcode,
             'qrCode': product.qr_code,
             'images': product.images,
-            'thumbnail': product.thumbnail
+            'thumbnail': product.thumbnail,
         }
         output.append(product_data)
 
@@ -355,7 +356,7 @@ def delete_product(id):
 
 # Route to add a product to the shopping cart
 @app.route('/cart', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def add_to_cart():
     current_user = get_jwt_identity()
     user = User.query.filter_by(username=current_user['username']).first()
@@ -417,18 +418,19 @@ def remove_from_cart(product_id):
 # @jwt_required()
 # @admin_required
 def get_all_orders():
-    orders = Order.query.all()
+    orders = Order.query.join(User, Order.user_id == User.id).all()
     output = []
 
     for order in orders:
         order_data = {
             'id': order.id,
             'user_id': order.user_id,
+            'user_email': order.user.email,  # Include the user's email
             'shipping_address': order.shipping_address,
             'payment_method': order.payment_method,
             'order_total': order.order_total,
-            'created_at': order.created_at,
-            'updated_at': order.updated_at
+            'created_at': order.order_date,
+            'status': order.status
         }
         output.append(order_data)
 
@@ -483,44 +485,22 @@ def get_orders():
         }
         for order in orders
     ]
-    return jsonify(orders_data)
+    return jsonify(orders_data)  
 
-@app.route('/review', methods=['GET'])
-def get_review():
-    reviews = Review.query.all()
-    reviews_data = [
+@app.route('/user', methods=['GET'])
+def get_user():
+    users = User.query.all()
+    users_data = [
         {
-            'id': review.id,
-            'rating': review.rating,
-            'comment': review.comment,
-            'date': review.date,
-            'reviewer_name': review.reviewer_name,
-            'reviewer_email': review.reviewer_email,
-            'product_id': review.product_id
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'password': user.password,
+            'is_admin': user.is_admin,
         }
-        for review in reviews
+        for user in users
     ]
-    return jsonify(reviews_data)        
-
-@app.route('/delete_reviews', methods=['DELETE'])
-def delete_reviews():
-    data = request.get_json()
-    review_ids = data.get('review_ids')
-    if not review_ids:
-        return jsonify({"message": "No review IDs provided"}), 400
-
-    try:
-        for review_id in review_ids:
-            review = Review.query.get(review_id)
-            if review:
-                db.session.delete(review)
-        db.session.commit()
-        return jsonify({"message": "Reviews deleted"}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"message": str(e)}), 500
-
-
+    return jsonify(users_data)          
 
 # Route to add product to wishlist
 @app.route('/wishlist', methods=['POST'])
@@ -602,8 +582,8 @@ def add_review():
 
 
 # Route to get all reviews for a product
-@app.route('/review/<int:product_id>', methods=['GET'])
-def get_reviews(product_id):
+@app.route('/reviews/<int:product_id>', methods=['GET'])
+def get_reviews_id(product_id):
     reviews = Review.query.filter_by(product_id=product_id).all()
     output = []
 
@@ -618,24 +598,44 @@ def get_reviews(product_id):
 
     return jsonify({'reviews': output})
 
+# Route to get all reviews for a product
+@app.route('/review', methods=['GET'])
+def get_reviews():
+    reviews = Review.query.all()
+    output = []
+
+    for review in reviews:
+        review_data = {
+            'id': review.id,
+            'rating': review.rating,
+            'comment': review.comment,
+            'reviewer_name': review.reviewer_name,
+            'reviewer_email': review.reviewer_email,
+            'product_id': review.product_id,
+            'date': review.date
+        }
+        output.append(review_data)
+
+    return jsonify({'reviews': output})
+
 #Delete a review 
-@app.route('/reviews/<int:id>', methods=['DELETE'])
-@jwt_required()
-def delete_review(id):
-    current_user = get_jwt_identity()
-    review = Review.query.get(id)
-    
-    if not review:
-        return jsonify({'message': 'Review not found'}), 404
+@app.route('/delete_reviews', methods=['DELETE'])
+def delete_reviews():
+    data = request.get_json()
+    review_ids = data.get('review_ids')
+    if not review_ids:
+        return jsonify({"message": "No review IDs provided"}), 400
 
-    if current_user['id'] != review.user_id and not current_user['is_admin']:
-        return jsonify({'message': 'Permission denied'}), 403
-
-    db.session.delete(review)
-    db.session.commit()
-
-    return jsonify({'message': 'Review deleted successfully'})
-
+    try:
+        for review_id in review_ids:
+            review = Review.query.get(review_id)
+            if review:
+                db.session.delete(review)
+        db.session.commit()
+        return jsonify({"message": "Reviews deleted"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": str(e)}), 500
 # Route for contact us form
 @app.route('/contact', methods=['POST'])
 def contact_us():
@@ -675,6 +675,48 @@ def view_contact_submissions():
         output.append(submission_data)
 
     return jsonify({'submissions': output})
+
+
+@app.route('/products/category/<string:category>', methods=['GET'])
+def get_products_by_category(category):
+    products = Product.query.filter_by(category=category).all()
+    output = []
+
+    for product in products:
+        product_data = {
+            'id': product.id,
+            'title': product.title,
+            'description': product.description,
+            'category': product.category,
+            'price': product.price,
+            'discountPercentage': product.discount_percentage,
+            'rating': product.rating,
+            'stock': product.stock,
+            'tags': product.tags,
+            'brand': product.brand,
+            'sku': product.sku,
+            'weight': product.weight,
+            'dimensions': {
+                'width': product.width,
+                'height': product.height,
+                'depth': product.depth
+            },
+            'warrantyInformation': product.warranty_information,
+            'shippingInformation': product.shipping_information,
+            'availabilityStatus': product.availability_status,
+            'returnPolicy': product.return_policy,
+            'minimumOrderQuantity': product.minimum_order_quantity,
+            'createdAt': product.created_at,
+            'updatedAt': product.updated_at,
+            'barcode': product.barcode,
+            'qrCode': product.qr_code,
+            'images': product.images,
+            'thumbnail': product.thumbnail
+        }
+        output.append(product_data)
+
+    return jsonify({'products': output})
+
 
 
 #Enable Flask application to run in debug mode
