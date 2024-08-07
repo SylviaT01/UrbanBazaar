@@ -53,5 +53,16 @@ return (
     <div className="self-start -mt-4 ml-20 text-2xl font-bold tracking-tight leading-loose text-gray-800 max-md:mt-10 max-md:ml-2.5">
       Reviews
     </div>
+    <div className="-mt-12 w-full max-w-[1239px] max-md:max-w-full">
+      <div className="flex justify-end mb-4">
+        <button
+          className="px-4 py-2 bg-red-500 text-white rounded"
+          onClick={handleDeleteSelected}
+          disabled={selectedReviews.length === 0}
+        >
+          Delete Selected
+        </button>
+      </div>
+    </div>
   </div>
 );
