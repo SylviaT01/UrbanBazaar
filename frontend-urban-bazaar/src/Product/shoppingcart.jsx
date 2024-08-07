@@ -5,34 +5,33 @@ import { useNavigate } from 'react-router-dom';
 const Cart = () => {
   const { cart, loading, removeFromCart } = useCart();
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(true); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   if (loading) return <p>Loading...</p>;
 
-  // Calculate total price
-  const totalPrice = cart.reduce((total, item) => 
-    total + (item.price * (100 - item.discountPercentage) / 100) * item.quantity, 
+  const totalPrice = cart.reduce(
+    (total, item) =>
+      total +
+      ((item.price * (100 - item.discountPercentage)) / 100) * item.quantity,
     0
   );
 
-  // Function to close the modal
   const closeModal = () => {
-    setIsModalOpen(false); // Set state to close modal
+    setIsModalOpen(false);
+    navigate('/products');
   };
 
-  // Function to continue shopping
   const continueShopping = () => {
-    navigate('/'); // Redirect to the homepage or products page
+    navigate('/products');
   };
 
-  // Function to handle checkout
   const handleCheckout = () => {
-    navigate('/checkout'); // Redirect to the checkout page
+    navigate('/checkout');
   };
 
   return (
     <>
-      {isModalOpen && ( // Only render the modal if isModalOpen is true
+      {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded-lg w-[1000px] max-h-[80vh] overflow-y-auto">
             <div className="p-6">
@@ -54,10 +53,18 @@ const Cart = () => {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Item
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Price
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Subtotal
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -70,14 +77,26 @@ const Cart = () => {
                               className="w-16 h-16 object-cover mr-4"
                             />
                             <div>
-                              <h4 className="text-sm font-medium">{item.title}</h4>
+                              <h4 className="text-sm font-medium">
+                                {item.title}
+                              </h4>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh {Math.round((item.price * (100 - item.discountPercentage)) / 100).toLocaleString()}
+                            Ksh{' '}
+                            {Math.round(
+                              (item.price * (100 - item.discountPercentage)) /
+                                100
+                            ).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh {(Math.round((item.price * (100 - item.discountPercentage)) / 100) * item.quantity).toLocaleString()}
+                            Ksh{' '}
+                            {(
+                              Math.round(
+                                (item.price * (100 - item.discountPercentage)) /
+                                  100
+                              ) * item.quantity
+                            ).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button
@@ -106,7 +125,9 @@ const Cart = () => {
                   </table>
                   <div className="flex justify-between items-center border-t border-gray-200 pt-4">
                     <h4 className="text-sm font-medium">Total Price:</h4>
-                    <p className="text-sm font-medium">Ksh {Math.round(totalPrice)}</p>
+                    <p className="text-sm font-medium">
+                      Ksh {Math.round(totalPrice)}
+                    </p>
                   </div>
                   <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
                     <button

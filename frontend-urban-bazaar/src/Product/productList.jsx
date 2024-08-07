@@ -7,7 +7,9 @@ import SortBar from './sortBar';
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedBrand, setSelectedBrand] = useState('All Brands');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,12 +23,21 @@ const ProductList = () => {
         setProducts(data.products);
         const uniqueCategories = ['All', ...new Set(data.products.map(product => product.category))];
         setCategories(uniqueCategories);
+
+        // Assuming brands are included in product data
+        const uniqueBrands = ['All Brands', ...new Set(data.products.map(product => product.brand))];
+        setBrands(uniqueBrands);
       })
       .catch(error => console.error('Error fetching products:', error));
   }, []);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handleBrandChange = (brand) => {
+    setSelectedBrand(brand);
     setCurrentPage(1);
   };
 
@@ -41,6 +52,7 @@ const ProductList = () => {
 
   const filteredProducts = products
     .filter(product => selectedCategory === 'All' || product.category === selectedCategory)
+    .filter(product => selectedBrand === 'All Brands' || product.brand === selectedBrand)
     .filter(product => product.title.toLowerCase().includes(searchQuery));
 
   const sortedProducts = filteredProducts.sort((a, b) => {
@@ -86,22 +98,44 @@ const ProductList = () => {
     <div className="container mx-auto px-4 py-4">
       <div className="mb-4">
         <h2 className="text-xl font-semibold text-center uppercase">Products</h2>
-        <div className="text-center mb-2 border-b">
-          <Categories
-            categories={categories.map(cat => ({ id: cat, name: cat }))}
-            selectedCategory={selectedCategory}
-            onSelectCategory={handleCategoryChange}
-          />
-          <div className="flex flex-row justify-center items-center gap-4">
-            <SearchBar
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-            />
-            <SortBar
-              sortOption={sortOption}
-              onSortChange={handleSortChange}
+        <div className="mb-4 border-b">
+          <div className="text-center mb-2 border-b">
+            <Categories
+              categories={categories.map(cat => ({ id: cat, name: cat }))}
+              selectedCategory={selectedCategory}
+              onSelectCategory={handleCategoryChange}
             />
           </div>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center gap-4">
+            <div className="flex-shrink-0 w-full sm:w-1/4 mb-4 sm:mb-2">
+              <select
+                value={selectedBrand}
+                onChange={(e) => handleBrandChange(e.target.value)}
+                className="bg-white border rounded-md p-1 w-full"
+              >
+                {brands.map(brand => (
+                  <option key={brand} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-3/4">
+              <div className="flex-grow">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  onSearchChange={handleSearchChange}
+                />
+              </div>
+              <div className="flex-grow">
+                <SortBar
+                  sortOption={sortOption}
+                  onSortChange={handleSortChange}
+                />
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0 bg-blue-50 z-100 px-4 py-4 mb-0">

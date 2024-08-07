@@ -24,7 +24,7 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     setCart(prevCart => [...prevCart, product]);
-    setNotification(`✅Product successfully added to your cart!`);
+    setNotification(`✅ Product successfully added to your cart!`);
 
     fetch('http://127.0.0.1:5000/cart', {
       method: 'POST',
@@ -41,17 +41,15 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCart(prevCart => prevCart.filter(product => product.id !== productId));
-    setNotification(`❌Product successfully removed from your cart!`);
+    setCart(prevCart => prevCart.filter(item => item.id !== productId));
 
     fetch(`http://127.0.0.1:5000/cart/${productId}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
     .catch(error => console.error('Error removing from cart:', error));
-    
-    setTimeout(() => {
-      setNotification(null); // Clear the notification after 3 seconds
-    }, 3000);
   };
 
   return (
