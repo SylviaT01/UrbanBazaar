@@ -470,18 +470,21 @@ def remove_from_cart(product_id):
 # @jwt_required()
 # @admin_required
 def get_all_orders():
-    orders = Order.query.join(User, Order.user_id == User.id).all()
+    orders = db.session.query(Order, User).join(User, Order.user_id == User.id).all()
     output = []
 
-    for order in orders:
+    for order, user in orders:
         order_data = {
             'id': order.id,
             'user_id': order.user_id,
+            'user_email': user.email,  # Include the user's email
             'shipping_address': order.shipping_address,
             'payment_method': order.payment_method,
             'order_total': order.order_total,
             'created_at': order.order_date,
-            'updated_at': order.updated_at
+            'status': order.status
+            
+            # 'updated_at': order.updated_at
         }
         output.append(order_data)
 
