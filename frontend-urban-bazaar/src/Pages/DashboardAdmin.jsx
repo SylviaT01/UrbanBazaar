@@ -16,7 +16,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F0F9FF] py-20 ">
+    <div className="flex min-h-screen bg-[#F0F9FF] py-20 -mt-5">
       {/* Sidebar */}
       <aside className="ml-20 w-64 text-[#747474]">
         <nav className="p-4">
@@ -96,7 +96,7 @@ const Dashboard = () => {
 
             <li className="mb-4">
               <NavLink
-                to="/orders"
+                to="orders"
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
@@ -122,7 +122,7 @@ const Dashboard = () => {
             </li>
             <li className="mb-4">
               <NavLink
-                to="/customers"
+                to="customers"
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
@@ -148,7 +148,7 @@ const Dashboard = () => {
             </li>
             <li className="mb-4">
               <NavLink
-                to="payments"
+                to="logout"
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
