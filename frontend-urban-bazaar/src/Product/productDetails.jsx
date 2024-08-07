@@ -1,8 +1,10 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import RelatedProducts from './relatedProducts'; // Import the new component
+import RelatedProducts from './relatedProducts';
+import TopPicksFour from './top-picksfour';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -46,7 +48,7 @@ const ProductDetailPage = () => {
             />
           ))}
         </div>
-        
+
         {/* Main product image */}
         <div className="flex-1">
           <img
@@ -73,7 +75,19 @@ const ProductDetailPage = () => {
       </div>
 
       {/* Related Products */}
-      <RelatedProducts relatedProducts={relatedProducts} /> {/* Use the new component */}
+      <RelatedProducts relatedProducts={relatedProducts} />
+      <div className="4-items">
+        <h1 className="mb-2 flex justify-center text-xl font-semibold">Top picks</h1>
+        <TopPicksFour />
+      </div>
+      <div className="flex justify-center py-4">
+        <Link
+          to="/toppicks"
+          className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md "
+        >
+          View Top Picks
+        </Link>
+      </div>
     </div>
   );
 };
