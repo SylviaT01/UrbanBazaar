@@ -8,7 +8,7 @@ import { useCart } from '../contexts/cartContext';
 export default function NavItems() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const { cart } = useCart(); // Access the cart from context
+  const { cart, wishlist } = useCart(); // Access wishlist from context
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -67,8 +67,13 @@ export default function NavItems() {
               <FontAwesomeIcon icon={faUser} className="text-lg" />
               <span className="ml-1">My Account</span>
             </Link>
-            <Link to="/wishlist" className="text-gray-700 hover:text-blue-700 flex items-center">
+            <Link to="/wishlist" className="text-gray-700 hover:text-blue-700 flex items-center relative">
               <FontAwesomeIcon icon={faHeart} className="text-lg border border-gray-400 rounded-full p-1" />
+              {wishlist.length > 0 && (
+                <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full text-center">
+                  {wishlist.length}
+                </span>
+              )}
             </Link>
             <Link to="/cart" className="text-gray-700 hover:text-blue-700 flex items-center relative">
               <FontAwesomeIcon icon={faShoppingCart} className="text-lg border border-gray-400 rounded-full p-1" />
