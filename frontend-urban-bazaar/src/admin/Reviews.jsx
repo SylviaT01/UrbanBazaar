@@ -63,6 +63,49 @@ return (
           Delete Selected
         </button>
       </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-md:flex-col">
+        {currentReviews.map((review) => (
+          <div
+            className={`flex flex-col p-6 bg-white rounded shadow-[0px_10px_60px_rgba(226,236,249,0.5)] ${
+              selectedReviews.includes(review.id)
+                ? "border-2 border-blue-500"
+                : ""
+            }`}
+            key={review.id}
+          >
+            <div className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                checked={selectedReviews.includes(review.id)}
+                onChange={() => handleSelectReview(review.id)}
+              />
+              <img
+                src={profile}
+                alt="Reviewer"
+                className="object-contain shrink-0 rounded-full w-[53px]"
+              />
+              <div className="flex flex-col">
+                <div className="font-semibold">{review.reviewer_name}</div>
+                <div className="text-sm text-gray-600">
+                  {review.reviewer_email}
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Rating
+                value={review.rating}
+                size={24}
+                activeColor="#ffd700"
+                isHalf={true}
+                edit={false}
+              />
+            </div>
+            <div className="mt-4 text-sm">{review.comment}</div>
+            <div className="mt-2 text-xs text-gray-500">{`Product ID: ${review.product_id}`}</div>
+            <div className="mt-1 text-xs text-gray-500">{`Date: ${review.date}`}</div>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 );
