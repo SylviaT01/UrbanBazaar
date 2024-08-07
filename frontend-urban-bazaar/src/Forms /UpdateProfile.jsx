@@ -27,7 +27,7 @@ const UpdateProfile = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-50">
-      <form className="bg-white p-8 rounded shadow-md w-full max-w-custom" onSubmit={handleSubmit}>
+      <form className="bg-white p-8 rounded shadow-md w-[900px] max-w-custom" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-gray-700">First Name</label>
