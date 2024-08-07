@@ -21,3 +21,11 @@ const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
 const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
 const totalPages = Math.ceil(reviews.length / reviewsPerPage);
 const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+const handleSelectReview = (reviewId) => {
+  setSelectedReviews((prevSelectedReviews) =>
+    prevSelectedReviews.includes(reviewId)
+      ? prevSelectedReviews.filter((id) => id !== reviewId)
+      : [...prevSelectedReviews, reviewId]
+  );
+};
