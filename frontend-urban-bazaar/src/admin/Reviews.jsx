@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import profile from "../assets/profile.svg";
+import Profile from "../assets/Profile.svg";
 import Rating from "react-rating-stars-component";
 
 const Reviews = () => {
@@ -79,7 +79,7 @@ const Reviews = () => {
                   onChange={() => handleSelectReview(review.id)}
                 />
                 <img
-                  src={profile}
+                  src={Profile}
                   alt="Reviewer"
                   className="object-contain shrink-0 rounded-full w-[53px]"
                 />
