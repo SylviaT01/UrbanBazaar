@@ -427,7 +427,7 @@ def get_all_orders():
             'shipping_address': order.shipping_address,
             'payment_method': order.payment_method,
             'order_total': order.order_total,
-            'created_at': order.created_at,
+            'created_at': order.order_date,
             'updated_at': order.updated_at
         }
         output.append(order_data)
