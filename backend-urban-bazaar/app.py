@@ -188,7 +188,7 @@ def get_products():
             'barcode': product.barcode,
             'qrCode': product.qr_code,
             'images': product.images,
-            'thumbnail': product.thumbnail
+            'thumbnail': product.thumbnail,
         }
         output.append(product_data)
 
@@ -678,6 +678,8 @@ def get_products_by_category(category):
         output.append(product_data)
 
     return jsonify({'products': output})
+
+
 
 
 #Enable Flask application to run in debug mode

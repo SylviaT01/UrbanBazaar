@@ -17,6 +17,7 @@ const ProductDetailPage = () => {
       .then(response => response.json())
       .then(data => {
         setProduct(data.product);
+
         // Set the first image as the default selected image
         if (data.product.images.length > 0) {
           setSelectedImage(data.product.images[0]);
@@ -30,6 +31,7 @@ const ProductDetailPage = () => {
       })
       .catch(error => console.error('Error fetching product details:', error));
   }, [id]);
+console.log(product)
 
   if (!product) return <div className="text-center py-8">Loading...</div>;
 
