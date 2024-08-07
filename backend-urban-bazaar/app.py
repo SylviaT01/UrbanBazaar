@@ -483,7 +483,44 @@ def get_orders():
         }
         for order in orders
     ]
-    return jsonify(orders_data)    
+    return jsonify(orders_data)
+
+@app.route('/review', methods=['GET'])
+def get_review():
+    reviews = Review.query.all()
+    reviews_data = [
+        {
+            'id': review.id,
+            'rating': review.rating,
+            'comment': review.comment,
+            'date': review.date,
+            'reviewer_name': review.reviewer_name,
+            'reviewer_email': review.reviewer_email,
+            'product_id': review.product_id
+        }
+        for review in reviews
+    ]
+    return jsonify(reviews_data)        
+
+@app.route('/delete_reviews', methods=['DELETE'])
+def delete_reviews():
+    data = request.get_json()
+    review_ids = data.get('review_ids')
+    if not review_ids:
+        return jsonify({"message": "No review IDs provided"}), 400
+
+    try:
+        for review_id in review_ids:
+            review = Review.query.get(review_id)
+            if review:
+                db.session.delete(review)
+        db.session.commit()
+        return jsonify({"message": "Reviews deleted"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": str(e)}), 500
+
+
 
 # Route to add product to wishlist
 @app.route('/wishlist', methods=['POST'])
@@ -565,7 +602,7 @@ def add_review():
 
 
 # Route to get all reviews for a product
-@app.route('/reviews/<int:product_id>', methods=['GET'])
+@app.route('/review/<int:product_id>', methods=['GET'])
 def get_reviews(product_id):
     reviews = Review.query.filter_by(product_id=product_id).all()
     output = []
