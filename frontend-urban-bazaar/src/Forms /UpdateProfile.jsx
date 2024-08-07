@@ -64,6 +64,17 @@ const UpdateProfileForm = () => {
             placeholder="Enter display name" 
           />
         </div>
+        <div className="mt-4">
+          <label className="block text-gray-700">Email Address</label>
+          <input 
+            type="email" 
+            name="email" 
+            value={formData.email} 
+            onChange={handleChange} 
+            className="mt-1 p-2 border rounded w-full" 
+            placeholder="Enter email address" 
+          />
+        </div>
 
 
 
