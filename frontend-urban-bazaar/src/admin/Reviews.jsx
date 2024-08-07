@@ -150,3 +150,5 @@ return (
     </div>
   </div>
 );
+
+export default Reviews;
