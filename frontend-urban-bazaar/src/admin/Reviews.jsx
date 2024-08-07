@@ -49,7 +49,7 @@ const Reviews = () => {
 
   return (
     <div className="flex flex-col items-center px-4 sm:px-6 lg:px-4 -mt-20">
-      <div className="self-start -mt-4 ml-20 text-2xl font-bold tracking-tight leading-loose text-gray-800 max-md:mt-10 max-md:ml-2.5">
+      <div className="self-start -mt-4 ml-6 text-2xl font-bold tracking-tight leading-loose text-gray-800 max-md:mt-10 max-md:ml-2.5">
         Reviews
       </div>
       <div className="-mt-12 w-full max-w-[1239px] max-md:max-w-full">
