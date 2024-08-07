@@ -4,7 +4,7 @@ import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
-import CartModal from "./components/cartModal";
+import ShoppingCart from "./Product/shoppingcart.jsx";
 import NavItems from "./components/navItems";
 import TopPicks from "./Product/top-picks.jsx";
 import WeeklyOffers from "./Product/weekly-offers.jsx";
@@ -44,7 +44,7 @@ function AppContent() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/cart" element={<CartModal />} />
+          <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/toppicks" element={<TopPicks />} />
@@ -75,9 +75,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    // <CartProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    // </CartProvider>
   );
 }
 

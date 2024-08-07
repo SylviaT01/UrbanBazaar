@@ -355,7 +355,7 @@ def delete_product(id):
 
 # Route to add a product to the shopping cart
 @app.route('/cart', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def add_to_cart():
     current_user = get_jwt_identity()
     user = User.query.filter_by(username=current_user['username']).first()
@@ -639,6 +639,7 @@ def view_contact_submissions():
 
     return jsonify({'submissions': output})
 
+
 @app.route('/products/category/<string:category>', methods=['GET'])
 def get_products_by_category(category):
     products = Product.query.filter_by(category=category).all()
@@ -678,7 +679,6 @@ def get_products_by_category(category):
         output.append(product_data)
 
     return jsonify({'products': output})
-
 
 
 
