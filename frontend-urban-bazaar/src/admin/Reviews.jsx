@@ -15,3 +15,9 @@ useEffect(() => {
     .then((data) => setReviews(data.reviews))
     .catch((error) => console.error("Error fetching reviews:", error));
 }, []);
+
+const indexOfLastReview = currentPage * reviewsPerPage;
+const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+const paginate = (pageNumber) => setCurrentPage(pageNumber);
