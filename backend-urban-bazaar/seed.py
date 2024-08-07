@@ -22,7 +22,8 @@ def seed_users():
     db.session.commit()
 
 def seed_products():
-    db.session.query(Product).delete()  # Clear existing products
+    db.session.query(Product).delete() 
+    db.session.query(Review).delete()# Clear existing products
     products = load_products()
     for product in products:
         db_product = Product(
@@ -54,6 +55,7 @@ def seed_products():
         db.session.flush()  # Flush to get the product ID for reviews
 
         # Add reviews for this product if available
+    
         if 'reviews' in product:
             for review in product['reviews']:
                 db_review = Review(
