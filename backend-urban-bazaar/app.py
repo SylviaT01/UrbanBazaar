@@ -27,6 +27,7 @@ CORS(app)
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
+
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user['username']).first()
         if not user.is_admin:
@@ -582,7 +583,7 @@ def add_review():
 
 # Route to get all reviews for a product
 @app.route('/reviews/<int:product_id>', methods=['GET'])
-def get_reviews(product_id):
+def get_reviews_id(product_id):
     reviews = Review.query.filter_by(product_id=product_id).all()
     output = []
 
@@ -597,24 +598,61 @@ def get_reviews(product_id):
 
     return jsonify({'reviews': output})
 
+# Route to get all reviews for a product
+@app.route('/review', methods=['GET'])
+def get_reviews():
+    reviews = Review.query.all()
+    output = []
+
+    for review in reviews:
+        review_data = {
+            'id': review.id,
+            'rating': review.rating,
+            'comment': review.comment,
+            'reviewer_name': review.reviewer_name,
+            'reviewer_email': review.reviewer_email,
+            'product_id': review.product_id,
+            'date': review.date
+        }
+        output.append(review_data)
+
+    return jsonify({'reviews': output})
+
+
 #Delete a review 
-@app.route('/reviews/<int:id>', methods=['DELETE'])
-@jwt_required()
-def delete_review(id):
-    current_user = get_jwt_identity()
-    review = Review.query.get(id)
+# @app.route('/reviews/<int:id>', methods=['DELETE'])
+# @jwt_required()
+# def delete_review(id):
+#     # current_user = get_jwt_identity()
+#     review = Review.query.get(id)
     
-    if not review:
-        return jsonify({'message': 'Review not found'}), 404
+#     if not review:
+#         return jsonify({'message': 'Review not found'}), 404
 
-    if current_user['id'] != review.user_id and not current_user['is_admin']:
-        return jsonify({'message': 'Permission denied'}), 403
+#     # if current_user['id'] != review.user_id and not current_user['is_admin']:
+#     #     return jsonify({'message': 'Permission denied'}), 403
 
-    db.session.delete(review)
-    db.session.commit()
+#     db.session.delete(review)
+#     db.session.commit()
 
-    return jsonify({'message': 'Review deleted successfully'})
+#     return jsonify({'message': 'Review deleted successfully'})
+@app.route('/delete_reviews', methods=['DELETE'])
+def delete_reviews():
+    data = request.get_json()
+    review_ids = data.get('review_ids')
+    if not review_ids:
+        return jsonify({"message": "No review IDs provided"}), 400
 
+    try:
+        for review_id in review_ids:
+            review = Review.query.get(review_id)
+            if review:
+                db.session.delete(review)
+        db.session.commit()
+        return jsonify({"message": "Reviews deleted"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": str(e)}), 500
 # Route for contact us form
 @app.route('/contact', methods=['POST'])
 def contact_us():
