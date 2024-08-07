@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 function Payment() {
   const [payments, setPayments] = useState([]);
@@ -8,14 +8,14 @@ function Payment() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/admin/orders', {
-          mode: 'cors'
+        const response = await fetch("http://127.0.0.1:5000/admin/orders", {
+          mode: "cors",
         });
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setPayments(data);
+        setPayments(data.orders);
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -30,7 +30,7 @@ function Payment() {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className='flex overflow-hidden flex-col items-center px-20 pb-8'>
+    <div className="flex overflow-hidden flex-col items-center px-20 pb-8">
       <div className="mt-7 ml-28 text-2xl font-bold tracking-tight leading-loose text-gray-800">
         Payment
       </div>
@@ -79,7 +79,7 @@ function Payment() {
                             {payment.user_id}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(payment.payment_date).toLocaleDateString()}
+                            {new Date(payment.created_at).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {payment.shipping_address}
@@ -88,7 +88,7 @@ function Payment() {
                             {payment.payment_method}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {payment.payment_total}
+                            {payment.order_total}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {payment.status}
