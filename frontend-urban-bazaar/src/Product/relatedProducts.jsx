@@ -58,7 +58,7 @@ const RelatedProducts = ({ relatedProducts }) => {
             </p>
             <p className="text-gray-700 mb-2 line-through">Ksh. {product.price}</p>
             <div className="flex items-center space-x-6">
-              <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">Add to Cart</button>
+              {/* <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">Add to Cart</button> */}
               <Link
                 to={`/products/${product.id}`}
                 className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md"
