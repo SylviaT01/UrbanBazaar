@@ -89,6 +89,17 @@ const UpdateProfileForm = () => {
             placeholder="Enter current password" 
           />
         </div>
+        <div className="mt-4">
+          <label className="block text-gray-700">New Password</label>
+          <input 
+            type="password" 
+            name="newPassword" 
+            value={formData.newPassword} 
+            onChange={handleChange} 
+            className="mt-1 p-2 border rounded w-full" 
+            placeholder="Enter new password" 
+          />
+        </div>
 
 
 
