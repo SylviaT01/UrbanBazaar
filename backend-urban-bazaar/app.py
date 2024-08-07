@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_cors import CORS
 from functools import wraps
 from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
 from datetime import datetime
@@ -19,6 +20,8 @@ db.init_app(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+CORS(app)
+
 
 # Helper function to check if a user is an admin
 def admin_required(fn):
@@ -409,6 +412,28 @@ def remove_from_cart(product_id):
 
     return jsonify({'message': 'Product removed from cart successfully'})
 
+# Route to view all orders (Admin only)
+@app.route('/admin/orders', methods=['GET'])
+# @jwt_required()
+# @admin_required
+def get_all_orders():
+    orders = Order.query.all()
+    output = []
+
+    for order in orders:
+        order_data = {
+            'id': order.id,
+            'user_id': order.user_id,
+            'shipping_address': order.shipping_address,
+            'payment_method': order.payment_method,
+            'order_total': order.order_total,
+            'created_at': order.created_at,
+            'updated_at': order.updated_at
+        }
+        output.append(order_data)
+
+    return jsonify({'orders': output})
+
 # Route to create an order from the shopping cart
 @app.route('/orders', methods=['POST'])
 @jwt_required()
@@ -442,6 +467,38 @@ def create_order():
     db.session.commit()
 
     return jsonify({'message': 'Order created successfully'})
+
+@app.route('/order', methods=['GET'])
+def get_orders():
+    orders = Order.query.all()
+    orders_data = [
+        {
+            'id': order.id,
+            'user_id': order.user_id,
+            'order_date': order.order_date,
+            'shipping_address': order.shipping_address,
+            'payment_method': order.payment_method,
+            'order_total': order.order_total,
+            'status': order.status
+        }
+        for order in orders
+    ]
+    return jsonify(orders_data)  
+
+@app.route('/user', methods=['GET'])
+def get_user():
+    users = User.query.all()
+    users_data = [
+        {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'password': user.password,
+            'is_admin': user.is_admin,
+        }
+        for user in users
+    ]
+    return jsonify(users_data)          
 
 # Route to add product to wishlist
 @app.route('/wishlist', methods=['POST'])
