@@ -106,6 +106,47 @@ return (
           </div>
         ))}
       </div>
+      <div className="flex justify-between items-center p-4">
+        <span className="text-sm text-gray-500">
+          Showing {indexOfFirstReview + 1} to {indexOfLastReview} of{" "}
+          {reviews.length} entries
+        </span>
+        <div className="flex space-x-2">
+          <button
+            className={`px-3 py-1 rounded ${
+              currentPage === 1 ? "bg-neutral-300" : "bg-neutral-100"
+            }`}
+            onClick={() => currentPage > 1 && paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &lt;
+          </button>
+          {[...Array(totalPages).keys()].map((number) => (
+            <button
+              key={number + 1}
+              className={`px-3 py-1 rounded ${
+                currentPage === number + 1
+                  ? "text-white bg-indigo-600"
+                  : "bg-neutral-100"
+              }`}
+              onClick={() => paginate(number + 1)}
+            >
+              {number + 1}
+            </button>
+          ))}
+          <button
+            className={`px-3 py-1 rounded ${
+              currentPage === totalPages ? "bg-neutral-300" : "bg-neutral-100"
+            }`}
+            onClick={() =>
+              currentPage < totalPages && paginate(currentPage + 1)
+            }
+            disabled={currentPage === totalPages}
+          >
+            &gt;
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 );
