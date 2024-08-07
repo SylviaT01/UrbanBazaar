@@ -9,15 +9,17 @@ import CartModal from "./components/cartModal";
 import NavItems from "./components/navItems";
 import DashboardAdmin from "./Pages/DashboardAdmin";
 import UserProfile from "./Pages/UserProfileDashboard";
-//import AllProducts from "./admin/AllProducts";
-//import AddProducts from "./admin/AddProducts";
-//import Reviews from "./admin/Reviews";
-//import Customers from "./components/Customers";
-//import Payments from "./admin/Payments";
-//import Dashboard from "./admin/DashboardAdmin";
+
+import AllProducts from "./admin/AllProducts";
+import AddProducts from "./admin/AddProducts";
+import Reviews from "./admin/Reviews";
+import Customers from "./components/Customers";
+import Payments from "./admin/Payments";
+import Dashboard from "./admin/DashboardAdmin";
+
 import Orders from "./admin/orders";
 import Navbar from "./admin/navbar";
-// import Customers from "./admin/customers";
+import Customer from './admin/customers'
 
 // Dummy components for User Profile
 const DashboardUser = () => <div>Dashboard Content</div>;
@@ -39,14 +41,15 @@ function AppContent() {
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/orders" element={<Orders />} />
-          {/* <Route path="/DashboardAdmin" element={<Dashboard />} /> */}
+          {/* <Route path='/customers' element={<Customer/>} /> */}
+          <Route path="/DashboardAdmin" element={<Dashboard />} />
           <Route path="/dashboard" element={<DashboardAdmin />}>
-            {/* <Route path="dashboardAdmin" element={<Dashboard />} /> */}
-            {/* <Route path="products/all" element={<AllProducts />} /> */}
-            {/* <Route path="products/add" element={<AddProducts />} /> */}
+            <Route path="dashboardAdmin" element={<Dashboard />} />
+            <Route path="products/all" element={<AllProducts />} />
+            <Route path="products/add" element={<AddProducts />} />
             <Route path="orders" element={<Orders />} />
             {/* <Route path="reviews" element={<Reviews />} /> */}
-            {/* <Route path="customers" element={<Customers />} /> */}
+            <Route path="customers" element={<Customer />} />
             {/* <Route path="payments" element={<Payments />} /> */}
           </Route>
           {/* UserProfile Routes */}
