@@ -77,9 +77,9 @@ function AppContent() {
 function App() {
   return (
     // <CartProvider>
-      <Router>
-        <AppContent />
-      </Router>
+    <Router>
+      <AppContent />
+    </Router>
     // </CartProvider>
   );
 }
