@@ -91,11 +91,11 @@ function Checkout() {
 
         <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6">
           <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
-          <form className="mx-auto max-w-sm space-y-8">
+          <form className="mx-auto max-w-sm space-y-8 flex flex-col items-center">
             <div className="flex items-center mb-4">
               
               <section className="flex flex-col rounded-none max-w-[731px]">          
-               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-full rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
+               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
                 <div className="flex gap-6 my-auto">
                 <input
                 type="radio"
@@ -106,14 +106,16 @@ function Checkout() {
                 onChange={() => handlePaymentMethodChange('mpesa')}
                 className="mr-2"
                 />
+                <div className="flex justify-center" style={{ gap: '450px' }}  >
                   <h2 className="my-auto text-2xl font-light text-black">M-Pesa</h2>
                   <img src={mpesa} alt="M-pesa" />
+                  </div>
                 </div>
                </div>
               </section>
             </div>
             {paymentMethod === 'mpesa' && (
-              <div className="mb-4">
+              <div className="mb-4 space-y-6">
                 <input type="text" placeholder="Phone Number" className="border p-2 rounded w-full" />
                 <div className="flex justify-between gap-4">
                 <button type="button" className="bg-gray-300 text-gray-700 py-2 px-4 rounded">
@@ -140,7 +142,7 @@ function Checkout() {
             <div className="flex items-center mt-4">
               
              < section className="flex flex-col rounded-none max-w-[731px]">          
-               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-full rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
+               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
                 <div className="flex gap-6 my-auto">
                 <input
                 type="radio"
@@ -151,8 +153,10 @@ function Checkout() {
                 onChange={() => handlePaymentMethodChange('pesapal')}
                 className="mr-2"
                 />
+                <div className="flex justify-center" style={{ gap: '450px' }}  >
                   <h2 className="my-auto text-2xl font-light text-black">Pesapal</h2>
                   <img src={pesapal} alt="Pesapal" />
+                </div>
                 </div>
                </div>
               </section>
@@ -169,7 +173,7 @@ function Checkout() {
             </button>
             </div>
           )}
-            <div className="flex items-center mt-4">
+            <div className="flex items-center justisfy-centre mt-4">
               {/* <input
                 type="radio"
                 id="paypal"
@@ -184,7 +188,7 @@ function Checkout() {
                 <span className="icon-[fluent--location-16-filled] text-blue-500"></span>
               </label> */}
               <section className="flex flex-col rounded-none max-w-[731px]">          
-               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-full rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
+               <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
                 <div className="flex gap-6 my-auto">
                 <input
                 type="radio"
@@ -195,8 +199,10 @@ function Checkout() {
                 onChange={() => handlePaymentMethodChange('paypal')}
                 className="mr-2"
                 />
+                <div className="flex justify-center" style={{ gap: '450px' }}  >
                   <h2 className="my-auto text-2xl font-light text-black">Paypal</h2>
                   <img src={Paypal} alt="Paypal" />
+                  </div>
                 </div>
                </div>
               </section>
