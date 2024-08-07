@@ -70,7 +70,7 @@ const Orders = () => {
                     {order.payment_method}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.order_total}
+                    Ksh {order.order_total}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {order.status}
