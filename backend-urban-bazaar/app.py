@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_cors import CORS
 from functools import wraps
 from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
 from datetime import datetime
@@ -19,6 +20,8 @@ db.init_app(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+CORS(app)
+
 
 # Helper function to check if a user is an admin
 def admin_required(fn):
@@ -90,11 +93,11 @@ def create_user():
 
 # Route to view all users (Admin only)
 @app.route('/admin/users', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def view_users():
-    current_user = get_jwt_identity()
-    if not current_user['is_admin']:
-        return jsonify({'message': 'Admin access required'}), 403
+    # current_user = get_jwt_identity()
+    # if not current_user['is_admin']:
+    #     return jsonify({'message': 'Admin access required'}), 403
 
     users = User.query.all()
     output = []
@@ -185,7 +188,7 @@ def get_products():
             'barcode': product.barcode,
             'qrCode': product.qr_code,
             'images': product.images,
-            'thumbnail': product.thumbnail
+            'thumbnail': product.thumbnail,
         }
         output.append(product_data)
 
@@ -352,7 +355,7 @@ def delete_product(id):
 
 # Route to add a product to the shopping cart
 @app.route('/cart', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def add_to_cart():
     current_user = get_jwt_identity()
     user = User.query.filter_by(username=current_user['username']).first()
@@ -409,6 +412,29 @@ def remove_from_cart(product_id):
 
     return jsonify({'message': 'Product removed from cart successfully'})
 
+# Route to view all orders (Admin only)
+@app.route('/admin/orders', methods=['GET'])
+# @jwt_required()
+# @admin_required
+def get_all_orders():
+    orders = Order.query.join(User, Order.user_id == User.id).all()
+    output = []
+
+    for order in orders:
+        order_data = {
+            'id': order.id,
+            'user_id': order.user_id,
+            'user_email': order.user.email,  # Include the user's email
+            'shipping_address': order.shipping_address,
+            'payment_method': order.payment_method,
+            'order_total': order.order_total,
+            'created_at': order.order_date,
+            'status': order.status
+        }
+        output.append(order_data)
+
+    return jsonify({'orders': output})
+
 # Route to create an order from the shopping cart
 @app.route('/orders', methods=['POST'])
 @jwt_required()
@@ -442,6 +468,23 @@ def create_order():
     db.session.commit()
 
     return jsonify({'message': 'Order created successfully'})
+
+@app.route('/order', methods=['GET'])
+def get_orders():
+    orders = Order.query.all()
+    orders_data = [
+        {
+            'id': order.id,
+            'user_id': order.user_id,
+            'order_date': order.order_date,
+            'shipping_address': order.shipping_address,
+            'payment_method': order.payment_method,
+            'order_total': order.order_total,
+            'status': order.status
+        }
+        for order in orders
+    ]
+    return jsonify(orders_data)    
 
 # Route to add product to wishlist
 @app.route('/wishlist', methods=['POST'])
@@ -596,6 +639,48 @@ def view_contact_submissions():
         output.append(submission_data)
 
     return jsonify({'submissions': output})
+
+
+@app.route('/products/category/<string:category>', methods=['GET'])
+def get_products_by_category(category):
+    products = Product.query.filter_by(category=category).all()
+    output = []
+
+    for product in products:
+        product_data = {
+            'id': product.id,
+            'title': product.title,
+            'description': product.description,
+            'category': product.category,
+            'price': product.price,
+            'discountPercentage': product.discount_percentage,
+            'rating': product.rating,
+            'stock': product.stock,
+            'tags': product.tags,
+            'brand': product.brand,
+            'sku': product.sku,
+            'weight': product.weight,
+            'dimensions': {
+                'width': product.width,
+                'height': product.height,
+                'depth': product.depth
+            },
+            'warrantyInformation': product.warranty_information,
+            'shippingInformation': product.shipping_information,
+            'availabilityStatus': product.availability_status,
+            'returnPolicy': product.return_policy,
+            'minimumOrderQuantity': product.minimum_order_quantity,
+            'createdAt': product.created_at,
+            'updatedAt': product.updated_at,
+            'barcode': product.barcode,
+            'qrCode': product.qr_code,
+            'images': product.images,
+            'thumbnail': product.thumbnail
+        }
+        output.append(product_data)
+
+    return jsonify({'products': output})
+
 
 
 #Enable Flask application to run in debug mode
