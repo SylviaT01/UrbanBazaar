@@ -376,7 +376,7 @@ def add_to_cart():
 
 # Route to view items in the shopping cart
 @app.route('/cart', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def view_cart():
     current_user = get_jwt_identity()
     user = User.query.filter_by(username=current_user['username']).first()
