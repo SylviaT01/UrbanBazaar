@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { useCart } from '../contexts/cartContext'; // Import useCart context
+import { useCart } from '../contexts/cartContext';
 import { useNavigate } from 'react-router-dom';
 
-const Wishlist = () => {
-  const { wishlist, loading, removeFromWishlist } = useCart(); // Add removeFromWishlist to the context
+const Cart = () => {
+  const { cart, loading, removeFromCart } = useCart();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   if (loading) return <p>Loading...</p>;
+
+  const totalPrice = cart.reduce(
+    (total, item) =>
+      total +
+      ((item.price * (100 - item.discountPercentage)) / 100) * item.quantity,
+    0
+  );
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -18,6 +25,10 @@ const Wishlist = () => {
     navigate('/products');
   };
 
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
+
   return (
     <>
       {isModalOpen && (
@@ -26,7 +37,7 @@ const Wishlist = () => {
             <div className="p-6">
               <div className="sticky top-0 bg-white pb-5 pt-4">
                 <div className="flex justify-between items-center border-b border-t border-gray-200 pb-4 pt-4">
-                  <h3 className="text-xl font-semibold">Wishlist</h3>
+                  <h3 className="text-xl font-semibold">Shopping Cart</h3>
                   <button
                     className="text-gray-500 hover:text-gray-600 focus:outline-none"
                     onClick={closeModal}
@@ -35,8 +46,8 @@ const Wishlist = () => {
                   </button>
                 </div>
               </div>
-              {wishlist.length === 0 ? (
-                <p className="text-center mt-4">Your wishlist is empty.</p>
+              {cart.length === 0 ? (
+                <p className="text-center mt-4">Your cart is empty.</p>
               ) : (
                 <div>
                   <table className="min-w-full divide-y divide-gray-200">
@@ -49,12 +60,15 @@ const Wishlist = () => {
                           Price
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Subtotal
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Actions
                         </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {wishlist.map((item) => (
+                      {cart.map((item) => (
                         <tr key={item.id}>
                           <td className="px-6 py-4 whitespace-nowrap flex items-center">
                             <img
@@ -76,9 +90,18 @@ const Wishlist = () => {
                             ).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
+                            Ksh{' '}
+                            {(
+                              Math.round(
+                                (item.price * (100 - item.discountPercentage)) /
+                                  100
+                              ) * item.quantity
+                            ).toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <button
                               className="text-red-600 hover:text-red-800"
-                              onClick={() => removeFromWishlist(item.id)}
+                              onClick={() => removeFromCart(item.id)}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -100,16 +123,28 @@ const Wishlist = () => {
                       ))}
                     </tbody>
                   </table>
+                  <div className="flex justify-between items-center border-t border-gray-200 pt-4">
+                    <h4 className="text-sm font-medium">Total Price:</h4>
+                    <p className="text-sm font-medium">
+                      Ksh {Math.round(totalPrice)}
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
+                    <button
+                      className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
+                      onClick={continueShopping}
+                    >
+                      Continue Shopping
+                    </button>
+                    <button
+                      className="bg-black hover:bg-gray-800 text-white py-2 px-4 rounded"
+                      onClick={handleCheckout}
+                    >
+                      Checkout
+                    </button>
+                  </div>
                 </div>
               )}
-              <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
-                <button
-                  className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
-                  onClick={continueShopping}
-                >
-                  Continue Shopping
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -118,4 +153,4 @@ const Wishlist = () => {
   );
 };
 
-export default Wishlist;
+export default Cart;

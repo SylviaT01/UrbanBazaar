@@ -1,5 +1,6 @@
 // Forms/SignUp.jsx
 import React, { useState } from 'react';
+// import { UserContext } from '../contexts/userContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +8,7 @@ import mall from '../assets/mall.jpg';
 
 
 export default function SignUp() {
+  // const { signup } = useContext(UserContext);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -26,7 +28,7 @@ export default function SignUp() {
       setError('Password must be at least 8 characters long and include numbers and symbols');
       return;
     }
-    // Add signup logic here
+    // signup(name, email, password);
   }
 
   return (

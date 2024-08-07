@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { CartProvider } from './contexts/cartContext.jsx';
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import WishList from "./components/wishList";
 import ProductList from "./Product/productList";
-import CartModal from "./components/cartModal";
+import ShoppingCart from "./Product/shoppingcart.jsx";
 import NavItems from "./components/navItems";
 import TopPicks from "./Product/top-picks.jsx";
 import WeeklyOffers from "./Product/weekly-offers.jsx";
@@ -24,9 +25,10 @@ import Login from "./Forms /login";
 import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
+import UserDashboard from "./User/UserDashboard.jsx";
 
 // Dummy components for User Profile
-const DashboardUser = () => <div>Dashboard Content</div>;
+
 const OrderHistory = () => <div>Order History Content</div>;
 const Wishlist = () => <div>Wishlist Content</div>;
 const UpdateProfile = () => <div>Update Profile Content</div>;
@@ -34,8 +36,8 @@ const UpdateProfile = () => <div>Update Profile Content</div>;
 function AppContent() {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* <NavItems /> */}
-      <Navbar />
+      <NavItems />
+      {/* <Navbar /> */}
       <div className="flex-grow">
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -44,7 +46,7 @@ function AppContent() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/cart" element={<CartModal />} />
+          <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/toppicks" element={<TopPicks />} />
@@ -61,7 +63,7 @@ function AppContent() {
           </Route>
           {/* UserProfile Routes */}
           <Route path="/userprofile" element={<UserProfile />}>
-            <Route path="dashboarduser" element={<DashboardUser />} />
+            <Route path="dashboarduser" element={<UserDashboard />} />
             <Route path="orderhistory" element={<OrderHistory />} />
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="profile" element={<UpdateProfile />} />
@@ -75,9 +77,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <CartProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </CartProvider>
   );
 }
 

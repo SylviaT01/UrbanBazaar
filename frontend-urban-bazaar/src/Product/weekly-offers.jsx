@@ -105,9 +105,9 @@ const WeeklyOffers = () => {
               Ksh. {product.price}
             </p>
             <div className="flex items-center space-x-6">
-              <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">
+              {/* <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">
                 Add to cart
-              </button>
+              </button> */}
               <Link to={`/products/${product.id}`} className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">View Product</Link>
             </div>
           </div>

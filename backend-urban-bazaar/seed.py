@@ -1,8 +1,7 @@
 import json
-from faker import Faker
 from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
 from app import app
-
+from faker import Faker
 fake = Faker()
 
 def load_products():
@@ -23,35 +22,52 @@ def seed_users():
     db.session.commit()
 
 def seed_products():
-    db.session.query(Product).delete()  # Clear existing products
+    db.session.query(Product).delete() 
+    db.session.query(Review).delete()# Clear existing products
     products = load_products()
     for product in products:
-        db.session.add(Product(
+        db_product = Product(
             title=product['title'],
             description=product['description'],
             category=product['category'],
             price=product['price'],
-            discount_percentage=product.get('discountPercentage', fake.pyfloat()),
-            rating=product.get('rating', fake.pyfloat()),
-            stock=product.get('stock', fake.random_int(min=1, max=100)),
+            discount_percentage=product.get('discountPercentage', None),
+            rating=product.get('rating', None),
+            stock=product.get('stock', 0),
             tags=product.get('tags', []),
-            brand=product.get('brand', fake.company()),  # Use .get() with a default value
-            sku=product.get('sku', fake.uuid4()),
-            weight=product.get('weight', fake.pyfloat()),
-            width=product.get('dimensions', {}).get('width', fake.pyfloat()),
-            height=product.get('dimensions', {}).get('height', fake.pyfloat()),
-            depth=product.get('dimensions', {}).get('depth', fake.pyfloat()),
-            warranty_information=product.get('warrantyInformation', fake.sentence()),
-            shipping_information=product.get('shippingInformation', fake.sentence()),
+            brand=product.get('brand', 'Unknown Brand'),  # Set default value for brand
+            sku=product.get('sku', None),
+            weight=product.get('weight', 0.0),
+            width=product.get('dimensions', {}).get('width', 0.0),
+            height=product.get('dimensions', {}).get('height', 0.0),
+            depth=product.get('dimensions', {}).get('depth', 0.0),
+            warranty_information=product.get('warrantyInformation', None),
+            shipping_information=product.get('shippingInformation', None),
             availability_status=product.get('availabilityStatus', 'In Stock'),
-            return_policy=product.get('returnPolicy', fake.sentence()),
-            minimum_order_quantity=product.get('minimumOrderQuantity', fake.random_int(min=1, max=10)),
-            barcode=product.get('meta', {}).get('barcode', fake.ean13()),
-            qr_code=product.get('meta', {}).get('qrCode', fake.uuid4()),
+            return_policy=product.get('returnPolicy', None),
+            minimum_order_quantity=product.get('minimumOrderQuantity', 1),
+            barcode=product.get('meta', {}).get('barcode', None),
+            qr_code=product.get('meta', {}).get('qrCode', None),
             images=product.get('images', []),
-            thumbnail=product.get('thumbnail', fake.image_url()),
-        ))
+            thumbnail=product.get('thumbnail', None)
+        )
+        db.session.add(db_product)
+        db.session.flush()  # Flush to get the product ID for reviews
+
+        # Add reviews for this product if available
+    
+        if 'reviews' in product:
+            for review in product['reviews']:
+                db_review = Review(
+                    product_id=db_product.id,
+                    rating=review['rating'],
+                    comment=review['comment'],
+                    reviewer_name=review['reviewerName'],
+                    reviewer_email=review['reviewerEmail']
+                )
+                db.session.add(db_review)
     db.session.commit()
+
 
 def seed_shipping_details():
     db.session.query(ShippingDetails).delete()  # Clear existing ShippingDetails entries
@@ -63,7 +79,6 @@ def seed_shipping_details():
             zip_code=fake.zipcode(),
             name=fake.name(),
             apartment_number=fake.random_int(min=1, max=200),
-            
         )
         db.session.add(shipping_detail)
     db.session.commit()
@@ -75,7 +90,6 @@ def seed_contacts():
             name=fake.name(),
             email=fake.email(),
             message=fake.text(),
-        
         )
         db.session.add(contact)
     db.session.commit()
@@ -84,9 +98,7 @@ def seed_other_tables():
     db.session.query(ShoppingCart).delete()  # Clear existing ShoppingCart entries
     db.session.query(Order).delete()  # Clear existing Orders
     db.session.query(OrderItem).delete()  # Clear existing OrderItems
-    db.session.query(Review).delete()  # Clear existing Reviews
     db.session.query(Wishlist).delete()  # Clear existing Wishlists
-     # Clear existing ContactUs entries
     
     user_ids = [user.id for user in User.query.all()]
     product_ids = [product.id for product in Product.query.all()]
@@ -121,15 +133,6 @@ def seed_other_tables():
                 quantity=fake.random_int(min=1, max=5),
                 price=fake.pyfloat(left_digits=2, right_digits=2, positive=True)
             ))
-
-    for _ in range(20):
-        db.session.add(Review(
-            product_id=fake.random_element(product_ids),
-            rating=fake.random_int(min=1, max=5),
-            comment=fake.text(),
-            reviewer_name=fake.name(),
-            reviewer_email=fake.email()
-        ))
 
     for _ in range(20):
         db.session.add(Wishlist(
