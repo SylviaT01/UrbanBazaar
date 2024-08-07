@@ -75,6 +75,20 @@ const UpdateProfileForm = () => {
             placeholder="Enter email address" 
           />
         </div>
+        <div className="mt-4">
+          <h2 className="text-xl text-blue-700">Password Change</h2>
+        </div>
+        <div className="mt-4">
+          <label className="block text-gray-700">Current Password</label>
+          <input 
+            type="password" 
+            name="currentPassword" 
+            value={formData.currentPassword} 
+            onChange={handleChange} 
+            className="mt-1 p-2 border rounded w-full" 
+            placeholder="Enter current password" 
+          />
+        </div>
 
 
 
