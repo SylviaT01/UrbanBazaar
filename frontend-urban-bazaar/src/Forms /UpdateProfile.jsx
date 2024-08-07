@@ -40,6 +40,19 @@ const UpdateProfileForm = () => {
               placeholder="Enter first name" 
             />
           </div>
+          </div>
+          <div>
+            <label className="block text-gray-700">Last Name</label>
+            <input 
+              type="text" 
+              name="lastName" 
+              value={formData.lastName} 
+              onChange={handleChange} 
+              className="mt-1 p-2 border rounded w-full" 
+              placeholder="Enter last name" 
+            />
+          </div>
+        </div>
 
 
 
