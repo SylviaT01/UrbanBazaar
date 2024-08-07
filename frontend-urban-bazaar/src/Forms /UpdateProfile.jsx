@@ -53,6 +53,17 @@ const UpdateProfileForm = () => {
             />
           </div>
         </div>
+        <div className="mt-4">
+          <label className="block text-gray-700">Display Name</label>
+          <input 
+            type="text" 
+            name="displayName" 
+            value={formData.displayName} 
+            onChange={handleChange} 
+            className="mt-1 p-2 border rounded w-full" 
+            placeholder="Enter display name" 
+          />
+        </div>
 
 
 
