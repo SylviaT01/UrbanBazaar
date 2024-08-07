@@ -24,9 +24,10 @@ import Login from "./Forms /login";
 import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
+import UserDashboard from "./User/UserDashboard.jsx";
 
 // Dummy components for User Profile
-const DashboardUser = () => <div>Dashboard Content</div>;
+
 const OrderHistory = () => <div>Order History Content</div>;
 const Wishlist = () => <div>Wishlist Content</div>;
 const UpdateProfile = () => <div>Update Profile Content</div>;
@@ -61,7 +62,7 @@ function AppContent() {
           </Route>
           {/* UserProfile Routes */}
           <Route path="/userprofile" element={<UserProfile />}>
-            <Route path="dashboarduser" element={<DashboardUser />} />
+            <Route path="dashboarduser" element={<UserDashboard />} />
             <Route path="orderhistory" element={<OrderHistory />} />
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="profile" element={<UpdateProfile />} />
