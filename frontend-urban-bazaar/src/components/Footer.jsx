@@ -42,7 +42,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <hr className="my-8 border-t-2 border-gray-300" />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-5">
                     <div className="footer-col-1 flex flex-col">
                         <h2 className="text-lg font-medium text-gray-700 underline">Our Company</h2>
                         <div className="link-col-left flex flex-col text-left gap-1 font-normal">

@@ -188,7 +188,7 @@ def get_products():
             'barcode': product.barcode,
             'qrCode': product.qr_code,
             'images': product.images,
-            'thumbnail': product.thumbnail
+            'thumbnail': product.thumbnail,
         }
         output.append(product_data)
 
@@ -355,7 +355,7 @@ def delete_product(id):
 
 # Route to add a product to the shopping cart
 @app.route('/cart', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def add_to_cart():
     current_user = get_jwt_identity()
     user = User.query.filter_by(username=current_user['username']).first()
@@ -639,6 +639,48 @@ def view_contact_submissions():
         output.append(submission_data)
 
     return jsonify({'submissions': output})
+
+
+@app.route('/products/category/<string:category>', methods=['GET'])
+def get_products_by_category(category):
+    products = Product.query.filter_by(category=category).all()
+    output = []
+
+    for product in products:
+        product_data = {
+            'id': product.id,
+            'title': product.title,
+            'description': product.description,
+            'category': product.category,
+            'price': product.price,
+            'discountPercentage': product.discount_percentage,
+            'rating': product.rating,
+            'stock': product.stock,
+            'tags': product.tags,
+            'brand': product.brand,
+            'sku': product.sku,
+            'weight': product.weight,
+            'dimensions': {
+                'width': product.width,
+                'height': product.height,
+                'depth': product.depth
+            },
+            'warrantyInformation': product.warranty_information,
+            'shippingInformation': product.shipping_information,
+            'availabilityStatus': product.availability_status,
+            'returnPolicy': product.return_policy,
+            'minimumOrderQuantity': product.minimum_order_quantity,
+            'createdAt': product.created_at,
+            'updatedAt': product.updated_at,
+            'barcode': product.barcode,
+            'qrCode': product.qr_code,
+            'images': product.images,
+            'thumbnail': product.thumbnail
+        }
+        output.append(product_data)
+
+    return jsonify({'products': output})
+
 
 
 #Enable Flask application to run in debug mode
