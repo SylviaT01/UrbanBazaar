@@ -175,7 +175,7 @@ const ProductDetailPage = () => {
         </Link>
       </div>
       {notification && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-lg shadow-lg">
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-center bg-green-500 text-white p-4 rounded-lg shadow-lg">
           {notification}
         </div>
       )}
