@@ -16,9 +16,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F0F9FF] py-20">
+    <div className="flex min-h-screen bg-[#F0F9FF]">
       {/* Sidebar */}
-      <aside className="ml-20 w-64 text-[#747474]">
+      <aside className="fixed top-20 bottom-0 left-5 w-64 text-[#747474] overflow-y-auto z-10">
         <nav className="p-4">
           <ul>
             <li className="mb-4">
@@ -31,13 +31,13 @@ const Dashboard = () => {
                 }
               >
                 <img src={home} className="mr-3" alt="Home" />
-                Dashboard Admin
+                 Dashboard
               </NavLink>
             </li>
             <li className="mb-4">
               <button
                 onClick={handleProductsClick}
-                className="w-full text-left flex items-center px-4 py-6 block px-4 py-4 bg-[#FFFFFF] hover:hover:bg-[#d1d5db] rounded flex items-center"
+                className="w-full text-left flex items-center px-4 py-6 block bg-[#FFFFFF] hover:bg-[#d1d5db] rounded"
               >
                 <img src={product} className="mr-3" alt="product" />
                 Products
@@ -73,7 +73,6 @@ const Dashboard = () => {
                           : "block px-4 py-4 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                       }
                     >
-                      {/* <FaList className="mr-2" /> */}
                       All Products
                     </NavLink>
                   </li>
@@ -86,14 +85,12 @@ const Dashboard = () => {
                           : "block px-4 py-4 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                       }
                     >
-                      {/* <FaPlus className="mr-2" /> */}
                       Add Product
                     </NavLink>
                   </li>
                 </ul>
               )}
             </li>
-
             <li className="mb-4">
               <NavLink
                 to="orders"
@@ -122,7 +119,7 @@ const Dashboard = () => {
             </li>
             <li className="mb-4">
               <NavLink
-                to="/customers"
+                to="customers"
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
@@ -148,7 +145,7 @@ const Dashboard = () => {
             </li>
             <li className="mb-4">
               <NavLink
-                to="payments"
+                to="logout"
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
@@ -164,7 +161,7 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1  bg-[#F0F9FF]">
+      <main className="flex-1 p-6 bg-[#F0F9FF] ml-64 mt-20">
         <Outlet />
       </main>
     </div>
