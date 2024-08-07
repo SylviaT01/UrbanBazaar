@@ -47,3 +47,11 @@ const handleDeleteSelected = () => {
     })
     .catch((error) => console.error("Error deleting reviews:", error));
 };
+
+return (
+  <div className="flex flex-col items-center px-4 sm:px-6 lg:px-4 -mt-20">
+    <div className="self-start -mt-4 ml-20 text-2xl font-bold tracking-tight leading-loose text-gray-800 max-md:mt-10 max-md:ml-2.5">
+      Reviews
+    </div>
+  </div>
+);
