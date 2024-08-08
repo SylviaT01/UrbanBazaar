@@ -16,9 +16,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F0F9FF]">
+    <div className="flex min-h-screen bg-[#F0F9FF] py-20">
       {/* Sidebar */}
-      <aside className="fixed top-20 bottom-0 left-5 w-64 text-[#747474] overflow-y-auto z-10">
+      <aside className="ml-20 w-64 text-[#747474]">
         <nav className="p-4">
           <ul>
             <li className="mb-4">
@@ -31,7 +31,7 @@ const Dashboard = () => {
                 }
               >
                 <img src={home} className="mr-3" alt="Home" />
-                 Dashboard
+                Dashboard
               </NavLink>
             </li>
             <li className="mb-4">
@@ -161,7 +161,7 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 bg-[#F0F9FF] ml-64 mt-20">
+      <main className="flex-1  bg-[#F0F9FF]">
         <Outlet />
       </main>
     </div>
