@@ -111,7 +111,7 @@ const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
 const currentPayments = payments.slice(indexOfFirstPayment, indexOfLastPayment);
 return (
   <div>
-    <table>
+    <table className="min-w-full divide-gray-200">
       <thead>
         <tr>
           <th>No.</th>
@@ -138,7 +138,7 @@ return (
 
         ))}
       </tbody>
-    </table>
+    </=table>
   </div>
 );
 <div>
