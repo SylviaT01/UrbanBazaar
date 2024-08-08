@@ -5,7 +5,7 @@ import { UserProvider, UserContext } from './contexts/userContext.jsx';
 import { CartContext } from './contexts/cartContext.jsx';
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
-import WishList from "./components/wishList";
+import WishList from "./User/wishList.jsx";
 import ProductList from "./Product/productList";
 import ShoppingCart from "./Product/shoppingcart.jsx";
 import NavItems from "./components/navItems";
@@ -32,7 +32,7 @@ import UserDashboard from "./User/UserDashboard.jsx";
 // Dummy components for User Profile
 
 const OrderHistory = () => <div>Order History Content</div>;
-const Wishlist = () => <div>Wishlist Content</div>;
+
 const UpdateProfile = () => <div>Update Profile Content</div>;
 
 function AppContent() {
@@ -51,7 +51,7 @@ function AppContent() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<ShoppingCart />} />
-          <Route path="/wishlist" element={<WishList />} />
+          {/* <Route path="/wishlist" element={<WishList />} /> */}
           <Route path="/products" element={<ProductList />} />
           <Route path="/toppicks" element={<TopPicks />} />
           <Route path="/weeklyoffers" element={<WeeklyOffers />} />
@@ -69,7 +69,7 @@ function AppContent() {
           <Route path="/userprofile" element={<UserProfile />}>
             <Route path="dashboarduser" element={<UserDashboard />} />
             <Route path="orderhistory" element={<OrderHistory />} />
-            <Route path="wishlist" element={<Wishlist />} />
+            <Route path="wishlist" element={<WishList />} />
             <Route path="profile" element={<UpdateProfile />} />
           </Route>
         </Routes>

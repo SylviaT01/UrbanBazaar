@@ -1,5 +1,6 @@
-import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import React, { useContext } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/userContext"; // Adjust the import path accordingly
 import userimage from "../assets/userimage.svg";
 import userdashboard from "../assets/userdashboard.svg";
 import orderhistory from "../assets/orderhistory.svg";
@@ -8,12 +9,24 @@ import whishlist from "../assets/wishlist.svg";
 import logoutuser from "../assets/logoutuser.svg";
 
 const UserProfile = () => {
+  const { logout } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      alert("Logged out successfully"); 
+    } catch (error) {
+      alert("Failed to log out. Please try again.");
+    }
+  };
+
   return (
     <div className="flex min-h-screen m-10">
       {/* Sidebar */}
       <div className="w-1/6 bg-white h-screen p-4 shadow-md">
         <div className="flex flex-col">
-          <div className="flex items-center mb-2 border-b-2 border-gray-200 ">
+          <div className="flex items-center mb-2 border-b-2 border-gray-200">
             <img
               src={userimage}
               alt="User Profile"
@@ -26,7 +39,7 @@ const UserProfile = () => {
             <NavLink
               to="dashboarduser"
               className={({ isActive }) =>
-                `py-2 px-4 flex items-center  ${
+                `py-2 px-4 flex items-center ${
                   isActive
                     ? "text-white bg-[#B5E0F6] border-[#41ADE3]"
                     : "text-[#41ADE3] border-b-2 border-[#41ADE3]"
@@ -39,7 +52,7 @@ const UserProfile = () => {
             <NavLink
               to="orderhistory"
               className={({ isActive }) =>
-                `py-2 px-4 flex items-center  ${
+                `py-2 px-4 flex items-center ${
                   isActive
                     ? "text-white bg-[#B5E0F6] border-[#41ADE3]"
                     : "text-[#41ADE3] border-b-2 border-[#41ADE3]"
@@ -52,7 +65,7 @@ const UserProfile = () => {
             <NavLink
               to="wishlist"
               className={({ isActive }) =>
-                `py-2 px-4 flex items-center  ${
+                `py-2 px-4 flex items-center ${
                   isActive
                     ? "text-white bg-[#B5E0F6] border-[#41ADE3]"
                     : "text-[#41ADE3] border-b-2 border-[#41ADE3]"
@@ -75,19 +88,13 @@ const UserProfile = () => {
               <img src={userprofile} alt="userprofile" className="mr-3" />
               Update Profile
             </NavLink>
-            <NavLink
-              to="/logout"
-              className={({ isActive }) =>
-                `py-2 px-4 flex items-center  ${
-                  isActive
-                    ? "text-white bg-[#B5E0F6] border-[#41ADE3]"
-                    : "text-[#41ADE3] border-b-2 border-[#41ADE3]"
-                }`
-              }
+            <button
+              onClick={handleLogout}
+              className="py-2 px-4 flex items-center text-[#41ADE3] border-b-2 border-[#41ADE3] bg-white hover:bg-[#B5E0F6]"
             >
               <img src={logoutuser} alt="logoutuser" className="mr-3" />
               Logout
-            </NavLink>
+            </button>
           </nav>
         </div>
       </div>
