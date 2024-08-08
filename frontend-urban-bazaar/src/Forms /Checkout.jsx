@@ -126,7 +126,7 @@ function Checkout() {
 
         <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6  h-[1000px]">
           <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
-          <form className="mx-auto max-w-sm space-y-44 flex flex-col items-center">
+          <form className="mx-auto max-w-sm space-y-32 flex flex-col items-center">
             <div className="flex items-center mb-4 s">
               <section className="flex flex-col rounded-none max-w-[731px]">
                 <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
