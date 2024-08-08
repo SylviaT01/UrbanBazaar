@@ -31,7 +31,27 @@ useEffect(() => {
       setLoading(false);
     }
   };
-
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  
+  const handleNext = () => {
+    if (currentPage < Math.ceil(payments.length / paymentsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  
+  return (
+    <div>
+      {/* Table content */}
+      <div>
+        <button onClick={handlePrevious}>Previous</button>
+        <button onClick={handleNext}>Next</button>
+      </div>
+    </div>
+  );
   fetchPayments();
   if (loading) return <p>Loading...</p>;
 if (error) return <p>Error: {error.message}</p>;
