@@ -135,7 +135,11 @@ return (
             <td>Kshs. {payment.order_total.toFixed(2)}</td>
             <td>{payment.status}</td>
           </tr>
-
+const handleNext = () => {
+  if (currentPage < Math.ceil(payments.length / paymentsPerPage)) {
+    setCurrentPage(currentPage + 1);
+  }
+};
         ))}
       </tbody>
     </=table>
