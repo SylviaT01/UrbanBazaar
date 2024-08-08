@@ -1,8 +1,7 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { CartProvider } from './contexts/cartContext.jsx';
 import { UserProvider, UserContext } from './contexts/userContext.jsx';
-import { CartContext } from './contexts/cartContext.jsx';
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import WishList from "./User/wishList.jsx";
@@ -36,8 +35,6 @@ const OrderHistory = () => <div>Order History Content</div>;
 const UpdateProfile = () => <div>Update Profile Content</div>;
 
 function AppContent() {
-  // const { currentUser } = useContext(UserContext);
-  // const { cartItems } = useContext(CartContext);
   return (
     <div className="min-h-screen flex flex-col">
       <NavItems />
@@ -51,7 +48,7 @@ function AppContent() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<ShoppingCart />} />
-          {/* <Route path="/wishlist" element={<WishList />} /> */}
+          <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/toppicks" element={<TopPicks />} />
           <Route path="/weeklyoffers" element={<WeeklyOffers />} />

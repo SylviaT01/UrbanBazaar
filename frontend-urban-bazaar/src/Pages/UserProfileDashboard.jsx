@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/userContext"; // Adjust the import path accordingly
+import { UserContext } from "../contexts/userContext";
 import userimage from "../assets/userimage.svg";
 import userdashboard from "../assets/userdashboard.svg";
 import orderhistory from "../assets/orderhistory.svg";
@@ -9,17 +9,23 @@ import whishlist from "../assets/wishlist.svg";
 import logoutuser from "../assets/logoutuser.svg";
 
 const UserProfile = () => {
-  const { logout } = useContext(UserContext);
+  const { currentUser, logout } = useContext(UserContext); 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await logout();
       alert("Logged out successfully"); 
+      navigate("/");
     } catch (error) {
       alert("Failed to log out. Please try again.");
     }
   };
+
+ 
+  if (!currentUser) {
+    return <div className="text-center py-8">Please log in to access your profile.</div>;
+  }
 
   return (
     <div className="flex min-h-screen m-10">
@@ -32,7 +38,7 @@ const UserProfile = () => {
               alt="User Profile"
               className="rounded-full w-24 h-24 mr-2"
             />
-            <h2 className="text-xl text-gray-700">John Doe</h2>
+            <h2 className="text-md text-gray-700">{currentUser.username || "User"}</h2>
           </div>
 
           <nav className="flex flex-col w-full">

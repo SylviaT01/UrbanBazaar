@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import RelatedProducts from './relatedProducts';
 import TopPicksFour from './top-picksfour';
-import { useCart } from '../contexts/cartContext'; // Import useCart context
+import { useCart } from '../contexts/cartContext'; 
+import { UserContext } from '../contexts/userContext'; 
 
 const ProductDetailPage = () => {
   const { id } = useParams();
-  const [product, setProduct] = React.useState(null);
-  const [selectedImage, setSelectedImage] = React.useState('');
-  const [relatedProducts, setRelatedProducts] = React.useState([]);
-  const [quantity, setQuantity] = React.useState(1); // State for quantity
-  const { addToCart, addToWishlist, notification } = useCart(); // Use useCart context
-  // const { currentUser } = useContext(UserContext);
+  const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false); 
+  const { addToCart, addToWishlist, notification } = useCart(); 
+  const { currentUser } = useContext(UserContext);
 
   React.useEffect(() => {
     fetch(`http://127.0.0.1:5000/products/${id}`)
@@ -40,17 +42,50 @@ const ProductDetailPage = () => {
   };
 
   const handleAddToCart = () => {
-    addToCart({ ...product, quantity });
+    if (currentUser) {
+      addToCart({ ...product, quantity });
+    } else {
+      setShowLoginPrompt(true);
+    }
   };
 
   const handleAddToWishlist = () => {
-    addToWishlist(product);
+    if (currentUser) {
+      addToWishlist(product);
+    } else {
+      setShowLoginPrompt(true);
+    }
+  };
+
+  const closeLoginPrompt = () => {
+    setShowLoginPrompt(false);
   };
 
   if (!product) return <div className="text-center py-8">Loading...</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Login prompt modal */}
+      {showLoginPrompt && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+          <div className="bg-white rounded-lg w-[400px] p-6">
+            <h2 className="text-xl font-semibold mb-4">Login Required</h2>
+            <p className="mb-4">You need to log in to add items to the cart or wishlist. Please log in to continue.</p>
+            <div className="flex justify-between">
+              <Link to="/login" className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400">
+                Log In
+              </Link>
+              <button
+                onClick={closeLoginPrompt}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-row gap-8">
         {/* Thumbnail images */}
         <div className="w-1/8 flex flex-col space-y-4">
@@ -77,7 +112,7 @@ const ProductDetailPage = () => {
         {/* Product details */}
         <div className="w-1/2 flex flex-col">
           <h1 className="text-3xl font-medium mb-2">{product.title}</h1>
-          <h2 className=" mb-2 capitalize text-lg">
+          <h2 className="mb-2 capitalize text-lg">
             <span className="font-medium text-gray-900">Category:</span>
             <span className="font-normal text-gray-700"> {product.category}</span>
           </h2>
