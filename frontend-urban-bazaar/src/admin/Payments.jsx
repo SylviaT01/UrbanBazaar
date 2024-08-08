@@ -1,4 +1,17 @@
 import React, { useState, useEffect } from "react";
+const totalPayment = currentPayments.reduce((total, payment) => total + payment.order_total, 0);
+
+return (
+  <div>
+    {/* Table content */}
+    <tfoot>
+      <tr>
+        <td colSpan="5">Total:</td>
+        <td colSpan="2">Kshs. {totalPayment.toFixed(2)}</td>
+      </tr>
+    </tfoot>
+  </div>
+);
 
 useEffect(() => {
   const fetchPayments = async () => {
@@ -53,11 +66,20 @@ return (
             <td>Kshs. {payment.order_total.toFixed(2)}</td>
             <td>{payment.status}</td>
           </tr>
+
         ))}
       </tbody>
     </table>
   </div>
 );
-
+<div>
+    {/* Table content */}
+    <tfoot>
+      <tr>
+        <td colSpan="5">Total:</td>
+        <td colSpan="2">Kshs. {totalPayment.toFixed(2)}</td>
+      </tr>
+    </tfoot>
+  </div>
 
 export default Payments;
