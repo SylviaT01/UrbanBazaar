@@ -527,23 +527,67 @@ def create_order():
 
     return jsonify({'message': 'Order created successfully'})
 
+# @app.route('/order', methods=['GET'])
+# def get_orders():
+#     orders = Order.query.all()
+#     orders_data = [
+#         {
+#             'id': order.id,
+#             'user_id': order.user_id,
+#             'order_date': order.order_date,
+#             'shipping_address': order.shipping_address,
+#             'payment_method': order.payment_method,
+#             'order_total': order.order_total,
+#             'status': order.status
+#         }
+#         for order in orders
+#     ]
+#     return jsonify(orders_data)  
 @app.route('/order', methods=['GET'])
 def get_orders():
-    orders = Order.query.all()
-    orders_data = [
-        {
+    # Fetch orders along with associated users and products
+    orders = db.session.query(Order).all()
+    orders_data = []
+
+    for order in orders:
+        # Fetch the order items for the current order
+        order_items = OrderItem.query.filter_by(order_id=order.id).all()
+        
+        # Build order item details including product info
+        items_data = []
+        for item in order_items:
+            product = Product.query.get(item.product_id)
+            if product:
+                product_data = {
+                    'product_id': product.id,
+                    'title': product.title,
+                    'images': product.images,  # List of image URLs
+                    'price': item.price,
+                    'quantity': item.quantity
+                }
+                items_data.append(product_data)
+
+        # Get user info
+        user = User.query.get(order.user_id)
+        user_data = {
+            'username': user.username if user else 'Unknown User'
+        }
+
+        # Build order details
+        order_data = {
             'id': order.id,
-            'user_id': order.user_id,
+            'user': user_data,
             'order_date': order.order_date,
             'shipping_address': order.shipping_address,
             'payment_method': order.payment_method,
             'order_total': order.order_total,
-            'status': order.status
+            'status': order.status,
+            'items': items_data
         }
-        for order in orders
-    ]
-    return jsonify(orders_data)  
+        
+        orders_data.append(order_data)
 
+    return jsonify(orders_data)
 @app.route('/user', methods=['GET'])
 def get_user():
     users = User.query.all()
