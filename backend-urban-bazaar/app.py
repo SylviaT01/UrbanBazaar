@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, create_refresh_token, get_jwt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,create_refresh_token, get_jwt
 from flask_cors import CORS
 from functools import wraps
 from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
@@ -44,7 +44,9 @@ def register():
     new_user = User(
         username=data['username'],
         email=data['email'],
-        password=hashed_password
+        password=hashed_password,
+        is_admin=False,
+        phone_number=data['phone_number']  # Add phone number field if needed
     )
     db.session.add(new_user)
     db.session.commit()
@@ -103,7 +105,6 @@ def logout():
     jti = get_jwt()["jti"]
     BLACKLIST.add(jti)
     return jsonify({"success":"Logged out successfully"}), 200
-
 
 # Admin route to assign admin role
 @app.route('/assign_admin/<int:user_id>', methods=['POST'])
@@ -197,46 +198,6 @@ def update_profile():
     return jsonify({'message': 'Profile updated successfully'})
 
 
-# Product routes
-# @app.route('/products', methods=['GET'])
-# def get_products():
-#     products = Product.query.all()
-#     output = []
-
-#     for product in products:
-#         product_data = {
-#             'id': product.id,
-#             'title': product.title,
-#             'description': product.description,
-#             'category': product.category,
-#             'price': product.price,
-#             'discountPercentage': product.discount_percentage,
-#             'rating': product.rating,
-#             'stock': product.stock,
-#             'tags': product.tags,
-#             'brand': product.brand,
-#             'sku': product.sku,
-#             'weight': product.weight,
-#             'dimensions': {
-#                 'width': product.width,
-#                 'height': product.height,
-#                 'depth': product.depth
-#             },
-#             'warrantyInformation': product.warranty_information,
-#             'shippingInformation': product.shipping_information,
-#             'availabilityStatus': product.availability_status,
-#             'returnPolicy': product.return_policy,
-#             'minimumOrderQuantity': product.minimum_order_quantity,
-#             'createdAt': product.created_at,
-#             'updatedAt': product.updated_at,
-#             'barcode': product.barcode,
-#             'qrCode': product.qr_code,
-#             'images': product.images,
-#             'thumbnail': product.thumbnail,
-#         }
-#         output.append(product_data)
-
-#     return jsonify({'products': output})
 @app.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()

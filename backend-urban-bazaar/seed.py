@@ -16,7 +16,8 @@ def seed_users():
             username=fake.user_name(),
             email=fake.email(),
             password=fake.password(),
-            is_admin=fake.boolean()
+            is_admin=fake.boolean(),
+            phone_number=fake.phone_number()  # Add phone number field if needed
         )
         db.session.add(user)
     db.session.commit()

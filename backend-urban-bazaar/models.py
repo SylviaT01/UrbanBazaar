@@ -26,6 +26,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    phone_number=db.Column(db.Integer, nullable=False)
 
     # Relationships to other models
     shopping_carts = db.relationship('ShoppingCart', backref='user', lazy=True)
