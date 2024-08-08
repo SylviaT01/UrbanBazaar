@@ -51,7 +51,25 @@ useEffect(() => {
         <button onClick={handleNext}>Next</button>
       </div>
     </div>
-  );
+  );<div>
+  {/* Table content */}
+  <div>
+    <button
+      onClick={handlePrevious}
+      className={`px-4 py-2 border ${currentPage === 1 ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+      disabled={currentPage === 1}
+    >
+      Previous
+    </button>
+    <button
+      onClick={handleNext}
+      className={`px-4 py-2 border ${currentPage === Math.ceil(payments.length / paymentsPerPage) ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+      disabled={currentPage === Math.ceil(payments.length / paymentsPerPage)}
+    >
+      Next
+    </button>
+  </div>
+</div>
   fetchPayments();
   if (loading) return <p>Loading...</p>;
 if (error) return <p>Error: {error.message}</p>;
