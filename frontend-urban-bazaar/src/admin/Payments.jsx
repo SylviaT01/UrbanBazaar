@@ -129,6 +129,7 @@ return (
             <td>{index + indexOfFirstPayment + 1}</td>
             <td>{payment.user_email}</td>
             <td>{payment.created_at ? new Date(payment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'Invalid Date'}</td>
+
             <td>{payment.shipping_address}</td>
             <td>{payment.payment_method}</td>
             <td>Kshs. {payment.order_total.toFixed(2)}</td>
