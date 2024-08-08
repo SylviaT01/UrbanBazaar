@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,create_refresh_token, get_jwt
 from flask_cors import CORS
 from functools import wraps
 from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
@@ -44,23 +44,66 @@ def register():
     new_user = User(
         username=data['username'],
         email=data['email'],
-        password=hashed_password
+        password=hashed_password,
+        is_admin=False,
+        phone_number=data['phone_number']  # Add phone number field if needed
     )
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({'message': 'User registered successfully'})
 # User login route
+# @app.route('/login', methods=['POST'])
+# def login():
+#     data = request.get_json()
+#     user = User.query.filter_by(email=data['email']).first()
+
+#     if user and bcrypt.check_password_hash(user.password, data['password']):
+#         access_token = create_access_token(identity={'username': user.username, 'is_admin': user.is_admin})
+#         return jsonify({'token': access_token})
+
+#     return jsonify({'message': 'Invalid credentials'}), 401
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    user = User.query.filter_by(email=data['email']).first()
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    user = User.query.filter_by(email=email).first()
+    if user and bcrypt.check_password_hash(user.password, password):
+        access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
+        return jsonify({"access_token": access_token, "refresh_token": refresh_token})
+    else:
+        return jsonify({"message": "Invalid username or password"}), 401
+    
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    current_user_id = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user_id)
+    return jsonify({"access_token": new_access_token}), 200
 
-    if user and bcrypt.check_password_hash(user.password, data['password']):
-        access_token = create_access_token(identity={'username': user.username, 'is_admin': user.is_admin})
-        return jsonify({'token': access_token})
+@app.route("/current_user", methods=["GET"])
+@jwt_required()
+def get_current_user():
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+    if current_user:
+        return jsonify({"id":current_user.id, "name":current_user.name, "email":current_user.email}), 200
+    else: 
+        return jsonify({"message":"User not found"}), 404
+    
+BLACKLIST = set()
+# @jwt.token_in_blocklist_loader
+def check_if_token_in_blocklist(jwt_header, decrypted_token):
+    jti = decrypted_token["jti"]
+    return jti in BLACKLIST
 
-    return jsonify({'message': 'Invalid credentials'}), 401
+@app.route("/logout", methods=["POST"])
+@jwt_required()
+def logout():
+    jti = get_jwt()["jti"]
+    BLACKLIST.add(jti)
+    return jsonify({"success":"Logged out successfully"}), 200
 
 # Admin route to assign admin role
 @app.route('/assign_admin/<int:user_id>', methods=['POST'])
@@ -154,46 +197,6 @@ def update_profile():
     return jsonify({'message': 'Profile updated successfully'})
 
 
-# Product routes
-# @app.route('/products', methods=['GET'])
-# def get_products():
-#     products = Product.query.all()
-#     output = []
-
-#     for product in products:
-#         product_data = {
-#             'id': product.id,
-#             'title': product.title,
-#             'description': product.description,
-#             'category': product.category,
-#             'price': product.price,
-#             'discountPercentage': product.discount_percentage,
-#             'rating': product.rating,
-#             'stock': product.stock,
-#             'tags': product.tags,
-#             'brand': product.brand,
-#             'sku': product.sku,
-#             'weight': product.weight,
-#             'dimensions': {
-#                 'width': product.width,
-#                 'height': product.height,
-#                 'depth': product.depth
-#             },
-#             'warrantyInformation': product.warranty_information,
-#             'shippingInformation': product.shipping_information,
-#             'availabilityStatus': product.availability_status,
-#             'returnPolicy': product.return_policy,
-#             'minimumOrderQuantity': product.minimum_order_quantity,
-#             'createdAt': product.created_at,
-#             'updatedAt': product.updated_at,
-#             'barcode': product.barcode,
-#             'qrCode': product.qr_code,
-#             'images': product.images,
-#             'thumbnail': product.thumbnail,
-#         }
-#         output.append(product_data)
-
-#     return jsonify({'products': output})
 @app.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
