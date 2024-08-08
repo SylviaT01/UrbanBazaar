@@ -11,7 +11,7 @@ const Reviews = () => {
   useEffect(() => {
     fetch("http://127.0.0.1:5000/review")
       .then((response) => response.json())
-      .then((data) => setReviews(data))
+      .then((data) => setReviews(data.reviews))
       .catch((error) => console.error("Error fetching reviews:", error));
   }, []);
 
@@ -19,6 +19,7 @@ const Reviews = () => {
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
   const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
   const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleSelectReview = (reviewId) => {
@@ -45,6 +46,29 @@ const Reviews = () => {
         setSelectedReviews([]);
       })
       .catch((error) => console.error("Error deleting reviews:", error));
+  };
+
+  const pageNumbersToShow = 5; // Number of page buttons to show
+  const halfPageNumbersToShow = Math.floor(pageNumbersToShow / 2);
+
+  const getPageNumbers = () => {
+    let startPage, endPage;
+
+    if (totalPages <= pageNumbersToShow) {
+      startPage = 1;
+      endPage = totalPages;
+    } else if (currentPage <= halfPageNumbersToShow) {
+      startPage = 1;
+      endPage = pageNumbersToShow;
+    } else if (currentPage + halfPageNumbersToShow >= totalPages) {
+      startPage = totalPages - pageNumbersToShow + 1;
+      endPage = totalPages;
+    } else {
+      startPage = currentPage - halfPageNumbersToShow;
+      endPage = currentPage + halfPageNumbersToShow;
+    }
+
+    return [...Array(endPage - startPage + 1).keys()].map((i) => i + startPage);
   };
 
   return (
@@ -115,22 +139,31 @@ const Reviews = () => {
               className={`px-3 py-1 rounded ${
                 currentPage === 1 ? "bg-neutral-300" : "bg-neutral-100"
               }`}
+              onClick={() => currentPage > 1 && paginate(1)}
+              disabled={currentPage === 1}
+            >
+              &lt;&lt;
+            </button>
+            <button
+              className={`px-3 py-1 rounded ${
+                currentPage === 1 ? "bg-neutral-300" : "bg-neutral-100"
+              }`}
               onClick={() => currentPage > 1 && paginate(currentPage - 1)}
               disabled={currentPage === 1}
             >
               &lt;
             </button>
-            {[...Array(totalPages).keys()].map((number) => (
+            {getPageNumbers().map((number) => (
               <button
-                key={number + 1}
+                key={number}
                 className={`px-3 py-1 rounded ${
-                  currentPage === number + 1
+                  currentPage === number
                     ? "text-white bg-indigo-600"
                     : "bg-neutral-100"
                 }`}
-                onClick={() => paginate(number + 1)}
+                onClick={() => paginate(number)}
               >
-                {number + 1}
+                {number}
               </button>
             ))}
             <button
@@ -143,6 +176,15 @@ const Reviews = () => {
               disabled={currentPage === totalPages}
             >
               &gt;
+            </button>
+            <button
+              className={`px-3 py-1 rounded ${
+                currentPage === totalPages ? "bg-neutral-300" : "bg-neutral-100"
+              }`}
+              onClick={() => currentPage < totalPages && paginate(totalPages)}
+              disabled={currentPage === totalPages}
+            >
+              &gt;&gt;
             </button>
           </div>
         </div>
