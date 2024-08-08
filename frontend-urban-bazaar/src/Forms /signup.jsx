@@ -9,27 +9,48 @@ import mall from '../assets/mall.jpg';
 
 export default function SignUp() {
   const { signup } = useContext(UserContext);
-  const [name, setName] = useState('');
+  const [username, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  function handleSubmit(e) {
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   if (password !== passwordConfirmation) {
+  //     setError('Passwords do not match');
+  //     return;
+  //   }
+  //   if (!/(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}/.test(password)) {
+  //     setError('Password must be at least 8 characters long and include numbers and symbols');
+  //     return;
+  //   }
+  //     signup(username, email, phone_number, password);
+  // }
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (password !== passwordConfirmation) {
       setError('Passwords do not match');
       return;
     }
+  
     if (!/(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}/.test(password)) {
       setError('Password must be at least 8 characters long and include numbers and symbols');
       return;
     }
-      signup(name, email, password);
-  }
+  
+    try {
+      await signup(username, email, phone_number, password);
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setError('Something went wrong');
+    }
+  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -64,7 +85,7 @@ export default function SignUp() {
                         type="text"
                         autoComplete="username"
                         required
-                        value={name}
+                        value={username}
                         onChange={(e) => setName(e.target.value)}
                         className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder="Your Username"
@@ -80,7 +101,7 @@ export default function SignUp() {
                         type="tel"
                         autoComplete="tel"
                         required
-                        value={phoneNumber}
+                        value={phone_number}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder=" Your Phone Number"

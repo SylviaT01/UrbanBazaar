@@ -36,34 +36,38 @@ def admin_required(fn):
     return wrapper
 
 
-# User registration route
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
+
+    # Check if the required fields are present
+    if 'username' not in data or 'email' not in data or 'password' not in data or 'phone_number' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+    
+    # Check if the user already exists
+    existing_user = User.query.filter_by(email=data['email']).first()
+    if existing_user:
+        return jsonify({'error': 'User with this email already exists'}), 400
+    
+    # Hash the password
     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+
+    # Create a new user object
     new_user = User(
         username=data['username'],
         email=data['email'],
         password=hashed_password,
         is_admin=False,
-        phone_number=data['phone_number']  # Add phone number field if needed
+        phone_number=data['phone_number']
     )
+
+    # Add to the database and commit
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'message': 'User registered successfully'})
-# User login route
-# @app.route('/login', methods=['POST'])
-# def login():
-#     data = request.get_json()
-#     user = User.query.filter_by(email=data['email']).first()
+    return jsonify({'success': 'User registered successfully'}), 201
 
-#     if user and bcrypt.check_password_hash(user.password, data['password']):
-#         access_token = create_access_token(identity={'username': user.username, 'is_admin': user.is_admin})
-#         return jsonify({'token': access_token})
-
-#     return jsonify({'message': 'Invalid credentials'}), 401
-
+    
 @app.route('/login', methods=['POST'])
 def login():
     email = request.json.get("email", None)
@@ -89,7 +93,7 @@ def get_current_user():
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
     if current_user:
-        return jsonify({"id":current_user.id, "name":current_user.name, "email":current_user.email}), 200
+        return jsonify({"id":current_user.id, "username":current_user.username, "email":current_user.email}), 200
     else: 
         return jsonify({"message":"User not found"}), 404
     

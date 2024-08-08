@@ -77,34 +77,98 @@ export const UserProvider = ({ children }) => {
     fetchCurrentUser();
   }, [authToken]);
 
-  const signup = (name, email, password) => {
-    fetch("http://127.0.0.1:5000/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          nav("/login");
-          alert(res.success);
-        } else if (res.error) {
-          alert("Account already exists, proceed to login");
-        } else {
-          alert("Something went wrong");
-        }
-      })
-      .catch((error) => {
-        console.error("Error during signup:", error);
-        alert("Something went wrong");
+//   const signup = (username, email, phone_number, password) => {
+//     fetch("http://127.0.0.1:5000/register", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         username,
+//         email,
+//         phone_number,
+//         password,
+//       }),
+//     })
+//       .then((res) => res.json())
+//       .then((res) => {
+//         if (res.success) {
+//           nav("/login");
+//           alert(res.success);
+//         } else if (res.error) {
+//           alert("Account already exists, proceed to login");
+//         } else {
+//           alert("Something went wrong");
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("Error during signup:", error);
+//         alert("Something went wrong");
+//       });
+//   };
+
+// const signup = async (username, email, phone_number, password) => {
+//     try {
+//       const response = await fetch("http://127.0.0.1:5000/register", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           username,
+//           email,
+//           phone_number,
+//           password,
+//         }),
+//       });
+  
+//       const resData = await response.json();
+  
+//       if (response.ok && resData.success) {
+//         nav("/login");
+//         alert(resData.success);
+//       } else if (resData.error) {
+//         alert("Account already exists, proceed to login");
+//         console.log(resData.error)
+//       } else {
+//         alert("Something went wrong");
+//       }
+//     } catch (error) {
+//       console.error("Error during signup:", error);
+//       alert("Something went wrong");
+//     }
+//   };
+const signup = async (username, email, phone_number, password) => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          phone_number,
+          password,
+        }),
       });
+  
+      const resData = await response.json();
+  
+      if (response.ok && resData.success) {
+        nav("/login");
+        alert(resData.success);
+      } else if (resData.error) {
+        alert(resData.error);  // Handle specific errors like email already exists
+      } else {
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      alert("Something went wrong");
+    }
   };
+  
 
   const login = (email, password) => {
     fetch("http://127.0.0.1:5000/login", {
