@@ -1,6 +1,8 @@
-import React from "react";
+import React, {useContext} from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { CartProvider } from './contexts/cartContext.jsx';
+import { UserProvider, UserContext } from './contexts/userContext.jsx';
+import { CartContext } from './contexts/cartContext.jsx';
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import WishList from "./components/wishList";
@@ -34,17 +36,19 @@ const Wishlist = () => <div>Wishlist Content</div>;
 const UpdateProfile = () => <div>Update Profile Content</div>;
 
 function AppContent() {
+  // const { currentUser } = useContext(UserContext);
+  // const { cartItems } = useContext(CartContext);
   return (
     <div className="min-h-screen flex flex-col">
       <NavItems />
       {/* <Navbar /> */}
       <div className="flex-grow">
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/contact" element={<Contacts />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/wishlist" element={<WishList />} />
@@ -77,11 +81,13 @@ function AppContent() {
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </CartProvider>
+    <Router>
+      <UserProvider>
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
+      </UserProvider>
+    </Router>
   );
 }
 

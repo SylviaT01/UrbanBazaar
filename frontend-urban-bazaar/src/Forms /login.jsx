@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-// import { UserContext } from '../contexts/userContext';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../contexts/userContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
@@ -7,14 +7,14 @@ import supermarket from "../assets/supermarket.jpg.jpg"
 
 
 export default function Login() {
-  // const { login } = useContext(UserContext);
+  const { login } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword ] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
-    // login(email, password);
+    login(email, password);
   }
 
   return (

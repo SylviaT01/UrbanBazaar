@@ -13,6 +13,7 @@ const ProductDetailPage = () => {
   const [relatedProducts, setRelatedProducts] = React.useState([]);
   const [quantity, setQuantity] = React.useState(1); // State for quantity
   const { addToCart, addToWishlist, notification } = useCart(); // Use useCart context
+  // const { currentUser } = useContext(UserContext);
 
   React.useEffect(() => {
     fetch(`http://127.0.0.1:5000/products/${id}`)
