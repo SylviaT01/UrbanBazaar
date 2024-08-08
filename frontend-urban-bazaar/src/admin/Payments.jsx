@@ -22,5 +22,12 @@ useEffect(() => {
   fetchPayments();
   if (loading) return <p>Loading...</p>;
 if (error) return <p>Error: {error.message}</p>;
+const [currentPage, setCurrentPage] = useState(1);
+const paymentsPerPage = 8;
+
+const indexOfLastPayment = currentPage * paymentsPerPage;
+const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
+const currentPayments = payments.slice(indexOfFirstPayment, indexOfLastPayment);
+
 
 export default Payments;
