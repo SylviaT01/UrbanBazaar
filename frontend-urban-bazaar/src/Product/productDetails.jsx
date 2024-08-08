@@ -104,7 +104,7 @@ const ProductDetailPage = () => {
             <span className="font-normal text-red-500"> {product.stock}</span>
           </p>
 
-          <div className="flex flex-row gap-6 m-4 items-center">
+          <div className="flex flex-row gap-6 mb-4 items-center">
             <button
               onClick={handleAddToCart}
               className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400"
