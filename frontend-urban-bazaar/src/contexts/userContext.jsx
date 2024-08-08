@@ -98,7 +98,7 @@ const signup = async (username, email, phone_number, password) => {
         nav("/login");
         alert(resData.success);
       } else if (resData.error) {
-        alert(resData.error);  // Handle specific errors like email already exists
+        alert(resData.error);  
       } else {
         alert("Something went wrong");
       }
@@ -126,7 +126,7 @@ const signup = async (username, email, phone_number, password) => {
           setAuthToken(res.access_token);
           localStorage.setItem("token", res.access_token);
           localStorage.setItem("refresh_token", res.refresh_token);
-          nav("/home");
+          nav("/");
           alert("Login success");
         } else if (res.error) {
           alert(res.error);
