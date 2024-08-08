@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from "react";
 
-function Payments() {
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+useEffect(() => {
+  const fetchPayments = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/admin/orders", {
+        mode: "cors",
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log(data);
+      setPayments(data.orders);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
+  };
 
-  return (
-    <div>
-      {/* Payment component structure initialized */}
-    </div>
-  );
-}
+  fetchPayments();
 
 export default Payments;
