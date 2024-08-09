@@ -32,7 +32,16 @@ function AdminDashboard() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  return <div>Admin Dashboard</div>;
+  return (
+    <div>
+      <div>
+        <div>Earnings</div>
+        <div>Orders</div>
+        <div>Signups</div>
+      </div>
+      <div>Admin Dashboard</div>
+    </div>
+  );
 }
 
 export default AdminDashboard;
