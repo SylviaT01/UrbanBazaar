@@ -138,7 +138,7 @@ def seed_other_tables():
     for _ in range(20):
         db.session.add(Wishlist(
             user_id=fake.random_element(user_ids),
-            product_id=fake.random_element(product_ids)
+            product_id=fake.random_element(product_ids),
         ))
 
     db.session.commit()
