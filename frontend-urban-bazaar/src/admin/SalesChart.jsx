@@ -36,6 +36,19 @@ import {
       },
     ],
   };
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: "rgba(200, 200, 200, 0.2)",
+        },
+      },
+    },
+  };
+  
   
 function SalesChart({ orders }) {
   // Prepare data for the chart
