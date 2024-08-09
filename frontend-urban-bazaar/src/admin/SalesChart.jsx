@@ -52,7 +52,13 @@ import {
         },
       },
     },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
   };
+  
   
   };
   
