@@ -6,6 +6,8 @@ function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortField, setSortField] = useState("order_date");
+  const [filterStatus, setFilterStatus] = useState("");
   const ordersPerPage = 10;
 
   useEffect(() => {
@@ -27,9 +29,23 @@ function AdminDashboard() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  const handleSort = (field) => {
+    const sortedOrders = [...orders].sort((a, b) => {
+      if (a[field] < b[field]) return -1;
+      if (a[field] > b[field]) return 1;
+      return 0;
+    });
+    setOrders(sortedOrders);
+    setSortField(field);
+  };
+
+  const filteredOrders = filterStatus
+    ? orders.filter((order) => order.status === filterStatus)
+    : orders;
+
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -53,6 +69,25 @@ function AdminDashboard() {
       </div>
       <SalesChart orders={orders} />
       <div className="w-full max-w-6xl">
+        <div className="flex justify-between mb-4">
+          <select
+            className="border rounded p-2"
+            value={sortField}
+            onChange={(e) => handleSort(e.target.value)}
+          >
+            <option value="order_date">Order Date</option>
+            <option value="order_total">Amount</option>
+          </select>
+          <select
+            className="border rounded p-2"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
           <table className="min-w-full divide-gray-200">
             <thead className="bg-gray-50">
