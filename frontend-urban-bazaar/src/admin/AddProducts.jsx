@@ -24,6 +24,12 @@ function AddProductPage() {
     e.preventDefault();
   };
 
+  // Handle click event for the "Add Products" button
+  const handleAddProductClick = () => {
+    // Add logic here to handle the click event, such as submitting the form data
+    console.log("Add Products button clicked");
+  };
+
   return (
     <div className="w-full relative bg-aliceblue h-[1024px] overflow-hidden text-left text-base text-black font-poppins p-8">
       <h2 className="text-2xl mb-4">General Information</h2>
@@ -153,7 +159,10 @@ function AddProductPage() {
         </div>
       </div>
       <div className="flex justify-center mt-8">
-        <button className="bg-blue-500 text-white py-2 px-6 rounded-md">
+        <button
+          className="bg-blue-500 text-white py-2 px-6 rounded-md"
+          onClick={handleAddProductClick}
+        >
           Add Products
         </button>
       </div>

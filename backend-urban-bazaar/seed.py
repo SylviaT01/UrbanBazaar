@@ -16,7 +16,8 @@ def seed_users():
             username=fake.user_name(),
             email=fake.email(),
             password=fake.password(),
-            is_admin=fake.boolean()
+            is_admin=fake.boolean(),
+            phone_number=fake.phone_number()  # Add phone number field if needed
         )
         db.session.add(user)
     db.session.commit()
@@ -137,7 +138,7 @@ def seed_other_tables():
     for _ in range(20):
         db.session.add(Wishlist(
             user_id=fake.random_element(user_ids),
-            product_id=fake.random_element(product_ids)
+            product_id=fake.random_element(product_ids),
         ))
 
     db.session.commit()

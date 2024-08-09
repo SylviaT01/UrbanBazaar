@@ -17,7 +17,7 @@ function Payments() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log(data);
+
         setPayments(data.orders);
         setLoading(false);
       } catch (error) {
@@ -56,10 +56,6 @@ function Payments() {
     }
   };
 
-  // Handle print button click
-  const handlePrint = () => {
-    window.print();
-  };
 
   return (
     <div className="flex overflow-hidden flex-col px-20 pb-8">

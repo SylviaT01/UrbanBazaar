@@ -1,35 +1,47 @@
-// Forms/SignUp.jsx
-import React, { useState } from 'react';
-// import { UserContext } from '../contexts/userContext';
+
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../contexts/userContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import mall from '../assets/mall.jpg';
+import googleIcon from '../assets/google icon.png';
+import facebookIcon from '../assets/facebookIcon.png';
 
 
 export default function SignUp() {
-  // const { signup } = useContext(UserContext);
-  const [name, setName] = useState('');
+  const { signup } = useContext(UserContext);
+  const [username, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  function handleSubmit(e) {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (password !== passwordConfirmation) {
       setError('Passwords do not match');
       return;
     }
+
     if (!/(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}/.test(password)) {
       setError('Password must be at least 8 characters long and include numbers and symbols');
       return;
     }
-    // signup(name, email, password);
-  }
+
+    try {
+      await signup(username, email, phone_number, password);
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setError('Something went wrong');
+    }
+  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -40,10 +52,6 @@ export default function SignUp() {
             className="bg-cover bg-center md:w-1/2"
             style={{ backgroundImage: `url(${mall})` }}
           >
-            {/* <div className="bg-blue-300 bg-opacity-50 h-full flex flex-col justify-center items-center p-4 md:p-12">
-              <h2 className="text-4xl font-semibold text-gray-700 text-center">Join Medimart</h2>
-              <p className="text-gray-700 mt-4 text-center">Create your account today.</p>
-            </div> */}
           </div>
 
           {/* Right half with form */}
@@ -64,7 +72,7 @@ export default function SignUp() {
                         type="text"
                         autoComplete="username"
                         required
-                        value={name}
+                        value={username}
                         onChange={(e) => setName(e.target.value)}
                         className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder="Your Username"
@@ -80,7 +88,7 @@ export default function SignUp() {
                         type="tel"
                         autoComplete="tel"
                         required
-                        value={phoneNumber}
+                        value={phone_number}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder=" Your Phone Number"
@@ -155,18 +163,18 @@ export default function SignUp() {
                       </button>
                     </div>
                     <div className="mt-6 text-center">
-                    <div className="text-gray-500">or</div>
-                    <div className="flex items-center justify-center mt-4 space-x-4">
-                      <button className="flex items-center justify-center py-1 px-3 w-auto bg-red-500 hover:bg-red-600 text-white rounded-md shadow-sm text-sm">
-                        <img src="/path/to/google-icon.png" alt="Google" className="w-4 h-4 mr-2" />
+                      <div className="text-gray-500">or</div>
+                      <div className="flex items-center justify-center mt-4 space-x-4 ">
+                        <button className="flex items-center justify-center py-1 px-3 w-auto text-black rounded-md shadow-sm text-sm border border-gray-200">
+                          <img src={googleIcon} alt="Google" className="w-6 h-6 mr-2" />
                           Sign up with Google
-                      </button>
-                      <button className="flex items-center justify-center py-1 px-3 w-auto bg-blue-500 hover:bg-blue-600 text-white rounded-md shadow-sm text-sm">
-                        <img src="/path/to/facebook-icon.png" alt="Facebook" className="w-4 h-4 mr-2" />
-                         Sign up with Facebook
-                      </button>
+                        </button>
+                        <button className="flex items-center justify-center py-1 px-3 w-auto text-black  rounded-md shadow-sm text-sm border border-gray-200">
+                          <img src={facebookIcon} alt="Facebook" className="w-5 h-5 mr-2" />
+                          Sign up with Facebook
+                        </button>
+                      </div>
                     </div>
-                  </div>
                     <div className="text-center mt-4">
                       <span className="text-sm text-gray-600">Already have an account?</span>{' '}
                       <Link to="/login" className="text-sm font-medium text-blue-500 hover:text-blue-400">
