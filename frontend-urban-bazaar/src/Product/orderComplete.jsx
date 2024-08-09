@@ -21,4 +21,28 @@ const OrderComplete = () => {
         }
       `,
   });
+
+  const products = [
+    {
+      imageSrc: shoe ,
+      name: "Shoes",
+      description: "Ultraboost Light Running Shoes",
+      quantity: 2,
+      price: "Ksh 1,300",
+    },
+    {
+      imageSrc: shoe ,
+      name: "Shoes",
+      description: "Ultraboost Light Running Shoes",
+      quantity: 2,
+      price: "Ksh 1,300",
+    },
+    {
+      imageSrc: shoe ,
+      name: "Shoes",
+      description: "Ultraboost Light Running Shoes",
+      quantity: 2,
+      price: "Ksh 1,300",
+    },
+  ];
 };
