@@ -28,7 +28,7 @@ export default function NavItems() {
       <div className="bg-blue-200 border-b border-gray-300">
         <div className="flex h-8 items-center justify-end px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-4">
-            <Link to="/join" className="text-gray-700 font-medium text-sm hover:text-blue-700">
+            <Link to="/signup" className="text-gray-700 font-medium text-sm hover:text-blue-700">
               Join UrbanBazaar
             </Link>
             <Link to="/about" className="text-gray-700 font-medium text-sm hover:text-blue-700">
