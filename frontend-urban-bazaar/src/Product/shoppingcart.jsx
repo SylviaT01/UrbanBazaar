@@ -5,7 +5,7 @@ import { UserContext } from "../contexts/userContext"; // Adjust the import path
 
 const Cart = () => {
   const { cart, loading, removeFromCart } = useCart();
-  const { authToken } = useContext(UserContext); // Access authentication state
+  const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
 

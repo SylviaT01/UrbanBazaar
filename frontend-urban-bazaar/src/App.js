@@ -27,6 +27,7 @@ import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
 import UserDashboard from "./User/UserDashboard.jsx";
+import RelatedProducts from "./Product/relatedProducts.jsx";
 
 // Dummy components for User Profile
 
@@ -68,6 +69,7 @@ function AppContent() {
             <Route path="orderhistory" element={<OrderHistory />} />
             <Route path="wishlist" element={<WishList />} />
             <Route path="profile" element={<UpdateProfile />} />
+            <Route path="relatedproducts" element={<RelatedProducts />} />
           </Route>
         </Routes>
       </div>
