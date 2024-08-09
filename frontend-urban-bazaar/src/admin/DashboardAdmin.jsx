@@ -32,12 +32,17 @@ function AdminDashboard() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const totalEarnings = orders.reduce((total, order) => total + order.order_total, 0).toFixed(2);
+
   return (
     <div>
       <div>
         <div>Earnings</div>
+        <div>{`Ksh ${totalEarnings}`}</div>
         <div>Orders</div>
+        <div>{orders.length}</div>
         <div>Signups</div>
+        <div>123</div>
       </div>
       <div>Admin Dashboard</div>
     </div>
