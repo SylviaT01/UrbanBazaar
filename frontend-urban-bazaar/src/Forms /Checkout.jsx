@@ -2,11 +2,86 @@ import React, { useState } from "react";
 import mpesa from "../assets/mpesa.png";
 import pesapal from "../assets/pesapal.png";
 import Paypal from "../assets/Paypal.png";
+
 function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [apartmentNumber, setApartmentNumber] = useState("");
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
 
   const handlePaymentMethodChange = (method) => {
     setPaymentMethod(method);
+  };
+
+  const handleShippingFormSubmit = async (e) => {
+    e.preventDefault();
+
+    const shippingData = {
+      firstName,
+      lastName,
+      streetAddress,
+      apartmentNumber,
+      city,
+      zip,
+    };
+
+    try {
+      const response = await fetch("", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(shippingData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Shipping data submitted:", result);
+    } catch (error) {
+      console.error("Error submitting shipping form:", error);
+    }
+  };
+
+  const handlePaymentFormSubmit = async (e) => {
+    e.preventDefault();
+
+    const paymentData = {
+      paymentMethod,
+      ...(paymentMethod === "mpesa" && {
+        phoneNumber: e.target.phoneNumber.value,
+      }),
+      ...(paymentMethod === "pesapal" && {
+        emailAddress: e.target.emailAddress.value,
+      }),
+      ...(paymentMethod === "paypal" && {
+        paypalEmail: e.target.paypalEmail.value,
+      }),
+    };
+
+    try {
+      const response = await fetch("", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Payment data submitted:", result);
+    } catch (error) {
+      console.error("Error submitting payment form:", error);
+    }
   };
 
   return (
@@ -30,7 +105,7 @@ function Checkout() {
         <div className="flex mb-6">
           <div className="w-1/2 mr-4">
             <h2 className="text-lg font-semibold mb-4">Shipping Address</h2>
-            <form>
+            <form onSubmit={handleShippingFormSubmit}>
               <div className="flex mb-4">
                 <label className="mr-2 flex items-center">
                   <input type="radio" name="address" className="mr-2" />
@@ -41,11 +116,15 @@ function Checkout() {
                 <input
                   type="text"
                   placeholder="First Name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   className="border p-2 rounded w-full"
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </div>
@@ -53,6 +132,8 @@ function Checkout() {
                 <input
                   type="text"
                   placeholder="Street Address"
+                  value={streetAddress}
+                  onChange={(e) => setStreetAddress(e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </div>
@@ -60,16 +141,22 @@ function Checkout() {
                 <input
                   type="text"
                   placeholder="Apartment Number"
+                  value={apartmentNumber}
+                  onChange={(e) => setApartmentNumber(e.target.value)}
                   className="border p-2 rounded w-full"
                 />
                 <input
                   type="text"
                   placeholder="City"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
                   className="border p-2 rounded w-full"
                 />
                 <input
                   type="text"
                   placeholder="Zip"
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </div>
@@ -124,10 +211,13 @@ function Checkout() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6  h-[1000px]">
+        <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6">
           <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
-          <form className="mx-auto max-w-sm space-y-32 flex flex-col items-center">
-            <div className="flex items-center mb-4 s">
+          <form
+            onSubmit={handlePaymentFormSubmit}
+            className="mx-auto max-w-sm space-y-6"
+          >
+            <div className="flex items-center mb-4">
               <section className="flex flex-col rounded-none max-w-[731px]">
                 <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
                   <div className="flex gap-6 my-auto">
@@ -140,11 +230,7 @@ function Checkout() {
                       onChange={() => handlePaymentMethodChange("mpesa")}
                       className="mr-2"
                     />
-                    
-                    <div
-                      className="flex justify-center"
-                      style={{ gap: "450px" }}
-                    >
+                    <div className="flex justify-between w-full">
                       <h2 className="my-auto text-2xl font-light text-black">
                         M-Pesa
                       </h2>
@@ -154,6 +240,7 @@ function Checkout() {
                 </div>
               </section>
             </div>
+
             {paymentMethod === "mpesa" && (
               <div className="mb-4 space-y-6">
                 <input
@@ -177,6 +264,7 @@ function Checkout() {
                 </div>
               </div>
             )}
+
             <div className="flex items-center mt-4">
               <section className="flex flex-col rounded-none max-w-[731px]">
                 <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
@@ -190,10 +278,7 @@ function Checkout() {
                       onChange={() => handlePaymentMethodChange("pesapal")}
                       className="mr-2"
                     />
-                    <div
-                      className="flex justify-between"
-                      style={{ gap: "400px" }}
-                    >
+                    <div className="flex justify-between w-full">
                       <h2 className="my-auto text-2xl font-light text-black">
                         Pesapal
                       </h2>
@@ -227,6 +312,7 @@ function Checkout() {
                 </div>
               </div>
             )}
+
             <div className="flex flex-col items-center mt-4 gap-4">
               <section className="flex flex-col rounded-none max-w-[731px]">
                 <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
@@ -240,10 +326,7 @@ function Checkout() {
                       onChange={() => handlePaymentMethodChange("paypal")}
                       className="mr-2"
                     />
-                    <div
-                      className="flex justify-center"
-                      style={{ gap: "450px" }}
-                    >
+                    <div className="flex justify-between w-full">
                       <h2 className="my-auto text-2xl font-light text-black">
                         Paypal
                       </h2>
@@ -252,30 +335,31 @@ function Checkout() {
                   </div>
                 </div>
               </section>
-              {paymentMethod === "paypal" && (
-                <div className="mb-4 space-y-6">
-                  <input
-                    type="text"
-                    placeholder="Email Address"
-                    className="border p-2 rounded w-full"
-                  />
-                  <div className="flex justify-between gap-4">
-                    <button
-                      type="button"
-                      className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white py-2 px-4 rounded"
-                    >
-                      Confirm Payment
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
+
+            {paymentMethod === "paypal" && (
+              <div className="mb-4 space-y-6">
+                <input
+                  type="text"
+                  placeholder="Email Address"
+                  className="border p-2 rounded w-full"
+                />
+                <div className="flex justify-between gap-4">
+                  <button
+                    type="button"
+                    className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 px-4 rounded"
+                  >
+                    Confirm Payment
+                  </button>
+                </div>
+              </div>
+            )}
           </form>
         </div>
       </div>
