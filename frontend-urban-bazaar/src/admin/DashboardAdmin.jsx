@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SalesChart from "./SalesChart";
 
 function AdminDashboard() {
   const [orders, setOrders] = useState([]);
@@ -50,6 +51,7 @@ function AdminDashboard() {
           <div className="text-3xl">123</div>
         </div>
       </div>
+      <SalesChart orders={orders} />
       <div className="w-full max-w-6xl">
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
           <table className="min-w-full divide-gray-200">
