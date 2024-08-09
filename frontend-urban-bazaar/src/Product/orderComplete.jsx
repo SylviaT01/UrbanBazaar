@@ -214,6 +214,26 @@ const OrderComplete = () => {
                 </div>
               </div>
             ))}
+            <div className="flex flex-wrap gap-5 justify-between mt-6 ml-3 w-full max-w-[1102px] max-md:max-w-full">
+              <p className="text-xl font-medium">Discount 10%</p>
+              <p className="my-auto text-base font-semibold mr-4">Ksh 390</p>
+            </div>
+            <hr className="shrink-0 mt-6 w-full border border-black border-solid h-[3px]" />
+            <div className="z-10 shrink-0 w-full border border-black border-solid h-[3px]" />
+            <div className="flex flex-wrap gap-5 justify-between mt-6 ml-3 w-full max-w-[1102px] max-md:max-w-full">
+              <p className="text-xl font-medium">Shipping</p>
+              <p className="my-auto text-base font-semibold mr-4">Ksh 120</p>
+            </div>
+            <hr className="shrink-0 mt-6 w-full border border-black border-solid h-[3px]" />
+            <div className="flex flex-wrap gap-5 justify-between mt-6 ml-3 w-full max-w-[1099px] max-md:max-w-full">
+              <p className="text-xl font-medium">VAT</p>
+              <p className="my-auto text-base font-semibold mr-4">Ksh 140</p>
+            </div>
+            <hr className="shrink-0 mt-6 w-full border border-black border-solid h-[3px]" />
+            <div className="flex flex-wrap gap-5 justify-between mt-6 ml-3 text-3xl font-medium max-md:max-w-full">
+              <p>TOTAL</p>
+              <p>Ksh 3,770</p>
+            </div>
           </section>
         </main>
       </div>
