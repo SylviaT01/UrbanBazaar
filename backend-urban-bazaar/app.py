@@ -773,7 +773,7 @@ def contact_us():
     new_contact = ContactUs(
         name=data['name'],
         email=data['email'],
-        subject=data['subject'],
+       # subject=data['subject'],
         message=data['message']
     )
     db.session.add(new_contact)

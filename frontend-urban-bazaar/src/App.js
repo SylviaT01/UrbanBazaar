@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import { CartProvider } from './contexts/cartContext.jsx';
-import { UserProvider, UserContext } from './contexts/userContext.jsx';
+import { CartProvider } from "./contexts/cartContext.jsx";
+import { UserProvider, UserContext } from "./contexts/userContext.jsx";
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import WishList from "./User/wishList.jsx";
@@ -29,13 +29,16 @@ import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
 import UserDashboard from "./User/UserDashboard.jsx";
+
+import UpdateProfile from "./Forms /UpdateProfile.jsx";
+
 import RelatedProducts from "./Product/relatedProducts.jsx";
 
 // Dummy components for User Profile
 
 const OrderHistory = () => <div>Order History Content</div>;
 
-const UpdateProfile = () => <div>Update Profile Content</div>;
+const Wishlist = () => <div>Wishlist Content</div>;
 
 function AppContent() {
   return (
