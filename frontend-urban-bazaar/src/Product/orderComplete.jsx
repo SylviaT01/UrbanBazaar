@@ -154,6 +154,33 @@ const OrderComplete = () => {
                   </p>
                 </div>
               </section>
+
+              <section className="flex flex-col w-full md:w-1/2">
+                <h2 className="text-3xl font-semibold mb-5 mt-5">
+                  Payment Details
+                </h2>
+                <hr className="border-t border-gray-300 mb-5" />
+                <div className="text-xl text-gray-700 space-y-5">
+                  <p>
+                    Transaction Time:{" "}
+                    <span className="font-medium text-gray-900">
+                      02/08/2024 at 00:59
+                    </span>
+                  </p>
+                  <p>
+                    Card Details:{" "}
+                    <span className="font-medium text-gray-900">
+                      **** **** **** 5446
+                    </span>
+                  </p>
+                  <p>
+                    Amount:{" "}
+                    <span className="font-medium text-gray-900">
+                      Ksh 56,789
+                    </span>
+                  </p>
+                </div>
+              </section>
             </div>
           </section>
         </main>
