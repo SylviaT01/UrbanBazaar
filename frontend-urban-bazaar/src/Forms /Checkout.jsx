@@ -140,6 +140,7 @@ function Checkout() {
                       onChange={() => handlePaymentMethodChange("mpesa")}
                       className="mr-2"
                     />
+                    
                     <div
                       className="flex justify-center"
                       style={{ gap: "450px" }}

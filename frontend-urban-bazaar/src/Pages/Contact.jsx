@@ -1,9 +1,11 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 //import { UserContext } from "./context/userContext";
 import { useNavigate } from "react-router-dom";
-import shelf from '../assets/shelf.jpg';
+import shelf from "../assets/shelf.jpg";
+import emailIcon from "../assets/emailIcon.svg"
+import phoneIcon from "../assets/phoneIcon.svg"
 
 //import email from "../assets/email.svg"
 //import Footer from "./footer";
@@ -15,9 +17,9 @@ const Contact = () => {
   //console.log(currentUser);
 
   const initialValues = {
-   //name: currentUser.name,
-   //email: currentUser.email,
-    phone: "", 
+    //name: currentUser.name,
+    //email: currentUser.email,
+    phone: "",
     message: "",
   };
 
@@ -32,7 +34,7 @@ const Contact = () => {
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const response = await fetch("https://medimart-1.onrender.com/contacts", {
+      const response = await fetch("http://127.0.0.1:5000/contacts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +83,7 @@ const Contact = () => {
                       htmlFor="name"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                        Enter your name
+                      Enter your name
                     </label>
                     <Field
                       id="name"
@@ -101,7 +103,7 @@ const Contact = () => {
                       htmlFor="email"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                        Enter your email
+                      Enter your email
                     </label>
                     <Field
                       id="email"
@@ -122,7 +124,7 @@ const Contact = () => {
                       htmlFor="phone"
                       className="block text-gray-700 text-sm font-bold mb-2"
                     >
-                     Enter your phone number
+                      Enter your phone number
                     </label>
                     <Field
                       id="phone"
@@ -159,15 +161,15 @@ const Contact = () => {
                     />
                   </div>
                   <div className="flex items-center justify-center">
-                  <div className="flex items-center justify-between">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="bg-submitBlue hover:bg-submitBlue text-Black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                      {isSubmitting ? "Submitting..." : "Submit"}
-                    </button>
-                  </div>
+                    <div className="flex items-center justify-between">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-submitBlue hover:bg-submitBlue text-Black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      >
+                        {isSubmitting ? "Submitting..." : "Submit"}
+                      </button>
+                    </div>
                   </div>
                 </Form>
               )}
@@ -178,52 +180,63 @@ const Contact = () => {
             )}
           </div>
           {/* Contact Information */}
-          
-          <div className="w-full md:w-1/2 p-8 bg-gray-50 rounded opacity-70"style={{
-            backgroundImage: `url(${shelf})`,
-            backgroundSize: 'cover', 
-            backgroundPosition: 'center', 
-            
-            }}><div/>
-        
+
+          <div
+            className="w-full md:w-1/2 p-8 bg-gray-50 rounded opacity-70"
+            style={{
+              backgroundImage: `url(${shelf})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            <div />
+
             <div className="flex flex-col gap-10">
               <div>
-                <h3 className="font-bold text-lg text-gray-800">RETURN ADDRESS FOR ONLINE ORDERS</h3>
-
+                <h3 className="font-bold text-lg text-gray-800">
+                  RETURN ADDRESS FOR ONLINE ORDERS
+                </h3>
 
                 <p>
-                <span class="icon-[fluent--location-16-filled]"  style={{width: '20px', height: '20px' ,color: '#7DC8EF' }}></span> Bilha Towers Ground Floor, Shop Number 45KE
+                  <span
+                    class="icon-[fluent--location-16-filled]"
+                    style={{ width: "20px", height: "20px", color: "#7DC8EF" }}
+                  ></span>{" "}
+                  Bilha Towers Ground Floor, Shop Number 45KE
                 </p>
 
-
-                <p >
-                <span class="icon-[fluent--location-16-filled]"  style={{width: '28px', height: '28px' ,color: '#7DC8EF' }}></span>Postal Address P.O. Box 1852-00621, Village Market Nairobi, Kenya
+                <p>
+                  <span
+                    class="icon-[fluent--location-16-filled]"
+                    style={{ width: "28px", height: "28px", color: "#7DC8EF" }}
+                  ></span>
+                  Postal Address P.O. Box 1852-00621, Village Market Nairobi,
+                  Kenya
                 </p>
-
-
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-800">
                  Phone Number
                 </h3>
-                <p className="text-blue-600 underline underline-offset-2">
-                <span class="icon-[fluent--call-add-20-filled]"  style={{ width: '28px', height: '28px',color: '#7DC8EF' }}></span>+254 712 345 678
+                <p className="text-blue-600 underline underline-offset-2 flex flex-row gap-2">
+                 <img src={phoneIcon} alt="phoneIcon"/> 
+                +254 712 345 678
                 </p>
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-800">
                   Email Address
                 </h3>
-                
-                <p className="text-blue-600 underline underline-offset-2">
-                <span class="icon-[marketeq--email-open]"style={{ width: '28px', height: '28px'}}></span> urbanbazaar@gmail.com
-                </p> 
+
+                <p className="text-blue-600 underline underline-offset-2 flex items-center gap-2">
+                  <img src={emailIcon} alt="emailIcon" />
+                  urbanbazaar@gmail.com
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-     
     </div>
   );
 };
