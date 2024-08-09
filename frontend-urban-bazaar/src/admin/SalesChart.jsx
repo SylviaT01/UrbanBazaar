@@ -81,9 +81,11 @@ function SalesChart({ orders }) {
   };
 
   return (
-    <div>
-      <h2>Sales Report</h2>
-      <Line data={data} />
+    <div className="w-full max-w-3xl h-96 mt-8 bg-white rounded-lg shadow-md p-6 mb-20">
+      <h2 className="text-xl font-bold mb-6 text-center text-gray-800">Sales Report</h2>
+      <div className="h-full">
+        <Line data={data} options={options} />
+      </div>
     </div>
   );
 }
