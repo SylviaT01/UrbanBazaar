@@ -1,26 +1,26 @@
-import React, { useState, useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import RelatedProducts from './relatedProducts';
-import TopPicksFour from './top-picksfour';
-import { useCart } from '../contexts/cartContext'; 
-import { UserContext } from '../contexts/userContext'; 
+import React, { useState, useContext } from "react";
+import { Link, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import RelatedProducts from "./relatedProducts";
+import TopPicksFour from "./top-picksfour";
+import { useCart } from "../contexts/cartContext";
+import { UserContext } from "../contexts/userContext";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage, setSelectedImage] = useState("");
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false); 
-  const { addToCart, addToWishlist, notification } = useCart(); 
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const { addToCart, addToWishlist, notification } = useCart();
   const { currentUser } = useContext(UserContext);
 
   React.useEffect(() => {
     fetch(`http://127.0.0.1:5000/products/${id}`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setProduct(data.product);
 
         // Set the first image as the default selected image
@@ -28,13 +28,19 @@ const ProductDetailPage = () => {
           setSelectedImage(data.product.images[0]);
         }
         // Fetch related products
-        fetch(`http://127.0.0.1:5000/products/category/${data.product.category}`)
-          .then(response => response.json())
-          .then(relatedData => {
-            setRelatedProducts(relatedData.products.filter(p => p.id !== data.product.id));
+        fetch(
+          `http://127.0.0.1:5000/products/category/${data.product.category}`
+        )
+          .then((response) => response.json())
+          .then((relatedData) => {
+            setRelatedProducts(
+              relatedData.products.filter((p) => p.id !== data.product.id)
+            );
           });
       })
-      .catch(error => console.error('Error fetching product details:', error));
+      .catch((error) =>
+        console.error("Error fetching product details:", error)
+      );
   }, [id]);
 
   const handleQuantityChange = (increment) => {
@@ -70,9 +76,15 @@ const ProductDetailPage = () => {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded-lg w-[400px] p-6">
             <h2 className="text-xl font-semibold mb-4">Login Required</h2>
-            <p className="mb-4">You need to log in to add items to the cart or wishlist. Please log in to continue.</p>
+            <p className="mb-4">
+              You need to log in to add items to the cart or wishlist. Please
+              log in to continue.
+            </p>
             <div className="flex justify-between">
-              <Link to="/login" className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400">
+              <Link
+                to="/login"
+                className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400"
+              >
                 Log In
               </Link>
               <button
@@ -94,7 +106,9 @@ const ProductDetailPage = () => {
               key={index}
               src={image}
               alt={`Product Thumbnail ${index + 1}`}
-              className={`w-10 h-10 object-cover cursor-pointer rounded-lg shadow-md ${selectedImage === image ? 'border-2 border-blue-500' : ''}`}
+              className={`w-10 h-10 object-cover cursor-pointer rounded-lg shadow-md ${
+                selectedImage === image ? "border-2 border-blue-500" : ""
+              }`}
               onClick={() => setSelectedImage(image)}
             />
           ))}
@@ -114,7 +128,10 @@ const ProductDetailPage = () => {
           <h1 className="text-3xl font-medium mb-2">{product.title}</h1>
           <h2 className="mb-2 capitalize text-lg">
             <span className="font-medium text-gray-900">Category:</span>
-            <span className="font-normal text-gray-700"> {product.category}</span>
+            <span className="font-normal text-gray-700">
+              {" "}
+              {product.category}
+            </span>
           </h2>
           <h2 className="text-lg mb-4 capitalize">
             <span className="font-medium text-gray-900">Brand:</span>
@@ -126,14 +143,21 @@ const ProductDetailPage = () => {
             <span className="font-normal text-gray-700"> {product.sku}</span>
           </p>
           <p className="text-md text-gray-700 mb-2">
-            <span className="font-medium text-gray-900">Price:</span> Ksh. {Math.round((product.price * (100 - product.discountPercentage)) / 100)}
+            <span className="font-medium text-gray-900">Price:</span> Ksh.{" "}
+            {Math.round(
+              (product.price * (100 - product.discountPercentage)) / 100
+            )}
           </p>
           <p className="text-md text-gray-500 mb-4">
             <span className="font-medium text-gray-900">Original Price:</span>
-            <span className="line-through text-gray-700"> Ksh. {product.price}</span>
+            <span className="line-through text-gray-700">
+              {" "}
+              Ksh. {product.price}
+            </span>
           </p>
           <p className="text-gray-600 mb-2 text-md">
-            <span className="font-medium text-gray-900">Description:</span> {product.description}
+            <span className="font-medium text-gray-900">Description:</span>{" "}
+            {product.description}
           </p>
           <p className="text-gray-600 mb-2 text-md">
             <span className="font-medium text-gray-900">Stock:</span>
@@ -155,42 +179,71 @@ const ProductDetailPage = () => {
               Add to Wishlist
             </button>
             <div className="flex items-center">
-              <button onClick={() => handleQuantityChange(-1)} className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400">-</button>
+              <button
+                onClick={() => handleQuantityChange(-1)}
+                className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400"
+              >
+                -
+              </button>
               <input
                 type="text"
                 value={quantity}
                 readOnly
                 className="w-12 text-center mx-2 border rounded"
               />
-              <button onClick={() => handleQuantityChange(1)} className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400">+</button>
+              <button
+                onClick={() => handleQuantityChange(1)}
+                className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400"
+              >
+                +
+              </button>
             </div>
           </div>
-          <div className='flex flex-row justify-between space-x-4 mb-2'>
+          <div className="flex flex-row justify-between space-x-4 mb-2">
             <p className="text-gray-600 mb-2 text-sm">
               <span className="font-medium text-gray-900">Shipping:</span>
-              <span className="font-light text-gray-700"> {product.shippingInformation}</span>
+              <span className="font-light text-gray-700">
+                {" "}
+                {product.shippingInformation}
+              </span>
             </p>
             <p className="text-gray-600 mb-2 text-sm">
               <span className="font-medium text-gray-900">Availability:</span>
-              <span className="font-bold text-yellow-500"> {product.availabilityStatus}</span>
+              <span className="font-bold text-yellow-500">
+                {" "}
+                {product.availabilityStatus}
+              </span>
             </p>
             <p className="text-gray-600 mb-2 text-sm">
               <span className="font-medium text-gray-900">Return Policy:</span>
-              <span className="font-light text-gray-600"> {product.returnPolicy}</span>
+              <span className="font-light text-gray-600">
+                {" "}
+                {product.returnPolicy}
+              </span>
             </p>
           </div>
-          <div className='flex flex-row justify-between space-x-4 mb-2'>
+          <div className="flex flex-row justify-between space-x-4 mb-2">
             <p className="text-gray-600 mb-2 text-sm">
               <span className="font-medium text-gray-900">Weight:</span>
-              <span className="font-light text-gray-600"> {product.weight}g</span>
+              <span className="font-light text-gray-600">
+                {" "}
+                {product.weight}g
+              </span>
             </p>
             <p className="text-gray-600 mb-2 text-sm">
               <span className="font-medium text-gray-900">Dimensions:</span>
-              <span className="font-light text-gray-600"> {product.dimensions.width}x{product.dimensions.height}x{product.dimensions.depth} mm</span>
+              <span className="font-light text-gray-600">
+                {" "}
+                {product.dimensions.width}x{product.dimensions.height}x
+                {product.dimensions.depth} mm
+              </span>
             </p>
             <p className="text-gray-600 mb-2 text-sm">
               <span className="font-medium text-gray-900">Warranty:</span>
-              <span className="italic text-gray-700"> {product.warrantyInformation}</span>
+              <span className="italic text-gray-700">
+                {" "}
+                {product.warrantyInformation}
+              </span>
             </p>
           </div>
         </div>
@@ -199,7 +252,9 @@ const ProductDetailPage = () => {
       {/* Related Products */}
       <RelatedProducts relatedProducts={relatedProducts} />
       <div className="4-items">
-        <h1 className="mb-2 flex justify-center text-xl font-semibold">Top picks</h1>
+        <h1 className="mb-2 flex justify-center text-xl font-semibold">
+          Top picks
+        </h1>
         <TopPicksFour />
       </div>
       <div className="flex justify-center py-4">

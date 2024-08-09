@@ -145,6 +145,19 @@ const Dashboard = () => {
             </li>
             <li className="mb-4">
               <NavLink
+                to="contacts"
+                className={({ isActive }) =>
+                  isActive
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
+                }
+              >
+                <img src={profile} className="mr-3" alt="logout" />
+                Contacts
+              </NavLink>
+            </li>
+            <li className="mb-4">
+              <NavLink
                 to="logout"
                 className={({ isActive }) =>
                   isActive

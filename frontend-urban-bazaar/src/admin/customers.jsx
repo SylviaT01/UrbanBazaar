@@ -56,7 +56,7 @@ const Customer = () => {
             </div>
           </div>
           <div className="shrink-0 w-px h-24" />
-          <div className="flex gap-6 items-start self-stretch">
+          <div className="flex gap-1 items-start self-stretch">
             <img
               src={members}
               className="object-contain shrink-0 w-24 aspect-[1.14]"

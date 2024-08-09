@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-function Payment() {
+function Payments() {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const paymentsPerPage = 8;
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -29,9 +31,33 @@ function Payment() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  // Calculate the current payments to display
+  const indexOfLastPayment = currentPage * paymentsPerPage;
+  const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
+  const currentPayments = payments.slice(indexOfFirstPayment, indexOfLastPayment);
+
+  // Calculate total payment
+  const totalPayment = currentPayments.reduce((total, payment) => total + payment.order_total, 0);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Handle previous and next button clicks
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < Math.ceil(payments.length / paymentsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   return (
-    <div className="flex overflow-hidden flex-col items-center px-20 pb-8">
-      <div className="mt-7 ml-28 text-2xl font-bold tracking-tight leading-loose text-gray-800">
+    <div className="flex overflow-hidden flex-col px-20 pb-8">
+      <div className="mt-1 ml-28 text-2xl font-bold tracking-tight leading-loose text-gray-800">
         Payment
       </div>
       <div className="flex flex-col mt-5 w-full max-w-[1240px] max-md:max-w-full">
@@ -70,16 +96,16 @@ function Payment() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {payments.map((payment) => (
+                      {currentPayments.map((payment, index) => (
                         <tr key={payment.id}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {payment.id}
+                            {index + indexOfFirstPayment + 1}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {payment.user_id}
+                            {payment.user_email}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {new Date(payment.created_at).toLocaleDateString()}
+                            {payment.created_at ? new Date(payment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'Invalid Date'}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {payment.shipping_address}
@@ -88,7 +114,7 @@ function Payment() {
                             {payment.payment_method}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {payment.order_total}
+                            Kshs. {payment.order_total.toFixed(2)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {payment.status}
@@ -96,7 +122,48 @@ function Payment() {
                         </tr>
                       ))}
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="5" className="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-gray-700">
+                          Total:
+                        </td>
+                        <td colSpan="2" className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-700 bg-gray-100">
+                          Kshs. {totalPayment.toFixed(2)}
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
+                </div>
+                <div className="flex justify-center mt-4">
+                  <nav>
+                    <ul className="flex list-none">
+                      <li>
+                        <button
+                          onClick={handlePrevious}
+                          className={`px-4 py-2 border ${currentPage === 1 ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+                          disabled={currentPage === 1}
+                        >
+                          Previous
+                        </button>
+                      </li>
+                      {Array.from({ length: Math.ceil(payments.length / paymentsPerPage) }, (_, index) => (
+                        <li key={index} className={`px-4 py-2 border ${currentPage === index + 1 ? 'bg-blue-400 text-white' : 'bg-white text-gray-800'}`}>
+                          <button onClick={() => paginate(index + 1)}>
+                            {index + 1}
+                          </button>
+                        </li>
+                      ))}
+                      <li>
+                        <button
+                          onClick={handleNext}
+                          className={`px-4 py-2 border ${currentPage === Math.ceil(payments.length / paymentsPerPage) ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+                          disabled={currentPage === Math.ceil(payments.length / paymentsPerPage)}
+                        >
+                          Next
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
                 </div>
               </div>
             </div>
@@ -107,4 +174,4 @@ function Payment() {
   );
 }
 
-export default Payment;
+export default Payments;
