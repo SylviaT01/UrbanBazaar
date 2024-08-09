@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { useCart } from '../contexts/cartContext';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/userContext'; // Adjust the import path accordingly
+import { UserContext } from '../contexts/userContext'; 
 
 const Cart = () => {
   const { cart, loading, removeFromCart } = useCart();
-  const { authToken } = useContext(UserContext); // Access authentication state
+  const { authToken } = useContext(UserContext); 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
