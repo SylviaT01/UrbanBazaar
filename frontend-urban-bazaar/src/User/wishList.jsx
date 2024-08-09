@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useCart } from '../contexts/cartContext'; // Import useCart context
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useCart } from "../contexts/cartContext"; // Import useCart context
+import { useNavigate } from "react-router-dom";
 
 const Wishlist = () => {
   const { wishlist, loading, removeFromWishlist } = useCart(); // Add removeFromWishlist to the context
@@ -11,12 +11,13 @@ const Wishlist = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate('/products');
+    navigate("/products");
   };
 
   const continueShopping = () => {
-    navigate('/products');
+    navigate("/products");
   };
+  console.log(wishlist);
 
   return (
     <>
@@ -54,11 +55,11 @@ const Wishlist = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {wishlist.map((item) => (
-                        <tr key={item.id}>
+                      {wishlist.map((item, i) => (
+                        <tr key={i}>
                           <td className="px-6 py-4 whitespace-nowrap flex items-center">
                             <img
-                              src={item.images[0]}
+                              src={item.image}
                               alt={item.title}
                               className="w-16 h-16 object-cover mr-4"
                             />
@@ -69,9 +70,9 @@ const Wishlist = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh{' '}
+                            Ksh{" "}
                             {Math.round(
-                              (item.price * (100 - item.discountPercentage)) /
+                              (item.price * (100 - item.discount_percentage)) /
                                 100
                             ).toLocaleString()}
                           </td>
