@@ -183,6 +183,38 @@ const OrderComplete = () => {
               </section>
             </div>
           </section>
+          <section className="flex flex-col self-center px-14 py-10 mt-12 bg-white rounded-lg border border-solid border-gray-200 max-w-[1240px] max-md:px-5 max-md:mt-10">
+            <div className="flex flex-wrap justify-between text-xl font-semibold mb-5">
+              <span className="w-1/3">Product</span>
+              <span className="w-1/3 text-center">Quantity</span>
+              <span className="w-1/3 text-right">Price</span>
+            </div>
+            <hr className="border-t border-gray-300 mb-5" />
+            {products.map((product, index) => (
+              <div
+                className="flex justify-between items-center text-xl text-gray-700 mb-5"
+                key={index}
+              >
+                <div className="w-1/3 flex items-center">
+                  <img
+                    src={product.imageSrc}
+                    alt={product.name}
+                    className="w-16 h-16 object-cover mr-4"
+                  />
+                  <div>
+                    <p className="font-medium">{product.name}</p>
+                    <p className="text-gray-600">{product.description}</p>
+                  </div>
+                </div>
+                <div className="w-1/3 text-center my-auto text-base font-semibold">
+                  {product.quantity}
+                </div>
+                <div className="w-1/3 text-right my-auto text-base font-semibold">
+                  {product.price}
+                </div>
+              </div>
+            ))}
+          </section>
         </main>
       </div>
     </div>
