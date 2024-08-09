@@ -563,25 +563,60 @@ def get_user():
     ]
     return jsonify(users_data)          
 
-# Route to add product to wishlist
+# # Route to add product to wishlist
+# @app.route('/wishlist', methods=['POST'])
+# @jwt_required()
+# def add_to_wishlist():
+#     current_user = get_jwt_identity()
+#     user = User.query.filter_by(username=current_user['username']).first()
+
+#     data = request.get_json()
+#     wishlist = Wishlist.query.filter_by(user_id=user.id).first()
+
+#     if not wishlist:
+#         wishlist = Wishlist(user_id=user.id, product_id=data['product_id'])
+#         db.session.add(wishlist)
+#     else:
+#         wishlist.product_id = data['product_id']
+
+#     db.session.commit()
+
+#     return jsonify({'message': 'Product added to wishlist successfully'})
+
+
 @app.route('/wishlist', methods=['POST'])
 @jwt_required()
 def add_to_wishlist():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    try:
+        # Get the current user
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(id=current_user['id']).first()
 
-    data = request.get_json()
-    wishlist = Wishlist.query.filter_by(user_id=user.id).first()
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
 
-    if not wishlist:
-        wishlist = Wishlist(user_id=user.id, product_id=data['product_id'])
-        db.session.add(wishlist)
-    else:
-        wishlist.product_id = data['product_id']
+        # Get the product data from the request
+        data = request.get_json()
+        product_id = data.get('id')
 
-    db.session.commit()
+        if not product_id:
+            return jsonify({'message': 'Product ID is required'}), 400
 
-    return jsonify({'message': 'Product added to wishlist successfully'})
+        # Validate that the product exists
+        product = Product.query.get(product_id)
+        if not product:
+            return jsonify({'message': 'Product not found'}), 404
+
+        # Create a new wishlist entry
+        wishlist_entry = Wishlist(user_id=user.id, product_id=product.id)
+        db.session.add(wishlist_entry)
+        db.session.commit()
+
+        return jsonify({'message': 'Product added to wishlist successfully'})
+
+    except Exception as e:
+        db.session.rollback()  # Rollback any changes on error
+        return jsonify({'message': str(e)}), 500
 
 # Route to view wishlist
 @app.route('/wishlist', methods=['GET'])

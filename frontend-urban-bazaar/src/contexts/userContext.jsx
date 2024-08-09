@@ -126,6 +126,7 @@ const signup = async (username, email, phone_number, password) => {
           setAuthToken(res.access_token);
           localStorage.setItem("token", res.access_token);
           localStorage.setItem("refresh_token", res.refresh_token);
+          console.log("Logged in token:", res.access_token);
           nav("/");
           alert("Login success");
         } else if (res.error) {
