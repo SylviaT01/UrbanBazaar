@@ -31,13 +31,13 @@ const Dashboard = () => {
                 }
               >
                 <img src={home} className="mr-3" alt="Home" />
-                Dashboard Admin
+                Dashboard
               </NavLink>
             </li>
             <li className="mb-4">
               <button
                 onClick={handleProductsClick}
-                className="w-full text-left flex items-center px-4 py-6 block px-4 py-4 bg-[#FFFFFF] hover:hover:bg-[#d1d5db] rounded flex items-center"
+                className="w-full text-left flex items-center px-4 py-6 block bg-[#FFFFFF] hover:bg-[#d1d5db] rounded"
               >
                 <img src={product} className="mr-3" alt="product" />
                 Products
@@ -73,7 +73,6 @@ const Dashboard = () => {
                           : "block px-4 py-4 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                       }
                     >
-                      {/* <FaList className="mr-2" /> */}
                       All Products
                     </NavLink>
                   </li>
@@ -86,14 +85,12 @@ const Dashboard = () => {
                           : "block px-4 py-4 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                       }
                     >
-                      {/* <FaPlus className="mr-2" /> */}
                       Add Product
                     </NavLink>
                   </li>
                 </ul>
               )}
             </li>
-
             <li className="mb-4">
               <NavLink
                 to="orders"
@@ -148,7 +145,20 @@ const Dashboard = () => {
             </li>
             <li className="mb-4">
               <NavLink
-                to="payments"
+                to="contacts"
+                className={({ isActive }) =>
+                  isActive
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
+                }
+              >
+                <img src={profile} className="mr-3" alt="logout" />
+                Contacts
+              </NavLink>
+            </li>
+            <li className="mb-4">
+              <NavLink
+                to="logout"
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"

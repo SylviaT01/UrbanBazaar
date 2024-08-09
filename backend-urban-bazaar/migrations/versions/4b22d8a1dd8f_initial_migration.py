@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: d98b0530af1f
+Revision ID: 4b22d8a1dd8f
 Revises: 
-Create Date: 2024-08-04 20:57:17.346842
+Create Date: 2024-08-08 12:18:12.884118
 
 """
 from alembic import op
@@ -23,8 +23,10 @@ class JSONType(sa.TypeDecorator):
         if value is not None:
             return json.loads(value)
         return value
+
+
 # revision identifiers, used by Alembic.
-revision = 'd98b0530af1f'
+revision = '4b22d8a1dd8f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -76,6 +78,7 @@ def upgrade():
     sa.Column('email', sa.String(length=100), nullable=False),
     sa.Column('password', sa.String(length=255), nullable=False),
     sa.Column('is_admin', sa.Boolean(), nullable=True),
+    sa.Column('phone_number', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')

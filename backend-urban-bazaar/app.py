@@ -1,19 +1,23 @@
 from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,create_refresh_token, get_jwt
 from flask_cors import CORS
 from functools import wraps
 from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
 from datetime import datetime
 from flask_migrate import Migrate
+import logging
+import os
+SECRET_KEY = os.urandom(24)
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 # Flask configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'  # Update as needed
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'your_secret_key'  # Change this to a secure key
+app.config['JWT_SECRET_KEY'] = SECRET_KEY  # Change this to a secure key
 
 # Initialize extensions
 db.init_app(app)
@@ -27,6 +31,7 @@ CORS(app)
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
+
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user['username']).first()
         if not user.is_admin:
@@ -35,31 +40,79 @@ def admin_required(fn):
     return wrapper
 
 
-# User registration route
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
+
+    # Check if the required fields are present
+    if 'username' not in data or 'email' not in data or 'password' not in data or 'phone_number' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+    
+    # Check if the user already exists
+    existing_user = User.query.filter_by(email=data['email']).first()
+    if existing_user:
+        return jsonify({'error': 'User with this email already exists'}), 400
+    
+    # Hash the password
     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+
+    # Create a new user object
     new_user = User(
         username=data['username'],
         email=data['email'],
-        password=hashed_password
+        password=hashed_password,
+        is_admin=False,
+        phone_number=data['phone_number']
     )
+
+    # Add to the database and commit
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'message': 'User registered successfully'})
-# User login route
+    return jsonify({'success': 'User registered successfully'}), 201
+
+    
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    user = User.query.filter_by(email=data['email']).first()
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    user = User.query.filter_by(email=email).first()
+    if user and bcrypt.check_password_hash(user.password, password):
+        access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
+        return jsonify({"access_token": access_token, "refresh_token": refresh_token})
+    else:
+        return jsonify({"message": "Invalid username or password"}), 401
+    
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    current_user_id = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user_id)
+    return jsonify({"access_token": new_access_token}), 200
 
-    if user and bcrypt.check_password_hash(user.password, data['password']):
-        access_token = create_access_token(identity={'username': user.username, 'is_admin': user.is_admin})
-        return jsonify({'token': access_token})
+@app.route("/current_user", methods=["GET"])
+@jwt_required()
+def get_current_user():
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+    if current_user:
+        return jsonify({"id":current_user.id, "username":current_user.username, "email":current_user.email}), 200
+    else: 
+        return jsonify({"message":"User not found"}), 404
+    
+BLACKLIST = set()
+# @jwt.token_in_blocklist_loader
+def check_if_token_in_blocklist(jwt_header, decrypted_token):
+    jti = decrypted_token["jti"]
+    return jti in BLACKLIST
 
-    return jsonify({'message': 'Invalid credentials'}), 401
+@app.route("/logout", methods=["POST"])
+@jwt_required()
+def logout():
+    jti = get_jwt()["jti"]
+    BLACKLIST.add(jti)
+    return jsonify({"success":"Logged out successfully"}), 200
 
 # Admin route to assign admin role
 @app.route('/assign_admin/<int:user_id>', methods=['POST'])
@@ -153,13 +206,24 @@ def update_profile():
     return jsonify({'message': 'Profile updated successfully'})
 
 
-# Product routes
 @app.route('/products', methods=['GET'])
 def get_products():
     products = Product.query.all()
     output = []
 
     for product in products:
+        reviews = []
+        for review in product.reviews:
+            review_data = {
+                'id': review.id,
+                'rating': review.rating,
+                'comment': review.comment,
+                'date': review.date,
+                'reviewerName': review.reviewer_name,
+                'reviewerEmail': review.reviewer_email
+            }
+            reviews.append(review_data)
+
         product_data = {
             'id': product.id,
             'title': product.title,
@@ -189,6 +253,7 @@ def get_products():
             'qrCode': product.qr_code,
             'images': product.images,
             'thumbnail': product.thumbnail,
+            'reviews': reviews  # Add reviews to the product data
         }
         output.append(product_data)
 
@@ -234,7 +299,6 @@ def get_product(id):
     return jsonify({'product': product_data})
 
 
-#Implements POST /products route to allow admins to add new products to the database
 @app.route('/products', methods=['POST'])
 @jwt_required()
 def add_product():
@@ -353,55 +417,67 @@ def delete_product(id):
 
     return jsonify({'message': 'Product deleted successfully'})
 
-# Route to add a product to the shopping cart
+
 @app.route('/cart', methods=['POST'])
-# @jwt_required()
 def add_to_cart():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    try:
+        data = request.get_json()
+        print("Received data:", data)
+        user_id = data.get('user_id')  # Make sure user_id is included
+        product_id = data.get('product_id')
+        quantity = data.get('quantity')
+        price = data.get('price')
+        
 
-    data = request.get_json()
-    shopping_cart = ShoppingCart.query.filter_by(user_id=user.id).first()
+        if not user_id or not product_id or not quantity or not price:
+            return jsonify({'error': 'Invalid data provided'}), 400
 
-    if not shopping_cart:
-        shopping_cart = ShoppingCart(user_id=user.id, product_id=data['product_id'], quantity=data['quantity'], price=data['price'])
-        db.session.add(shopping_cart)
-    else:
-        shopping_cart.quantity += data['quantity']  # Update quantity if item is already in the cart
-        shopping_cart.price += data['price'] * data['quantity']
+        # Create a new cart item
+        new_cart_item = ShoppingCart(user_id=user_id, product_id=product_id, quantity=quantity, price=price)
+        db.session.add(new_cart_item)
+        db.session.commit()
 
-    db.session.commit()
-
-    return jsonify({'message': 'Product added to cart successfully'})
-
-# Route to view items in the shopping cart
+        return jsonify({'message': 'Product added to cart successfully'})
+    except Exception as e:
+        print(f"Error: {e}")  # Log the actual error
+        return jsonify({'error': 'An error occurred on the server'}), 500
 @app.route('/cart', methods=['GET'])
 @jwt_required()
 def view_cart():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    try:
+        # Get the current user's identity (assumed to be an integer user ID)
+        current_user_id = get_jwt_identity()
 
-    cart_items = ShoppingCart.query.filter_by(user_id=user.id).all()
-    output = []
+        # Fetch the user's shopping cart
+        cart_items = ShoppingCart.query.filter_by(user_id=current_user_id).all()
+        
+        # Prepare the response
+        cart_data = []
+        for item in cart_items:
+            product = Product.query.get(item.product_id)
+            if product:
+                cart_data.append({
+                    'id': product.id,
+                    'title': product.title,
+                    'description': product.description,
+                    'quantity': item.quantity,
+                    'price': item.price,
+                    'image': product.images[0] if product.images else None,
+                    'discount_percentage':product.discount_percentage
+                })
 
-    for item in cart_items:
-        product = Product.query.get(item.product_id)
-        product_data = {
-            'id': product.id,
-            'title': product.title,
-            'quantity': item.quantity,
-            'price': item.price,
-            'thumbnail': product.thumbnail
-        }
-        output.append(product_data)
+        return jsonify({'cart': cart_data}), 200
 
-    return jsonify({'cart': output})
-# Route to remove a product from the shopping cart
+    except Exception as e:
+        logging.error(f"Error fetching cart: {e}")
+        return jsonify({'msg': 'Failed to fetch cart'}), 500
+
+
 @app.route('/cart/<int:product_id>', methods=['DELETE'])
 @jwt_required()
 def remove_from_cart(product_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    user = User.query.filter_by(id=current_user).first()
 
     cart_item = ShoppingCart.query.filter_by(user_id=user.id, product_id=product_id).first()
     if not cart_item:
@@ -412,24 +488,25 @@ def remove_from_cart(product_id):
 
     return jsonify({'message': 'Product removed from cart successfully'})
 
-# Route to view all orders (Admin only)
 @app.route('/admin/orders', methods=['GET'])
 # @jwt_required()
 # @admin_required
 def get_all_orders():
-    orders = Order.query.join(User, Order.user_id == User.id).all()
+    orders = db.session.query(Order, User).join(User, Order.user_id == User.id).all()
     output = []
 
-    for order in orders:
+    for order, user in orders:
         order_data = {
             'id': order.id,
             'user_id': order.user_id,
-            'user_email': order.user.email,  # Include the user's email
+            'user_email': user.email,  # Include the user's email
             'shipping_address': order.shipping_address,
             'payment_method': order.payment_method,
             'order_total': order.order_total,
             'created_at': order.order_date,
             'status': order.status
+            
+            # 'updated_at': order.updated_at
         }
         output.append(order_data)
 
@@ -469,71 +546,141 @@ def create_order():
 
     return jsonify({'message': 'Order created successfully'})
 
+# @app.route('/order', methods=['GET'])
+# def get_orders():
+#     orders = Order.query.all()
+#     orders_data = [
+#         {
+#             'id': order.id,
+#             'user_id': order.user_id,
+#             'order_date': order.order_date,
+#             'shipping_address': order.shipping_address,
+#             'payment_method': order.payment_method,
+#             'order_total': order.order_total,
+#             'status': order.status
+#         }
+#         for order in orders
+#     ]
+#     return jsonify(orders_data)  
 @app.route('/order', methods=['GET'])
 def get_orders():
-    orders = Order.query.all()
-    orders_data = [
-        {
+    # Fetch orders along with associated users and products
+    orders = db.session.query(Order).all()
+    orders_data = []
+
+    for order in orders:
+        # Fetch the order items for the current order
+        order_items = OrderItem.query.filter_by(order_id=order.id).all()
+        
+        # Build order item details including product info
+        items_data = []
+        for item in order_items:
+            product = Product.query.get(item.product_id)
+            if product:
+                product_data = {
+                    'product_id': product.id,
+                    'title': product.title,
+                    'images': product.images,  # List of image URLs
+                    'price': item.price,
+                    'quantity': item.quantity
+                }
+                items_data.append(product_data)
+
+        # Get user info
+        user = User.query.get(order.user_id)
+        user_data = {
+            'username': user.username if user else 'Unknown User'
+        }
+
+        # Build order details
+        order_data = {
             'id': order.id,
-            'user_id': order.user_id,
+            'user': user_data,
             'order_date': order.order_date,
             'shipping_address': order.shipping_address,
             'payment_method': order.payment_method,
             'order_total': order.order_total,
-            'status': order.status
+            'status': order.status,
+            'items': items_data
         }
-        for order in orders
+        
+        orders_data.append(order_data)
+
+    return jsonify(orders_data)
+@app.route('/user', methods=['GET'])
+def get_user():
+    users = User.query.all()
+    users_data = [
+        {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'password': user.password,
+            'is_admin': user.is_admin,
+        }
+        for user in users
     ]
-    return jsonify(orders_data)    
+    return jsonify(users_data)          
 
-# Route to add product to wishlist
+# Route to add an item to the wishlist
 @app.route('/wishlist', methods=['POST'])
-@jwt_required()
+
 def add_to_wishlist():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
-
     data = request.get_json()
-    wishlist = Wishlist.query.filter_by(user_id=user.id).first()
+    user_id = data.get('user_id')
+    product_id = data.get('product_id')
 
-    if not wishlist:
-        wishlist = Wishlist(user_id=user.id, product_id=data['product_id'])
-        db.session.add(wishlist)
-    else:
-        wishlist.product_id = data['product_id']
+    if not user_id or not product_id:
 
+    # Check if the product is already in the user's wishlist
+        return jsonify({"msg": "user_id and product_id are required"}), 400
+    existing_item = Wishlist.query.filter_by(user_id=user_id, product_id=product_id).first()
+    if existing_item:
+        return jsonify({"msg": "Product already in wishlist"}), 409
+
+    # Add the product to the wishlist
+    wishlist_item = Wishlist(user_id=user_id, product_id=product_id)
+    db.session.add(wishlist_item)
     db.session.commit()
 
-    return jsonify({'message': 'Product added to wishlist successfully'})
+    return jsonify({"msg": "Item added to wishlist"}), 201
 
-# Route to view wishlist
 @app.route('/wishlist', methods=['GET'])
 @jwt_required()
 def view_wishlist():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    try:
+        # Get the current user's identity (assumed to be an integer user ID)
+        current_user_id = get_jwt_identity()
 
-    wishlist_items = Wishlist.query.filter_by(user_id=user.id).all()
-    output = []
+        # Fetch the user's wishlist
+        wishlist_items = Wishlist.query.filter_by(user_id=current_user_id).all()
+        
+        # Prepare the response
+        wishlist_data = []
+        for item in wishlist_items:
+            product = Product.query.get(item.product_id)
+            if product:
+                wishlist_data.append({
+                    'id': product.id,
+                    'title': product.title,
+                    'description': product.description,
+                    'price': product.price,
+                    'image': product.images[0] if product.images else None,
+                    'discount_percentage':product.discount_percentage
+                })
 
-    for item in wishlist_items:
-        product = Product.query.get(item.product_id)
-        product_data = {
-            'id': product.id,
-            'title': product.title,
-            'description': product.description,
-            'price': product.price,
-            'thumbnail': product.thumbnail
-        }
-        output.append(product_data)
+        return jsonify({'wishlist': wishlist_data}), 200
 
-    return jsonify({'wishlist': output})
-# Route to remove product from wishlist
+    except Exception as e:
+        logging.error(f"Error fetching wishlist: {e}")
+        return jsonify({'msg': 'Failed to fetch wishlist'}), 500
+
+
 @app.route('/wishlist/<int:product_id>', methods=['DELETE'])
 @jwt_required()
 def remove_from_wishlist(product_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    user = User.query.filter_by(id=current_user).first()
 
     wishlist_item = Wishlist.query.filter_by(user_id=user.id, product_id=product_id).first()
     if not wishlist_item:
@@ -543,8 +690,7 @@ def remove_from_wishlist(product_id):
     db.session.commit()
 
     return jsonify({'message': 'Product removed from wishlist successfully'})
-
-# Route to handle product reviews
+# # Route to handle product reviews
 @app.route('/reviews', methods=['POST'])
 @jwt_required()
 def add_review():
@@ -567,7 +713,7 @@ def add_review():
 
 # Route to get all reviews for a product
 @app.route('/reviews/<int:product_id>', methods=['GET'])
-def get_reviews(product_id):
+def get_reviews_id(product_id):
     reviews = Review.query.filter_by(product_id=product_id).all()
     output = []
 
@@ -582,24 +728,44 @@ def get_reviews(product_id):
 
     return jsonify({'reviews': output})
 
+# Route to get all reviews for a product
+@app.route('/review', methods=['GET'])
+def get_reviews():
+    reviews = Review.query.all()
+    output = []
+
+    for review in reviews:
+        review_data = {
+            'id': review.id,
+            'rating': review.rating,
+            'comment': review.comment,
+            'reviewer_name': review.reviewer_name,
+            'reviewer_email': review.reviewer_email,
+            'product_id': review.product_id,
+            'date': review.date
+        }
+        output.append(review_data)
+
+    return jsonify({'reviews': output})
+
 #Delete a review 
-@app.route('/reviews/<int:id>', methods=['DELETE'])
-@jwt_required()
-def delete_review(id):
-    current_user = get_jwt_identity()
-    review = Review.query.get(id)
-    
-    if not review:
-        return jsonify({'message': 'Review not found'}), 404
+@app.route('/delete_reviews', methods=['DELETE'])
+def delete_reviews():
+    data = request.get_json()
+    review_ids = data.get('review_ids')
+    if not review_ids:
+        return jsonify({"message": "No review IDs provided"}), 400
 
-    if current_user['id'] != review.user_id and not current_user['is_admin']:
-        return jsonify({'message': 'Permission denied'}), 403
-
-    db.session.delete(review)
-    db.session.commit()
-
-    return jsonify({'message': 'Review deleted successfully'})
-
+    try:
+        for review_id in review_ids:
+            review = Review.query.get(review_id)
+            if review:
+                db.session.delete(review)
+        db.session.commit()
+        return jsonify({"message": "Reviews deleted"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": str(e)}), 500
 # Route for contact us form
 @app.route('/contact', methods=['POST'])
 def contact_us():
@@ -616,14 +782,14 @@ def contact_us():
     return jsonify({'message': 'Your message has been received. We will get back to you shortly.'})
 
 # Route to view all Contact Us submissions (Admin only)
-@app.route('/admin/contact_us', methods=['GET'])
-@jwt_required()
+@app.route('/admin/contacts', methods=['GET'])
+# @jwt_required()
 def view_contact_submissions():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    # current_user = get_jwt_identity()
+    # user = User.query.filter_by(username=current_user['username']).first()
     
-    if not user.is_admin:
-        return jsonify({'message': 'Admin access required'}), 403
+    # if not user.is_admin:
+    #     return jsonify({'message': 'Admin access required'}), 403
 
     submissions = ContactUs.query.all()
     output = []
@@ -680,7 +846,11 @@ def get_products_by_category(category):
         output.append(product_data)
 
     return jsonify({'products': output})
-
+@jwt_required()
+def some_function():
+    current_user_id = get_jwt_identity()
+    # Verify current_user_id is being used as expected
+    print(current_user_id)
 
 
 #Enable Flask application to run in debug mode

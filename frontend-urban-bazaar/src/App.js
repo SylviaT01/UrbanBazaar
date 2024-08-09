@@ -1,9 +1,11 @@
-
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import { CartProvider } from "./contexts/cartContext.jsx";
+import { UserProvider, UserContext } from "./contexts/userContext.jsx";
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
-import WishList from "./components/wishList";
+import WishList from "./User/wishList.jsx";
 import ProductList from "./Product/productList";
 import ShoppingCart from "./Product/shoppingcart.jsx";
 import NavItems from "./components/navItems";
@@ -19,6 +21,7 @@ import Reviews from "./admin/Reviews";
 import Orders from "./admin/Orders";
 import Customers from "./admin/Customers";
 import Payments from "./admin/Payments";
+import ContactsUs from "./admin/Contacts";
 import Dashboard from "./admin/DashboardAdmin";
 import Navbar from "./admin/navbar";
 import Login from "./Forms /login";
@@ -26,13 +29,16 @@ import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
 import UserDashboard from "./User/UserDashboard.jsx";
+
 import UpdateProfile from "./Forms /UpdateProfile.jsx";
+
+import RelatedProducts from "./Product/relatedProducts.jsx";
 
 // Dummy components for User Profile
 
 const OrderHistory = () => <div>Order History Content</div>;
-const Wishlist = () => <div>Wishlist Content</div>;
 
+const Wishlist = () => <div>Wishlist Content</div>;
 
 function AppContent() {
   return (
@@ -41,11 +47,11 @@ function AppContent() {
       {/* <Navbar /> */}
       <div className="flex-grow">
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/contact" element={<Contacts />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/wishlist" element={<WishList />} />
@@ -61,13 +67,15 @@ function AppContent() {
             <Route path="reviews" element={<Reviews />} />
             <Route path="customers" element={<Customers />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="contacts" element={<ContactsUs />} />
           </Route>
           {/* UserProfile Routes */}
           <Route path="/userprofile" element={<UserProfile />}>
             <Route path="dashboarduser" element={<UserDashboard />} />
             <Route path="orderhistory" element={<OrderHistory />} />
-            <Route path="wishlist" element={<Wishlist />} />
+            <Route path="wishlist" element={<WishList />} />
             <Route path="profile" element={<UpdateProfile />} />
+            <Route path="relatedproducts" element={<RelatedProducts />} />
           </Route>
         </Routes>
       </div>
@@ -78,13 +86,14 @@ function AppContent() {
 
 function App() {
   return (
-    // <CartProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    // </CartProvider>
+    <Router>
+      <UserProvider>
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
+      </UserProvider>
+    </Router>
   );
 }
 
 export default App;
-
