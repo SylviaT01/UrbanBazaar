@@ -295,7 +295,6 @@ def get_product(id):
     return jsonify({'product': product_data})
 
 
-#Implements POST /products route to allow admins to add new products to the database
 @app.route('/products', methods=['POST'])
 @jwt_required()
 def add_product():

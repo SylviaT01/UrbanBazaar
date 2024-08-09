@@ -64,7 +64,7 @@ export const CartProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${currentUser.token}`
         },
-        body: JSON.stringify(product),
+        body: JSON.stringify(),
       })
       .catch(error => console.error('Error adding to cart:', error));
 
