@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 import { CartProvider } from './contexts/cartContext.jsx';
 import { UserProvider, UserContext } from './contexts/userContext.jsx';
 import Home from "./Pages/home";
@@ -20,6 +21,7 @@ import Reviews from "./admin/Reviews";
 import Orders from "./admin/Orders";
 import Customers from "./admin/Customers";
 import Payments from "./admin/Payments";
+import ContactsUs from "./admin/Contacts";
 import Dashboard from "./admin/DashboardAdmin";
 import Navbar from "./admin/navbar";
 import Login from "./Forms /login";
@@ -62,6 +64,7 @@ function AppContent() {
             <Route path="reviews" element={<Reviews />} />
             <Route path="customers" element={<Customers />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="contacts" element={<ContactsUs />} />
           </Route>
           {/* UserProfile Routes */}
           <Route path="/userprofile" element={<UserProfile />}>
