@@ -20,7 +20,23 @@ import {
     Tooltip,
     Legend
   );
-
+  const data = {
+    labels: dates,
+    datasets: [
+      {
+        label: "Sales (Ksh)",
+        data: sales,
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        tension: 0.3,
+        pointBackgroundColor: "rgba(75, 192, 192, 1)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgba(75, 192, 192, 1)",
+      },
+    ],
+  };
+  
 function SalesChart({ orders }) {
   // Prepare data for the chart
   const dates = orders.map(order => new Date(order.order_date).toLocaleDateString());
