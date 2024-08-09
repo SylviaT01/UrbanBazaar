@@ -40,6 +40,11 @@ import {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
       y: {
         beginAtZero: true,
         grid: {
@@ -47,6 +52,8 @@ import {
         },
       },
     },
+  };
+  
   };
   
   
