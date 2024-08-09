@@ -35,16 +35,24 @@ function AdminDashboard() {
   const totalEarnings = orders.reduce((total, order) => total + order.order_total, 0).toFixed(2);
 
   return (
-    <div>
-      <div>
-        <div>Earnings</div>
-        <div>{`Ksh ${totalEarnings}`}</div>
-        <div>Orders</div>
-        <div>{orders.length}</div>
-        <div>Signups</div>
-        <div>123</div>
+    <div className="flex flex-col items-center px-4 sm:px-6 lg:px-8 -mt-20">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 w-full max-w-6xl">
+        <div className="bg-blue-500 text-white rounded-lg shadow-md p-6">
+          <div>Earnings</div>
+          <div className="text-3xl">{`Ksh ${totalEarnings}`}</div>
+        </div>
+        <div className="bg-green-500 text-white rounded-lg shadow-md p-6">
+          <div>Orders</div>
+          <div className="text-3xl">{orders.length}</div>
+        </div>
+        <div className="bg-yellow-500 text-white rounded-lg shadow-md p-6">
+          <div>Signups</div>
+          <div className="text-3xl">123</div>
+        </div>
       </div>
-      <div>Admin Dashboard</div>
+      <div className="w-full max-w-6xl">
+        <div>Admin Dashboard</div>
+      </div>
     </div>
   );
 }
