@@ -240,3 +240,5 @@ const OrderComplete = () => {
     </div>
   );
 };
+
+export default OrderComplete;
