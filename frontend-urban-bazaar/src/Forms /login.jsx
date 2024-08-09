@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-// import { UserContext } from '../contexts/userContext';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../contexts/userContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
-import supermarket from "../assets/supermarket.jpg.jpg"
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import supermarket from "../assets/supermarket.jpg.jpg";
+import googleIcon from '../assets/google icon.png';
+import facebookIcon from '../assets/facebookIcon.png';
 
 
 export default function Login() {
-  // const { login } = useContext(UserContext);
+  const { login } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword ] = useState(false);
+  const [showPassword, setShowPassword ] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
-    // login(email, password);
+    login(email, password);
   }
 
   return (
@@ -59,9 +61,9 @@ export default function Login() {
                         className="input-field border border-gray-300 rounded-md px-3 py-2 w-full"
                         placeholder="Password"
                       />
-                      {/* <span className="absolute inset-y-0 right-0 pr-3 pt-4 flex items-center cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
+                      <span className="absolute inset-y-0 right-0 pr-3 pt-4 flex items-center cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
                         <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                      </span> */}
+                      </span>
                     </div>
                     <div>
                       <button
@@ -90,17 +92,14 @@ export default function Login() {
                       </div>
                     </div>
                     <div>
-                      {/* <div className="flex items-center">
-                      <p>or</p>
-                      </div> */}
                       
-                      <div className="social-login flex items-center justify-between">
-                        <button className="google-btn flex items-center text-gray-900 py-2 px-4 rounded border border-gray-300">
-                          <FontAwesomeIcon icon={faGoogle} className="text-sm text-gray-900 mr-2" />
+                      <div className="flex items-center justify-center mt-4 space-x-4 ">
+                        <button className="flex items-center justify-center py-1 px-3 w-auto text-black rounded-md shadow-sm text-sm border border-gray-200">
+                          <img src={googleIcon} alt="Google" className="w-5 h-5 mr-2" />
                           Google
                         </button>
-                        <button className="facebook-btn flex items-center text-gray-900 py-2 px-4 rounded border border-gray-300">
-                          <FontAwesomeIcon icon={faFacebook} className="text-sm text-gray-900 mr-2" />
+                        <button className="flex items-center justify-center py-1 px-3 w-auto text-black  rounded-md shadow-sm text-sm border border-gray-200">
+                          <img src={facebookIcon} alt="Facebook" className="w-4 h-4 mr-2" />
                           Facebook
                         </button>
                       </div>

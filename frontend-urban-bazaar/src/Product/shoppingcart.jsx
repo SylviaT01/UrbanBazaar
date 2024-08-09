@@ -1,33 +1,68 @@
-import React, { useState } from 'react';
-import { useCart } from '../contexts/cartContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from "react";
+import { useCart } from "../contexts/cartContext";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/userContext"; // Adjust the import path accordingly
 
 const Cart = () => {
   const { cart, loading, removeFromCart } = useCart();
+  const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   if (loading) return <p>Loading...</p>;
 
+  if (!authToken) {
+    // If not logged in, show a message and provide login options
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+        <div className="bg-white rounded-lg w-[500px] max-h-[80vh] p-6">
+          <div className="flex flex-col items-center">
+            <h3 className="text-xl font-semibold mb-4">You need to log in</h3>
+            <p className="text-center mb-4">
+              Please log in to view and manage your shopping cart.
+            </p>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mb-2"
+              onClick={() => navigate("/login")}
+            >
+              Log In
+            </button>
+            <button
+              className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
+              onClick={() => navigate("/")}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const totalPrice = cart.reduce(
     (total, item) =>
       total +
-      ((item.price * (100 - item.discountPercentage)) / 100) * item.quantity,
+      ((item.price * (100 - item.discount_percentage)) / 100) * item.quantity,
     0
   );
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    navigate('/products');
+    navigate("/"); // Navigate to the homepage
   };
 
   const continueShopping = () => {
-    navigate('/products');
+    navigate("/products");
   };
 
   const handleCheckout = () => {
-    navigate('/checkout');
+    navigate("/checkout");
   };
+  cart.map((item) => {
+    console.log(item.price);
+    console.log(item.image);
+    console.log(item.quantity);
+    console.log(item.discount_percentage);
+  });
 
   return (
     <>
@@ -72,7 +107,7 @@ const Cart = () => {
                         <tr key={item.id}>
                           <td className="px-6 py-4 whitespace-nowrap flex items-center">
                             <img
-                              src={item.images[0]}
+                              src={item.image}
                               alt={item.title}
                               className="w-16 h-16 object-cover mr-4"
                             />
@@ -83,17 +118,18 @@ const Cart = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh{' '}
+                            Ksh{" "}
                             {Math.round(
-                              (item.price * (100 - item.discountPercentage)) /
+                              (item.price * (100 - item.discount_percentage)) /
                                 100
                             ).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh{' '}
+                            Ksh{" "}
                             {(
                               Math.round(
-                                (item.price * (100 - item.discountPercentage)) /
+                                (item.price *
+                                  (100 - item.discount_percentage)) /
                                   100
                               ) * item.quantity
                             ).toLocaleString()}
