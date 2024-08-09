@@ -7,13 +7,17 @@ from functools import wraps
 from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
 from datetime import datetime
 from flask_migrate import Migrate
+import logging
+import os
+SECRET_KEY = os.urandom(24)
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 # Flask configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'  # Update as needed
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'your_secret_key'  # Change this to a secure key
+app.config['JWT_SECRET_KEY'] = SECRET_KEY  # Change this to a secure key
 
 # Initialize extensions
 db.init_app(app)
@@ -413,55 +417,67 @@ def delete_product(id):
 
     return jsonify({'message': 'Product deleted successfully'})
 
-# Route to add a product to the shopping cart
+
 @app.route('/cart', methods=['POST'])
-@jwt_required()
 def add_to_cart():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    try:
+        data = request.get_json()
+        print("Received data:", data)
+        user_id = data.get('user_id')  # Make sure user_id is included
+        product_id = data.get('product_id')
+        quantity = data.get('quantity')
+        price = data.get('price')
+        
 
-    data = request.get_json()
-    shopping_cart = ShoppingCart.query.filter_by(user_id=user.id).first()
+        if not user_id or not product_id or not quantity or not price:
+            return jsonify({'error': 'Invalid data provided'}), 400
 
-    if not shopping_cart:
-        shopping_cart = ShoppingCart(user_id=user.id, product_id=data['product_id'], quantity=data['quantity'], price=data['price'])
-        db.session.add(shopping_cart)
-    else:
-        shopping_cart.quantity += data['quantity']  # Update quantity if item is already in the cart
-        shopping_cart.price += data['price'] * data['quantity']
+        # Create a new cart item
+        new_cart_item = ShoppingCart(user_id=user_id, product_id=product_id, quantity=quantity, price=price)
+        db.session.add(new_cart_item)
+        db.session.commit()
 
-    db.session.commit()
-
-    return jsonify({'message': 'Product added to cart successfully'})
-
-# Route to view items in the shopping cart
+        return jsonify({'message': 'Product added to cart successfully'})
+    except Exception as e:
+        print(f"Error: {e}")  # Log the actual error
+        return jsonify({'error': 'An error occurred on the server'}), 500
 @app.route('/cart', methods=['GET'])
 @jwt_required()
 def view_cart():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    try:
+        # Get the current user's identity (assumed to be an integer user ID)
+        current_user_id = get_jwt_identity()
 
-    cart_items = ShoppingCart.query.filter_by(user_id=user.id).all()
-    output = []
+        # Fetch the user's shopping cart
+        cart_items = ShoppingCart.query.filter_by(user_id=current_user_id).all()
+        
+        # Prepare the response
+        cart_data = []
+        for item in cart_items:
+            product = Product.query.get(item.product_id)
+            if product:
+                cart_data.append({
+                    'id': product.id,
+                    'title': product.title,
+                    'description': product.description,
+                    'quantity': item.quantity,
+                    'price': item.price,
+                    'image': product.images[0] if product.images else None,
+                    'discount_percentage':product.discount_percentage
+                })
 
-    for item in cart_items:
-        product = Product.query.get(item.product_id)
-        product_data = {
-            'id': product.id,
-            'title': product.title,
-            'quantity': item.quantity,
-            'price': item.price,
-            'thumbnail': product.thumbnail
-        }
-        output.append(product_data)
+        return jsonify({'cart': cart_data}), 200
 
-    return jsonify({'cart': output})
-# Route to remove a product from the shopping cart
+    except Exception as e:
+        logging.error(f"Error fetching cart: {e}")
+        return jsonify({'msg': 'Failed to fetch cart'}), 500
+
+
 @app.route('/cart/<int:product_id>', methods=['DELETE'])
 @jwt_required()
 def remove_from_cart(product_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    user = User.query.filter_by(id=current_user).first()
 
     cart_item = ShoppingCart.query.filter_by(user_id=user.id, product_id=product_id).first()
     if not cart_item:
@@ -472,7 +488,6 @@ def remove_from_cart(product_id):
 
     return jsonify({'message': 'Product removed from cart successfully'})
 
-# Route to view all orders (Admin only)
 @app.route('/admin/orders', methods=['GET'])
 # @jwt_required()
 # @admin_required
@@ -563,54 +578,65 @@ def get_user():
     ]
     return jsonify(users_data)          
 
-# Route to add product to wishlist
+# Route to add an item to the wishlist
 @app.route('/wishlist', methods=['POST'])
-@jwt_required()
+
 def add_to_wishlist():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
-
     data = request.get_json()
-    wishlist = Wishlist.query.filter_by(user_id=user.id).first()
+    user_id = data.get('user_id')
+    product_id = data.get('product_id')
 
-    if not wishlist:
-        wishlist = Wishlist(user_id=user.id, product_id=data['product_id'])
-        db.session.add(wishlist)
-    else:
-        wishlist.product_id = data['product_id']
+    if not user_id or not product_id:
 
+    # Check if the product is already in the user's wishlist
+        return jsonify({"msg": "user_id and product_id are required"}), 400
+    existing_item = Wishlist.query.filter_by(user_id=user_id, product_id=product_id).first()
+    if existing_item:
+        return jsonify({"msg": "Product already in wishlist"}), 409
+
+    # Add the product to the wishlist
+    wishlist_item = Wishlist(user_id=user_id, product_id=product_id)
+    db.session.add(wishlist_item)
     db.session.commit()
 
-    return jsonify({'message': 'Product added to wishlist successfully'})
+    return jsonify({"msg": "Item added to wishlist"}), 201
 
-# Route to view wishlist
 @app.route('/wishlist', methods=['GET'])
 @jwt_required()
 def view_wishlist():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    try:
+        # Get the current user's identity (assumed to be an integer user ID)
+        current_user_id = get_jwt_identity()
 
-    wishlist_items = Wishlist.query.filter_by(user_id=user.id).all()
-    output = []
+        # Fetch the user's wishlist
+        wishlist_items = Wishlist.query.filter_by(user_id=current_user_id).all()
+        
+        # Prepare the response
+        wishlist_data = []
+        for item in wishlist_items:
+            product = Product.query.get(item.product_id)
+            if product:
+                wishlist_data.append({
+                    'id': product.id,
+                    'title': product.title,
+                    'description': product.description,
+                    'price': product.price,
+                    'image': product.images[0] if product.images else None,
+                    'discount_percentage':product.discount_percentage
+                })
 
-    for item in wishlist_items:
-        product = Product.query.get(item.product_id)
-        product_data = {
-            'id': product.id,
-            'title': product.title,
-            'description': product.description,
-            'price': product.price,
-            'thumbnail': product.thumbnail
-        }
-        output.append(product_data)
+        return jsonify({'wishlist': wishlist_data}), 200
 
-    return jsonify({'wishlist': output})
-# Route to remove product from wishlist
+    except Exception as e:
+        logging.error(f"Error fetching wishlist: {e}")
+        return jsonify({'msg': 'Failed to fetch wishlist'}), 500
+
+
 @app.route('/wishlist/<int:product_id>', methods=['DELETE'])
 @jwt_required()
 def remove_from_wishlist(product_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    user = User.query.filter_by(id=current_user).first()
 
     wishlist_item = Wishlist.query.filter_by(user_id=user.id, product_id=product_id).first()
     if not wishlist_item:
@@ -620,8 +646,7 @@ def remove_from_wishlist(product_id):
     db.session.commit()
 
     return jsonify({'message': 'Product removed from wishlist successfully'})
-
-# Route to handle product reviews
+# # Route to handle product reviews
 @app.route('/reviews', methods=['POST'])
 @jwt_required()
 def add_review():
@@ -777,7 +802,11 @@ def get_products_by_category(category):
         output.append(product_data)
 
     return jsonify({'products': output})
-
+@jwt_required()
+def some_function():
+    current_user_id = get_jwt_identity()
+    # Verify current_user_id is being used as expected
+    print(current_user_id)
 
 
 #Enable Flask application to run in debug mode
