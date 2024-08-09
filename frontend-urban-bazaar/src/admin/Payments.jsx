@@ -17,6 +17,7 @@ function Payments() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+
         setPayments(data.orders);
         setLoading(false);
       } catch (error) {
@@ -55,6 +56,7 @@ function Payments() {
     }
   };
 
+
   return (
     <div className="flex overflow-hidden flex-col px-20 pb-8">
       <div className="mt-1 ml-28 text-2xl font-bold tracking-tight leading-loose text-gray-800">
@@ -68,6 +70,14 @@ function Payments() {
             </div>
             <div className="flex flex-col ml-5 max-md:ml-0 max-md:w-full">
               <div className="flex flex-col items-center px-1.5 py-14 mx-auto w-full font-medium bg-white rounded max-md:mt-10 max-md:max-w-full">
+                <div className="flex justify-between mb-4 w-full">
+                  <button 
+                    onClick={handlePrint} 
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Print
+                  </button>
+                </div>
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-gray-200">
                     <thead className="bg-gray-50">
