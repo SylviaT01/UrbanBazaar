@@ -8,9 +8,8 @@ const Cart = () => {
   const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
-
+  console.log(cart);
   if (loading) return <p>Loading...</p>;
-
   if (!authToken) {
     // If not logged in, show a message and provide login options
     return (
