@@ -185,21 +185,138 @@ def delete_user(user_id):
 
 
 # Route to update user profile
+# @app.route('/profile', methods=['PATCH'])
+# @jwt_required()
+# def update_profile():
+#     current_user = get_jwt_identity()
+#     user = User.query.filter_by(username=current_user).first()
+
+#     data = request.get_json()
+
+#     if 'username' in data:
+#         user.username = data['username']
+#     if 'email' in data:
+#         user.email = data['email']
+#     if 'password' in data:
+#         hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+#         user.password = hashed_password
+
+#     db.session.commit()
+
+#     return jsonify({'message': 'Profile updated successfully'})
+
+# @app.route('/profile', methods=['PATCH'])
+# @jwt_required()
+# def update_profile():
+#     current_user = get_jwt_identity()
+#     user = User.query.filter_by(username=current_user).first()
+
+#     data = request.get_json()
+
+#     if 'username' in data:
+#         user.username = data['username']
+#     if 'email' in data:
+#         user.email = data['email']
+#     if 'currentPassword' in data and 'newPassword' in data and 'confirmPassword' in data:
+#         if not bcrypt.check_password_hash(user.password, data['currentPassword']):
+#             return jsonify({'message': 'Current password is incorrect'}), 400
+#         if data['newPassword'] != data['confirmPassword']:
+#             return jsonify({'message': 'New passwords do not match'}), 400
+#         user.password = bcrypt.generate_password_hash(data['newPassword']).decode('utf-8')
+
+#     db.session.commit()
+
+#     return jsonify({'message': 'Profile updated successfully'})
+# @app.route('/profile', methods=['GET'])
+# @jwt_required()
+# def get_profile():
+#     current_user = get_jwt_identity()
+#     logging.debug(f"GET /profile called for user: {current_user}")
+
+#     user = User.query.filter_by(username=current_user).first()
+
+#     if not user:
+#         return jsonify({'message': 'User not found'}), 404
+
+#     return jsonify({
+#         'username': user.username,
+#         'email': user.email
+#     })
+
+# @app.route('/profile', methods=['PATCH'])
+# @jwt_required()
+# def update_profile():
+#     current_user = get_jwt_identity()
+#     logging.debug(f"PATCH /profile called for user: {current_user}")
+
+#     user = User.query.filter_by(username=current_user).first()
+
+#     if not user:
+#         return jsonify({'message': 'User not found'}), 404
+
+#     data = request.get_json()
+#     logging.debug(f"Request data: {data}")
+
+#     if 'username' in data:
+#         user.username = data['username']
+#     if 'email' in data:
+#         user.email = data['email']
+#     if 'currentPassword' in data and 'newPassword' in data and 'confirmPassword' in data:
+#         if not bcrypt.check_password_hash(user.password, data['currentPassword']):
+#             return jsonify({'message': 'Current password is incorrect'}), 400
+#         if data['newPassword'] != data['confirmPassword']:
+#             return jsonify({'message': 'New passwords do not match'}), 400
+#         user.password = bcrypt.generate_password_hash(data['newPassword']).decode('utf-8')
+
+#     db.session.commit()
+
+#     return jsonify({'message': 'Profile updated successfully'})
+@app.route('/profile', methods=['GET'])
+@jwt_required()
+def get_profile():
+    current_user = get_jwt_identity()
+    logging.debug(f"GET /profile called for user: {current_user}")
+
+    user = User.query.filter_by(id=current_user).first()
+    logging.debug(f"Fetched user: {user}")
+
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    return jsonify({
+        'username': user.username,
+        'email': user.email,
+        'phone_number': user.phone_number
+    })
+
 @app.route('/profile', methods=['PATCH'])
 @jwt_required()
 def update_profile():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    logging.debug(f"PATCH /profile called for user: {current_user}")
+
+    user = User.query.filter_by(id=current_user).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
     data = request.get_json()
+    logging.debug(f"Request data: {data}")
 
     if 'username' in data:
         user.username = data['username']
     if 'email' in data:
         user.email = data['email']
-    if 'password' in data:
-        hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-        user.password = hashed_password
+    if 'phone_number' in data:
+        try:
+            user.phone_number = int(data['phone_number'])  # Convert to integer
+        except ValueError:
+            return jsonify({'message': 'Invalid phone number format'}), 400
+    if 'currentPassword' in data and 'newPassword' in data and 'confirmPassword' in data:
+        if not bcrypt.check_password_hash(user.password, data['currentPassword']):
+            return jsonify({'message': 'Current password is incorrect'}), 400
+        if data['newPassword'] != data['confirmPassword']:
+            return jsonify({'message': 'New passwords do not match'}), 400
+        user.password = bcrypt.generate_password_hash(data['newPassword']).decode('utf-8')
 
     db.session.commit()
 
