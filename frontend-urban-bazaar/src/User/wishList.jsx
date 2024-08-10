@@ -1,11 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useCart } from "../contexts/cartContext"; // Import useCart context
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/userContext";
 
 const Wishlist = () => {
-  const { wishlist, loading, removeFromWishlist } = useCart(); // Add removeFromWishlist to the context
+  const { wishlist, loading, removeFromWishlist, setWishlist, setLoading } = useCart();
+  const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+
+  useEffect(() => {
+    const fetchWishlistData = async () => {
+      const token = authToken || localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No auth token available");
+        return;
+      }
+      try {
+        console.log("Fetching wishlist data...");
+        const response = await fetch("http://127.0.0.1:5000/wishlist", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            
+          },
+        });
+        console.log("Wishlist fetch response status:", response.status);
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error response from server:", errorData);
+          throw new Error(errorData.msg || "Failed to fetch wishlist data");
+        }
+        const data = await response.json();
+        console.log("Wishlist data fetched:", data);
+        setWishlist(data.wishlist || []);
+      } catch (error) {
+        console.error("Error fetching wishlist:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWishlistData();
+
+    return () => {
+      setLoading(false);
+    };
+    
+  }, [ authToken, setWishlist, setLoading]);
 
   if (loading) return <p>Loading...</p>;
 

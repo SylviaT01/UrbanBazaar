@@ -1,26 +1,63 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useCart } from "../contexts/cartContext";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/userContext"; // Adjust the import path accordingly
+import { UserContext } from "../contexts/userContext";
 
 const Cart = () => {
-  const { cart, loading, removeFromCart } = useCart();
+  const { cart, setCart, loading, setLoading, removeFromCart } = useCart();
   const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
+  useEffect(() => {
+    const fetchCartData = async () => {
+      const token = authToken || localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No auth token available");
+        return;
+      }
+      setLoading(true);
+      try {
+        console.log("Fetching cart data...");
+        const response = await fetch("http://127.0.0.1:5000/cart", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Cart fetch response status:", response.status);
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error response from server:", errorData);
+          throw new Error(errorData.msg || "Failed to fetch cart data");
+        }
+        const data = await response.json();
+        console.log("Cart data fetched:", data);
+        setCart(data.cart || []);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCartData();
+
+    // Cleanup function to avoid setting state after unmounting
+    return () => {
+      setLoading(false);
+    };
+  }, [authToken, setCart, setLoading]); // Add authToken as a dependency
+
   if (loading) return <p>Loading...</p>;
 
   if (!authToken) {
-    // If not logged in, show a message and provide login options
     return (
       <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
         <div className="bg-white rounded-lg w-[500px] max-h-[80vh] p-6">
           <div className="flex flex-col items-center">
             <h3 className="text-xl font-semibold mb-4">You need to log in</h3>
-            <p className="text-center mb-4">
-              Please log in to view and manage your shopping cart.
-            </p>
+            <p className="text-center mb-4">Please log in to view and manage your shopping cart.</p>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mb-2"
               onClick={() => navigate("/login")}
@@ -39,12 +76,13 @@ const Cart = () => {
     );
   }
 
-  const totalPrice = cart.reduce(
-    (total, item) =>
-      total +
-      ((item.price * (100 - item.discount_percentage)) / 100) * item.quantity,
-    0
-  );
+  const totalPrice = cart.reduce((total, item) => {
+    if (item.price && item.discount_percentage && item.quantity) {
+      return total + ((item.price * (100 - item.discount_percentage)) / 100) * item.quantity;
+    }
+    return total;
+  }, 0);
+
 
   const closeModal = () => {
     navigate("/"); // Navigate to the homepage
@@ -57,12 +95,9 @@ const Cart = () => {
   const handleCheckout = () => {
     navigate("/checkout");
   };
-  cart.map((item) => {
-    console.log(item.price);
-    console.log(item.image);
-    console.log(item.quantity);
-    console.log(item.discount_percentage);
-  });
+
+
+
 
   return (
     <>
@@ -88,18 +123,10 @@ const Cart = () => {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Item
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Price
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Subtotal
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
-                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -112,27 +139,14 @@ const Cart = () => {
                               className="w-16 h-16 object-cover mr-4"
                             />
                             <div>
-                              <h4 className="text-sm font-medium">
-                                {item.title}
-                              </h4>
+                              <h4 className="text-sm font-medium">{item.title}</h4>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh{" "}
-                            {Math.round(
-                              (item.price * (100 - item.discount_percentage)) /
-                                100
-                            ).toLocaleString()}
+                            Ksh {Math.round((item.price * (100 - item.discount_percentage)) / 100).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh{" "}
-                            {(
-                              Math.round(
-                                (item.price *
-                                  (100 - item.discount_percentage)) /
-                                  100
-                              ) * item.quantity
-                            ).toLocaleString()}
+                            Ksh {(Math.round((item.price * (100 - item.discount_percentage)) / 100) * item.quantity).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button
@@ -161,9 +175,7 @@ const Cart = () => {
                   </table>
                   <div className="flex justify-between items-center border-t border-gray-200 pt-4">
                     <h4 className="text-sm font-medium">Total Price:</h4>
-                    <p className="text-sm font-medium">
-                      Ksh {Math.round(totalPrice)}
-                    </p>
+                    <p className="text-sm font-medium">Ksh {Math.round(totalPrice).toLocaleString()}</p>
                   </div>
                   <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
                     <button

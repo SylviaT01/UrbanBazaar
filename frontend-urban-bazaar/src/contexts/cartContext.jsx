@@ -239,7 +239,9 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         cart,
+        setCart,
         wishlist,
+        setWishlist,
         isInCart,
         isInWishlist,
         addToCart,
@@ -247,6 +249,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         removeFromWishlist,
         loading,
+        setLoading,
         notification,
       }}
     >
