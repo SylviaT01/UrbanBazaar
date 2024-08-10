@@ -25,6 +25,7 @@ import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
 import UserDashboard from "./User/UserDashboard.jsx";
+import OrderComplete from "./Product/orderComplete.jsx";
 
 // Dummy components for User Profile
 
@@ -51,6 +52,7 @@ function AppContent() {
           <Route path="/toppicks" element={<TopPicks />} />
           <Route path="/weeklyoffers" element={<WeeklyOffers />} />
           <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/ordercomplete" element={<OrderComplete />} />
           <Route path="/dashboard" element={<DashboardAdmin />}>
             <Route path="dashboardAdmin" element={<Dashboard />} />
             <Route path="products/all" element={<AllProducts />} />
