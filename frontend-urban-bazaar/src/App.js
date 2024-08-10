@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { CartProvider } from "./contexts/cartContext.jsx";
-import { UserProvider, UserContext } from "./contexts/userContext.jsx";
+import { UserProvider } from "./contexts/userContext.jsx";
 import Home from "./Pages/home";
 import AboutUs from "./Pages/about";
 import WishList from "./User/wishList.jsx";
@@ -23,27 +22,27 @@ import Customers from "./admin/Customers";
 import Payments from "./admin/Payments";
 import ContactsUs from "./admin/Contacts";
 import Dashboard from "./admin/DashboardAdmin";
-import Navbar from "./admin/navbar";
 import Login from "./Forms /login";
 import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
 import UserDashboard from "./User/UserDashboard.jsx";
-
 import UpdateProfile from "./Forms /UpdateProfile.jsx";
-
 import RelatedProducts from "./Product/relatedProducts.jsx";
+import Navbar from "./admin/navbar";
 
 // Dummy components for User Profile
-
 const OrderHistory = () => <div>Order History Content</div>;
 
 const Wishlist = () => <div>Wishlist Content</div>;
 
 function AppContent() {
+  const location = useLocation();
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
+
   return (
     <div className="min-h-screen flex flex-col">
-      <NavItems />
+      {!isAuthPage && <NavItems />}
       {/* <Navbar /> */}
       <div className="flex-grow">
         <Routes>
@@ -79,7 +78,7 @@ function AppContent() {
           </Route>
         </Routes>
       </div>
-      <Footer />
+      {!isAuthPage && <Footer />}
     </div>
   );
 }
@@ -97,3 +96,4 @@ function App() {
 }
 
 export default App;
+

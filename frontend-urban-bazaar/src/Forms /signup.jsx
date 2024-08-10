@@ -1,7 +1,7 @@
-
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../contexts/userContext';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import mall from '../assets/mall.jpg';
@@ -19,8 +19,9 @@ export default function SignUp() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const navigate = useNavigate();
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -40,6 +41,9 @@ export default function SignUp() {
       console.error('Error during signup:', error);
       setError('Something went wrong');
     }
+  };
+  const handleGoHome = () => {
+    navigate("/");
   };
 
 
@@ -182,6 +186,14 @@ export default function SignUp() {
                       </Link>
                     </div>
                   </form>
+                  <div className="text-center">
+                    <button
+                      onClick={handleGoHome}
+                      className="mt-4 px-4 py-2 bg-blue-300 text-white rounded hover:bg-blue-500"
+                    >
+                      Go Home
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
