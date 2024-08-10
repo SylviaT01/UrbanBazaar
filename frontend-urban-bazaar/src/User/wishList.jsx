@@ -81,11 +81,11 @@ const Wishlist = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate(`/products`);
+    navigate(-1);
   };
 
   const continueShopping = () => {
-    navigate("/products");
+    navigate(-1);
   };
 
   return (

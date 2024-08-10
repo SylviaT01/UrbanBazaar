@@ -1,24 +1,19 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-//import { UserContext } from "./context/userContext";
 import { useNavigate } from "react-router-dom";
 import shelf from "../assets/shelf.jpg";
-import emailIcon from "../assets/emailIcon.svg"
-import phoneIcon from "../assets/phoneIcon.svg"
-
-//import email from "../assets/email.svg"
-//import Footer from "./footer";
+import emailIcon from "../assets/emailIcon.svg";
+import phoneIcon from "../assets/phoneIcon.svg";
 
 const Contact = () => {
-  //const { currentUser, authToken } = useContext(UserContext);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const navigate = useNavigate();
-  //console.log(currentUser);
+  const [notification, setNotification] = useState(null);
 
   const initialValues = {
-    //name: currentUser.name,
-    //email: currentUser.email,
+    name: "",
+    email: "",
     phone: "",
     message: "",
   };
@@ -38,7 +33,6 @@ const Contact = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          //Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify(values),
       });
@@ -51,8 +45,14 @@ const Contact = () => {
       console.log(data);
       resetForm();
       setIsSubmitted(true);
-      navigate("/");
-      alert("Your message has been submitted successfully. Our team will get back to you shortly!");
+      setNotification(
+        "Your message has been submitted successfully. Our team will get back to you shortly!"
+      );
+
+      // Delay navigation to allow time for the notification to show
+      setTimeout(() => {
+        navigate("/");
+      }, 3500); 
     } catch (error) {
       console.error("Error submitting contact form:", error);
     }
@@ -65,7 +65,7 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="w-full md:w-1/2 p-8 bg-[#DAEFFA]">
             <h1 className="text-2xl font-bold mb-6 text-gray-800">
-              We'd love to here from you!
+              We'd love to hear from you!
             </h1>
 
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
@@ -199,7 +199,7 @@ const Contact = () => {
 
                 <p>
                   <span
-                    class="icon-[fluent--location-16-filled]"
+                    className="icon-[fluent--location-16-filled]"
                     style={{ width: "20px", height: "20px", color: "#7DC8EF" }}
                   ></span>{" "}
                   Bilha Towers Ground Floor, Shop Number 45KE
@@ -207,7 +207,7 @@ const Contact = () => {
 
                 <p>
                   <span
-                    class="icon-[fluent--location-16-filled]"
+                    className="icon-[fluent--location-16-filled]"
                     style={{ width: "28px", height: "28px", color: "#7DC8EF" }}
                   ></span>
                   Postal Address P.O. Box 1852-00621, Village Market Nairobi,
@@ -216,17 +216,15 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-800">
-                 Phone Number
+                  Phone Number
                 </h3>
                 <p className="text-blue-600 underline underline-offset-2 flex flex-row gap-2">
-                 <img src={phoneIcon} alt="phoneIcon"/> 
-                +254 712 345 678
+                  <img src={phoneIcon} alt="phoneIcon" />
+                  +254 712 345 678
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-lg text-gray-800">
-                  Email Address
-                </h3>
+                <h3 className="font-bold text-lg text-gray-800">Email Address</h3>
 
                 <p className="text-blue-600 underline underline-offset-2 flex items-center gap-2">
                   <img src={emailIcon} alt="emailIcon" />
@@ -237,6 +235,11 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      {notification && (
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 text-center bg-green-500 text-white p-4 rounded-lg shadow-lg">
+          {notification}
+        </div>
+      )}
     </div>
   );
 };

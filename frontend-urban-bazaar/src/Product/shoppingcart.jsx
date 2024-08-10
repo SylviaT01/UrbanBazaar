@@ -85,11 +85,11 @@ const Cart = () => {
 
 
   const closeModal = () => {
-    navigate("/"); // Navigate to the homepage
+    navigate(-1);
   };
 
   const continueShopping = () => {
-    navigate("/products");
+    navigate(-1);
   };
 
   const handleCheckout = () => {

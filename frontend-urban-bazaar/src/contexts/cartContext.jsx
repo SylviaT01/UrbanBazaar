@@ -7,7 +7,7 @@ export const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const { currentUser, authToken } = useContext(UserContext); // Access current user from UserContext
+  const { currentUser, authToken } = useContext(UserContext); 
   const navigate = useNavigate();
 
   const [cart, setCart] = useState([]);
@@ -95,7 +95,7 @@ export const CartProvider = ({ children }) => {
     }
 
     if (isInWishlist(id)) {
-      await removeFromWishlist(id); // Remove from wishlist if it exists
+      await removeFromWishlist(id); 
     }
 
     if (!isInCart(id)) {
