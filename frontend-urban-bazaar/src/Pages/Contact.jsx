@@ -51,8 +51,8 @@ const Contact = () => {
       console.log(data);
       resetForm();
       setIsSubmitted(true);
-      navigate("/home");
-      alert("Submitted successfully");
+      navigate("/");
+      alert("Your message has been submitted successfully. Our team will get back to you shortly!");
     } catch (error) {
       console.error("Error submitting contact form:", error);
     }

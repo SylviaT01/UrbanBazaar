@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useCart } from "../contexts/cartContext"; // Import useCart context
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/userContext";
+import { useCart } from "../contexts/cartContext";
 
 const Wishlist = () => {
   const { wishlist, loading, removeFromWishlist, setWishlist, setLoading } = useCart();
   const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
-
 
   useEffect(() => {
     const fetchWishlistData = async () => {
@@ -17,13 +16,13 @@ const Wishlist = () => {
         console.error("No auth token available");
         return;
       }
+      setLoading(true);
       try {
         console.log("Fetching wishlist data...");
         const response = await fetch("http://127.0.0.1:5000/wishlist", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            
           },
         });
         console.log("Wishlist fetch response status:", response.status);
@@ -42,25 +41,52 @@ const Wishlist = () => {
       }
     };
 
-    fetchWishlistData();
+    if (authToken) {
+      fetchWishlistData();
+    } else {
+      setLoading(false);
+    }
 
     return () => {
       setLoading(false);
     };
-    
-  }, [ authToken, setWishlist, setLoading]);
+  }, [authToken, setWishlist, setLoading]);
 
   if (loading) return <p>Loading...</p>;
 
+  if (!authToken) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+        <div className="bg-white rounded-lg w-[500px] max-h-[80vh] p-6">
+          <div className="flex flex-col items-center">
+            <h3 className="text-xl font-semibold mb-4">You need to log in</h3>
+            <p className="text-center mb-4">Please log in to view and manage your wishlist.</p>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mb-2"
+              onClick={() => navigate("/login")}
+            >
+              Log In
+            </button>
+            <button
+              className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
+              onClick={() => navigate("/")}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate("/products");
+    navigate(`/products`);
   };
 
   const continueShopping = () => {
     navigate("/products");
   };
-  console.log(wishlist);
 
   return (
     <>
@@ -86,15 +112,9 @@ const Wishlist = () => {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Item
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Price
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
-                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -107,17 +127,11 @@ const Wishlist = () => {
                               className="w-16 h-16 object-cover mr-4"
                             />
                             <div>
-                              <h4 className="text-sm font-medium">
-                                {item.title}
-                              </h4>
+                              <h4 className="text-sm font-medium">{item.title}</h4>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh{" "}
-                            {Math.round(
-                              (item.price * (100 - item.discount_percentage)) /
-                                100
-                            ).toLocaleString()}
+                            Ksh {Math.round((item.price * (100 - item.discount_percentage)) / 100).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button
