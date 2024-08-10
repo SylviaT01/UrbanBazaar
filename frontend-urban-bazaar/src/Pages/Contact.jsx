@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import shelf from "../assets/shelf.jpg";
 import emailIcon from "../assets/emailIcon.svg"
 import phoneIcon from "../assets/phoneIcon.svg"
+import locationIcon from "../assets/locationIcon.svg"
 
 //import email from "../assets/email.svg"
 //import Footer from "./footer";
@@ -197,19 +198,14 @@ const Contact = () => {
                   RETURN ADDRESS FOR ONLINE ORDERS
                 </h3>
 
-                <p>
-                  <span
-                    class="icon-[fluent--location-16-filled]"
-                    style={{ width: "20px", height: "20px", color: "#7DC8EF" }}
-                  ></span>{" "}
+                <p className="flex items-centre gap-2">
+                  <img src={locationIcon} alt="locationIcon" />
                   Bilha Towers Ground Floor, Shop Number 45KE
                 </p>
 
-                <p>
-                  <span
-                    class="icon-[fluent--location-16-filled]"
-                    style={{ width: "28px", height: "28px", color: "#7DC8EF" }}
-                  ></span>
+
+                <p className="flex items-centre gap-2">
+                  <img src={locationIcon} alt="locationIcon" />
                   Postal Address P.O. Box 1852-00621, Village Market Nairobi,
                   Kenya
                 </p>
