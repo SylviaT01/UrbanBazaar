@@ -30,6 +30,9 @@ import UserDashboard from "./User/UserDashboard.jsx";
 import UpdateProfile from "./Forms /UpdateProfile.jsx";
 import RelatedProducts from "./Product/relatedProducts.jsx";
 import Navbar from "./admin/navbar";
+import PrivacyPolicy from './components/privacypolicy.jsx';
+import FAQs from './components/FAQs';
+import DeliveryAndReturns from './components/DeliveryAndReturns.jsx';
 
 // Dummy components for User Profile
 const OrderHistory = () => <div>Order History Content</div>;
@@ -56,6 +59,9 @@ function AppContent() {
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/toppicks" element={<TopPicks />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/delivery" element={<DeliveryAndReturns />} />
           <Route path="/weeklyoffers" element={<WeeklyOffers />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/dashboard" element={<DashboardAdmin />}>
@@ -67,6 +73,7 @@ function AppContent() {
             <Route path="customers" element={<Customers />} />
             <Route path="payments" element={<Payments />} />
             <Route path="contacts" element={<ContactsUs />} />
+            
           </Route>
           {/* UserProfile Routes */}
           <Route path="/userprofile" element={<UserProfile />}>
