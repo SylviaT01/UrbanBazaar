@@ -11,7 +11,14 @@ function Checkout() {
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
   const [cartItems, setCartItems] = useState([]);
-  const [cartTotal, setCartTotal] = useState(0);
+  const [totalprice, setTotalPrice] = useState(0);
+  const shippingCost = 772.71;
+  const taxCollected = (totalprice * 0.16).toFixed(2);
+  const orderTotal = (
+    parseFloat(totalprice) +
+    parseFloat(shippingCost) +
+    parseFloat(taxCollected)
+  ).toFixed(2);
 
   useEffect(() => {
     // Fetch cart data from localStorage or your state management system
@@ -23,7 +30,7 @@ function Checkout() {
       (acc, item) => acc + item.price * item.quantity,
       0
     );
-    setCartTotal(total.toFixed(2)); // Fixed to two decimal places
+    setTotalPrice(total.toFixed(2)); // Fixed to two decimal places
   }, []);
  
 
@@ -43,7 +50,7 @@ function Checkout() {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/", {
+      const response = await fetch("http://127.0.0.1:5000/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -196,7 +203,7 @@ function Checkout() {
               <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
               <div className="flex justify-between mb-2">
                 <span>Items ({cartItems.length})</span>
-                <span>Ksh.{cartTotal}</span>
+                <span>Ksh.{totalprice}</span>
               </div>
               {cartItems.map((item) => (
                 <div className="flex justify-between mb-2" key={item.id}>
@@ -208,19 +215,19 @@ function Checkout() {
               ))}
               <div className="flex justify-between mb-2">
                 <span>Shipping & Handling</span>
-                <span>Ksh.772.71</span>
+                <span>Ksh.{shippingCost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span>Before Tax</span>
-                <span>Ksh.{(parseFloat(cartTotal) + 772.71).toFixed(2)}</span>
+                <span>Ksh.{(parseFloat(totalprice) + shippingCost).toFixed(2)}</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span>Tax Collected</span>
-                <span>$0.22</span>
+                <span>Ksh.{taxCollected}</span>
               </div>
               <div className="flex justify-between font-semibold">
                 <span>Order Total</span>
-                <span>$70.44</span>
+                <span>Ksh.{orderTotal}</span>
               </div>
             </div>
           </div>
