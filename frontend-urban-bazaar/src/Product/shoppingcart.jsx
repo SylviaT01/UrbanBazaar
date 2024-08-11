@@ -83,7 +83,6 @@ const Cart = () => {
     return total;
   }, 0);
 
-
   const closeModal = () => {
     navigate(-1);
   };
