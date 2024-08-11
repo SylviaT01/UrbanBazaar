@@ -183,23 +183,52 @@ def delete_user(user_id):
 
     return jsonify({'message': 'User deleted successfully'})
 
+@app.route('/profile', methods=['GET'])
+@jwt_required()
+def get_profile():
+    current_user = get_jwt_identity()
+    logging.debug(f"GET /profile called for user: {current_user}")
 
-# Route to update user profile
+    user = User.query.filter_by(id=current_user).first()
+    logging.debug(f"Fetched user: {user}")
+
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    return jsonify({
+        'username': user.username,
+        'email': user.email,
+        'phone_number': user.phone_number
+    })
+
 @app.route('/profile', methods=['PATCH'])
 @jwt_required()
 def update_profile():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    logging.debug(f"PATCH /profile called for user: {current_user}")
+
+    user = User.query.filter_by(id=current_user).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
     data = request.get_json()
+    logging.debug(f"Request data: {data}")
 
     if 'username' in data:
         user.username = data['username']
     if 'email' in data:
         user.email = data['email']
-    if 'password' in data:
-        hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-        user.password = hashed_password
+    if 'phone_number' in data:
+        try:
+            user.phone_number = int(data['phone_number'])  # Convert to integer
+        except ValueError:
+            return jsonify({'message': 'Invalid phone number format'}), 400
+    if 'currentPassword' in data and 'newPassword' in data and 'confirmPassword' in data:
+        if not bcrypt.check_password_hash(user.password, data['currentPassword']):
+            return jsonify({'message': 'Current password is incorrect'}), 400
+        if data['newPassword'] != data['confirmPassword']:
+            return jsonify({'message': 'New passwords do not match'}), 400
+        user.password = bcrypt.generate_password_hash(data['newPassword']).decode('utf-8')
 
     db.session.commit()
 
@@ -298,51 +327,64 @@ def get_product(id):
     }
     return jsonify({'product': product_data})
 
-
 @app.route('/products', methods=['POST'])
 @jwt_required()
 def add_product():
-    current_user = get_jwt_identity()
-    if not current_user['is_admin']:
+    current_user_id = get_jwt_identity()
+    
+    # Check if the user is an admin
+    user = User.query.get(current_user_id)
+    if not user or not user.is_admin:
         return jsonify({'message': 'Permission denied'}), 403
 
-    data = request.get_json()
+    data = request.get_json() or {}
+    
+    # Provide default values where necessary
     new_product = Product(
-        title=data['title'],
-        description=data['description'],
-        category=data['category'],
-        price=data['price'],
-        discount_percentage=data['discountPercentage'],
-        rating=data['rating'],
-        stock=data['stock'],
-        tags=data['tags'],
-        brand=data['brand'],
-        sku=data['sku'],
-        weight=data['weight'],
-        width=data['dimensions']['width'],
-        height=data['dimensions']['height'],
-        depth=data['dimensions']['depth'],
-        warranty_information=data['warrantyInformation'],
-        shipping_information=data['shippingInformation'],
-        availability_status=data['availabilityStatus'],
-        return_policy=data['returnPolicy'],
-        minimum_order_quantity=data['minimumOrderQuantity'],
-        barcode=data['barcode'],
-        qr_code=data['qrCode'],
-        images=data['images'],
-        thumbnail=data['thumbnail']
+        title=data.get('title', ''),
+        description=data.get('description', ''),
+        category=data.get('category', ''),
+        price=data.get('price', 0.0),
+        discount_percentage=data.get('discountPercentage', 0.0),
+        rating=data.get('rating', 0.0),
+        stock=data.get('stock', 0),
+        tags=data.get('tags', []),
+        brand=data.get('brand', ''),
+        sku=data.get('sku', ''),
+        weight=data.get('weight', 0.0),
+        width=data.get('dimensions', {}).get('width', 0.0),
+        height=data.get('dimensions', {}).get('height', 0.0),
+        depth=data.get('dimensions', {}).get('depth', 0.0),
+        warranty_information=data.get('warrantyInformation', ''),
+        shipping_information=data.get('shippingInformation', ''),
+        availability_status=data.get('availabilityStatus', ''),
+        return_policy=data.get('returnPolicy', ''),
+        minimum_order_quantity=data.get('minimumOrderQuantity', 1),
+        barcode=data.get('barcode', ''),
+        qr_code=data.get('qrCode', ''),
+        images=data.get('images', []),
+        thumbnail=data.get('thumbnail', '')
     )
-    db.session.add(new_product)
-    db.session.commit()
+    
+    try:
+        db.session.add(new_product)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'Failed to create product', 'error': str(e)}), 500
 
-    return jsonify({'message': 'Product created successfully'})
+    return jsonify({'message': 'Product created successfully'}), 201
 
-# PATCH route to partially update a product
 @app.route('/products/<int:id>', methods=['PATCH'])
 @jwt_required()
 def partial_update_product(id):
-    current_user = get_jwt_identity()
-    if not current_user['is_admin']:
+    user_id = get_jwt_identity()
+    
+    # Query the user based on the ID returned by get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    # Check if the user exists and is an admin
+    if not user or not user.is_admin:
         return jsonify({'message': 'Permission denied'}), 403
 
     product = Product.query.get(id)
@@ -351,6 +393,7 @@ def partial_update_product(id):
 
     data = request.get_json()
 
+    # Update product fields based on the provided data
     if 'title' in data:
         product.title = data['title']
     if 'description' in data:
@@ -381,24 +424,10 @@ def partial_update_product(id):
         product.warranty_information = data['warrantyInformation']
     if 'shippingInformation' in data:
         product.shipping_information = data['shippingInformation']
-    if 'availabilityStatus' in data:
-        product.availability_status = data['availabilityStatus']
-    if 'returnPolicy' in data:
-        product.return_policy = data['returnPolicy']
-    if 'minimumOrderQuantity' in data:
-        product.minimum_order_quantity = data['minimumOrderQuantity']
-    if 'barcode' in data:
-        product.barcode = data['barcode']
-    if 'qrCode' in data:
-        product.qr_code = data['qrCode']
-    if 'images' in data:
-        product.images = data['images']
-    if 'thumbnail' in data:
-        product.thumbnail = data['thumbnail']
 
     db.session.commit()
+    return jsonify({'message': 'Product updated successfully'}), 200
 
-    return jsonify({'message': 'Product partially updated successfully'})
 
 #Delete  products route only by admins
 @app.route('/products/<int:id>', methods=['DELETE'])
@@ -512,39 +541,59 @@ def get_all_orders():
 
     return jsonify({'orders': output})
 
-# Route to create an order from the shopping cart
+
 @app.route('/orders', methods=['POST'])
 @jwt_required()
 def create_order():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user['username']).first()
+    user = User.query.filter_by(id=current_user).first()
+
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
     data = request.get_json()
-    new_order = Order(
-        user_id=user.id,
-        shipping_address=data['shipping_address'],
-        payment_method=data['payment_method'],
-        order_total=data['order_total']
-    )
-    db.session.add(new_order)
-    db.session.commit()
-    
-    # Move items from cart to order
-    cart_items = ShoppingCart.query.filter_by(user_id=user.id).all()
 
-    for item in cart_items:
-        new_order_item = OrderItem(
-            order_id=new_order.id,
-            product_id=item.product_id,
-            quantity=item.quantity,
-            price=item.price
+    # Validate shipping and payment data
+    shipping_address = data.get('shipping_address')
+    payment_method = data.get('payment_method')
+    order_total = data.get('order_total')
+
+    if not all([shipping_address, payment_method, order_total]):
+        return jsonify({'message': 'Missing data'}), 400
+
+    try:
+        # Create new order
+        new_order = Order(
+            user_id=user.id,
+            shipping_address=shipping_address,
+            payment_method=payment_method,
+            order_total=order_total
         )
-        db.session.add(new_order_item)
-        db.session.delete(item)  # Remove item from cart after adding to order
+        db.session.add(new_order)
+        db.session.commit()
 
-    db.session.commit()
+        # Process items from the shopping cart
+        cart_items = ShoppingCart.query.filter_by(user_id=user.id).all()
+        for item in cart_items:
+            new_order_item = OrderItem(
+                order_id=new_order.id,
+                product_id=item.product_id,
+                quantity=item.quantity,
+                price=item.price
+            )
+            db.session.add(new_order_item)
+            db.session.delete(item)
 
-    return jsonify({'message': 'Order created successfully'})
+        db.session.commit()
+        return jsonify({'message': 'Order created successfully'}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+
+
+
+
+
 
 # @app.route('/order', methods=['GET'])
 # def get_orders():

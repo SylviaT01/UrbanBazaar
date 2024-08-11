@@ -77,7 +77,7 @@ export const UserProvider = ({ children }) => {
     fetchCurrentUser();
   }, [authToken]);
 
-const signup = async (username, email, phone_number, password) => {
+  const signup = async (username, email, phone_number, password) => {
     try {
       const response = await fetch("http://127.0.0.1:5000/register", {
         method: "POST",
@@ -91,14 +91,14 @@ const signup = async (username, email, phone_number, password) => {
           password,
         }),
       });
-  
+
       const resData = await response.json();
-  
+
       if (response.ok && resData.success) {
         nav("/login");
         alert(resData.success);
       } else if (resData.error) {
-        alert(resData.error);  
+        alert(resData.error);
       } else {
         alert("Something went wrong");
       }
@@ -107,7 +107,6 @@ const signup = async (username, email, phone_number, password) => {
       alert("Something went wrong");
     }
   };
-  
 
   const login = (email, password) => {
     fetch("http://127.0.0.1:5000/login", {

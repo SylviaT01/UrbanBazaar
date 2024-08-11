@@ -1,8 +1,8 @@
-"""Initial migration
+"""Initial mogration
 
-Revision ID: 4b22d8a1dd8f
+Revision ID: 15a00c61074d
 Revises: 
-Create Date: 2024-08-08 12:18:12.884118
+Create Date: 2024-08-10 00:32:59.831884
 
 """
 from alembic import op
@@ -26,7 +26,7 @@ class JSONType(sa.TypeDecorator):
 
 
 # revision identifiers, used by Alembic.
-revision = '4b22d8a1dd8f'
+revision = '15a00c61074d'
 down_revision = None
 branch_labels = None
 depends_on = None

@@ -9,7 +9,6 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const { currentUser, authToken } = useContext(UserContext); 
   const navigate = useNavigate();
-
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -1,8 +1,30 @@
-import React, { useState } from "react";
+// export default AddProductPage;
+import React, { useState, useContext } from "react";
+import { UserContext } from "../contexts/userContext";
 
 function AddProductPage() {
+  const { currentUser, authToken } = useContext(UserContext); // Get currentUser and authToken from context
   const [image, setImage] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([null, null]);
+  const [formData, setFormData] = useState({
+    title: "",
+    brand: "",
+    description: "",
+    price: "",
+    discount: "",
+    tags: "",
+    publishCategory: "",
+    sku: "default-sku", // Provide default values
+    stock: 0, // Provide default values
+    weight: 0.0, // Provide default values
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleImageChange = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
@@ -24,10 +46,70 @@ function AddProductPage() {
     e.preventDefault();
   };
 
-  // Handle click event for the "Add Products" button
-  const handleAddProductClick = () => {
-    // Add logic here to handle the click event, such as submitting the form data
-    console.log("Add Products button clicked");
+  const handleAddProductClick = async () => {
+    if (currentUser.username !== "admin") {
+      alert("You do not have permission to add products.");
+      return;
+    }
+
+    const data = {
+      title: formData.title,
+      brand: formData.brand,
+      description: formData.description,
+      price: formData.price,
+      discountPercentage: formData.discount,
+      tags: formData.tags.split(","), // Ensure tags is an array
+      images: [image, ...additionalImages.filter((img) => img !== null)],
+      category: formData.publishCategory,
+      sku: formData.sku,
+      stock: formData.stock,
+      weight: formData.weight,
+      // Add default values or empty strings if fields are optional
+    };
+
+    console.log("Sending data to server:", data);
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/products", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      console.log("Response status:", response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error(errorData.message || "Unknown error");
+      }
+
+      const result = await response.json();
+      console.log("Server response:", result);
+      alert(result.message);
+
+      // Clear form data and images
+      setFormData({
+        title: "",
+        brand: "",
+        description: "",
+        price: "",
+        discount: "",
+        tags: "",
+        publishCategory: "",
+        sku: "default-sku",
+        stock: 0,
+        weight: 0.0,
+      });
+      setImage(null);
+      setAdditionalImages([null, null]);
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Failed to add product. Please try again.");
+    }
   };
 
   return (
@@ -39,41 +121,56 @@ function AddProductPage() {
             <div className="w-1/2">
               <label className="block mb-2">Product name:</label>
               <input
-                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                name="title"
                 type="text"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 placeholder="Product Name"
+                value={formData.title}
+                onChange={handleInputChange}
               />
             </div>
             <div className="w-1/2">
               <label className="block mb-2">Brand:</label>
               <input
+                name="brand"
                 className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Brand"
+                value={formData.brand}
+                onChange={handleInputChange}
               />
             </div>
           </div>
           <label className="block mb-2">Description:</label>
           <input
+            name="description"
             className="border py-2 px-4 border-gray-300 rounded-md w-full h-[100px] mb-4"
             type="text"
             placeholder="Description"
+            value={formData.description}
+            onChange={handleInputChange}
           />
           <div className="flex space-x-4 mb-4">
             <div className="w-1/2">
               <label className="block mb-2">Price:</label>
               <input
+                name="price"
                 className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Price"
+                value={formData.price}
+                onChange={handleInputChange}
               />
             </div>
             <div className="w-1/2">
               <label className="block mb-2">Discount:</label>
               <input
+                name="discount"
                 className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
                 type="text"
                 placeholder="Discount"
+                value={formData.discount}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -81,9 +178,12 @@ function AddProductPage() {
         <div>
           <label className="block mb-2">Tags:</label>
           <input
+            name="tags"
             className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px] mb-4"
             type="text"
-            placeholder="Tags"
+            placeholder="Tags (comma-separated)"
+            value={formData.tags}
+            onChange={handleInputChange}
           />
           <label className="block mb-2">Product Image:</label>
           <div className="flex space-x-4 mb-4">
@@ -152,9 +252,12 @@ function AddProductPage() {
           </div>
           <label className="block mb-2">Publish Category:</label>
           <input
+            name="publishCategory"
             className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px] mb-4"
             type="text"
             placeholder="Publish Category"
+            value={formData.publishCategory}
+            onChange={handleInputChange}
           />
         </div>
       </div>

@@ -27,6 +27,7 @@ import SignUp from "./Forms /signup";
 import Contacts from "./Pages/Contact";
 import Checkout from "./Forms /Checkout";
 import UserDashboard from "./User/UserDashboard.jsx";
+import OrderComplete from "./Product/orderComplete.jsx";
 import UpdateProfile from "./Forms /UpdateProfile.jsx";
 import RelatedProducts from "./Product/relatedProducts.jsx";
 import Navbar from "./admin/navbar";
@@ -64,6 +65,7 @@ function AppContent() {
           <Route path="/delivery" element={<DeliveryAndReturns />} />
           <Route path="/weeklyoffers" element={<WeeklyOffers />} />
           <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/ordercomplete" element={<OrderComplete />} />
           <Route path="/dashboard" element={<DashboardAdmin />}>
             <Route path="dashboardAdmin" element={<Dashboard />} />
             <Route path="products/all" element={<AllProducts />} />
