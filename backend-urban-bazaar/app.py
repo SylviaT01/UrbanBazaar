@@ -28,17 +28,25 @@ CORS(app)
 
 
 # Helper function to check if a user is an admin
+# def admin_required(fn):
+#     @wraps(fn)
+#     def wrapper(*args, **kwargs):
+
+#         current_user = get_jwt_identity()
+#         user = User.query.filter_by(username=current_user).first()
+#         if not user.is_admin:
+#             return jsonify({'message': 'Admin access required'}), 403
+#         return fn(*args, **kwargs)
+#     return wrapper
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
-
         current_user = get_jwt_identity()
-        user = User.query.filter_by(username=current_user['username']).first()
+        user = User.query.filter_by(id=current_user).first()
         if not user.is_admin:
             return jsonify({'message': 'Admin access required'}), 403
         return fn(*args, **kwargs)
     return wrapper
-
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -123,59 +131,84 @@ def logout():
     BLACKLIST.add(jti)
     return jsonify({"success":"Logged out successfully"}), 200
 
-# Admin route to assign admin role
-@app.route('/assign_admin/<int:user_id>', methods=['POST'])
-@jwt_required()
-@admin_required
-def assign_admin(user_id):
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
-
-    user.is_admin = True
-    db.session.commit()
-    return jsonify({'message': f'{user.username} is now an admin'})
-
-# Admin route to create a new user
-@app.route('/admin/create_user', methods=['POST'])
-@jwt_required()
-@admin_required
-def create_user():
-    data = request.get_json()
-    hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-    new_user = User(
-        username=data['username'],
-        email=data['email'],
-        password=hashed_password
-    )
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({'message': 'User created successfully by admin'})
-
-# Route to view all users (Admin only)
-@app.route('/admin/users', methods=['GET'])
+# # Admin route to assign admin role
+# @app.route('/assign_admin/<int:user_id>', methods=['POST'])
 # @jwt_required()
-def view_users():
-    # current_user = get_jwt_identity()
-    # if not current_user['is_admin']:
-    #     return jsonify({'message': 'Admin access required'}), 403
+# @admin_required
+# def assign_admin(user_id):
+#     user = User.query.get(user_id)
+#     if not user:
+#         return jsonify({'message': 'User not found'}), 404
 
-    users = User.query.all()
-    output = []
+#     user.is_admin = True
+#     db.session.commit()
+#     return jsonify({'message': f'{user.username} is now an admin'})
 
-    for user in users:
-        user_data = {
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-            'is_admin': user.is_admin
-        }
-        output.append(user_data)
+# # Admin route to create a new user
+# @app.route('/admin/create_user', methods=['POST'])
+# @jwt_required()
+# @admin_required
+# def create_user():
+#     data = request.get_json()
+#     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+#     new_user = User(
+#         username=data['username'],
+#         email=data['email'],
+#         password=hashed_password
+#     )
+#     db.session.add(new_user)
+#     db.session.commit()
 
-    return jsonify({'users': output})
+#     return jsonify({'message': 'User created successfully by admin'})
+
+# # Route to view all users (Admin only)
+# @app.route('/admin/users', methods=['GET'])
+# # @jwt_required()
+# def view_users():
+#     # current_user = get_jwt_identity()
+#     # if not current_user['is_admin']:
+#     #     return jsonify({'message': 'Admin access required'}), 403
+
+#     users = User.query.all()
+#     output = []
+
+#     for user in users:
+#         user_data = {
+#             'id': user.id,
+#             'username': user.username,
+#             'email': user.email,
+#             'is_admin': user.is_admin
+#         }
+#         output.append(user_data)
+
+#     return jsonify({'users': output})
 
 # Route to delete a user (Admin only)
+@app.route('/admin/users', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_users():
+    users = User.query.all()
+    users_list = [{'id': user.id, 'username': user.username, 'email': user.email, 'is_admin': user.is_admin} for user in users]
+    return jsonify({'users': users_list})
+
+@app.route('/admin/users/<int:id>', methods=['PATCH'])
+@jwt_required()
+@admin_required
+def update_user(id):
+    user = User.query.get(id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    
+    data = request.get_json()
+    is_admin = data.get('is_admin')
+    
+    if is_admin is not None:
+        user.is_admin = is_admin
+        db.session.commit()
+        return jsonify({'message': 'User updated successfully'})
+    return jsonify({'message': 'No updates provided'}), 400
+
 @app.route('/admin/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(user_id):
@@ -914,10 +947,10 @@ def get_products_by_category(category):
             'returnPolicy': product.return_policy,
             'minimumOrderQuantity': product.minimum_order_quantity,
             'createdAt': product.created_at,
+            'images': product.images,
             'updatedAt': product.updated_at,
             'barcode': product.barcode,
             'qrCode': product.qr_code,
-            'images': product.images,
             'thumbnail': product.thumbnail
         }
         output.append(product_data)
