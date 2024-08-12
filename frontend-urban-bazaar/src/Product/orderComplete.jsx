@@ -49,13 +49,13 @@ const OrderComplete = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-sky-50 px-4">
       <div className="flex flex-col bg-white p-8 rounded-lg shadow-lg max-w-6xl w-full">
-        <header className="...">
+        <header className="flex flex-col md:flex-row gap-5 justify-between items-center self-center mt-14 w-full font-medium text-black max-w-[1230px] max-md:mt-10 max-md:max-w-full">
           <h1 className="text-3xl md:text-5xl font-bold">
             Your order is complete!
           </h1>
           <button
-            className="..."
-            onClick={handlePrint} // Triggering print functionality
+            className="flex items-center gap-2 px-4 py-2 text-xl bg-blue-500 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+            onClick={handlePrint}
           >
             <img src={print} alt="Print" className="w-8 h-8" />
             <span>Print</span>

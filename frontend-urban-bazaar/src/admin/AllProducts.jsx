@@ -1,57 +1,107 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import star from "../assets/star.svg";
+import { UserContext } from "../contexts/userContext";
 
 export default function AllProducts() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [updateValue, setUpdateValue] = useState("");
+  const [notification, setNotification] = useState(null);
   const productsPerPage = 6;
+  const { currentUser, authToken } = useContext(UserContext);
+  console.log("Current User:", currentUser);
+  console.log("Auth Token:", authToken);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/products")
       .then((response) => response.json())
-      .then((data) => setProducts(data.products))
+      .then((data) => {
+        setProducts(data.products);
+      })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
-  const handleEditPrice = (productId, newPrice) => {
+  const handleEditPrice = (productId) => {
+    if (currentUser.username !== "admin") {
+      alert("You do not have permission to edit prices.");
+      return;
+    }
+
+    const token = authToken || localStorage.getItem("access_token");
     fetch(`http://127.0.0.1:5000/products/${productId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ price: newPrice }),
+      body: JSON.stringify({ price: updateValue }),
     })
       .then((response) => response.json())
       .then((updatedProduct) => {
-        setProducts(
-          products.map((product) =>
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
             product.id === productId ? updatedProduct : product
           )
         );
+        setNotification(`Price updated to Ksh ${updateValue}`);
+        setEditingProduct(null);
+        setUpdateValue("");
       })
       .catch((error) => console.error("Error updating price:", error));
   };
 
-  const handleStockChange = (productId, action) => {
-    const stockChange = action === "in" ? 1 : -1;
+  const handleStockChange = (productId) => {
+    if (currentUser.username !== "admin") {
+      alert("You do not have permission to change stock.");
+      return;
+    }
+
+    const token = authToken || localStorage.getItem("access_token");
+    const stockChange = Number(updateValue);
+
+    if (isNaN(stockChange) || stockChange === 0) {
+      alert("Please enter a valid number for stock change.");
+      return;
+    }
+
     fetch(`http://127.0.0.1:5000/products/${productId}`, {
       method: "PATCH",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ stockChange }),
+      body: JSON.stringify({ stock: stockChange }),
     })
       .then((response) => response.json())
       .then((updatedProduct) => {
-        setProducts(
-          products.map((product) =>
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
             product.id === productId ? updatedProduct : product
           )
         );
+        setNotification(`Stock updated to ${stockChange}`);
+        console.log(stockChange);
+        setEditingProduct(null);
+        setUpdateValue("");
       })
       .catch((error) => console.error("Error updating stock:", error));
+  };
+
+  const handleUpdateChange = (e) => {
+    setUpdateValue(e.target.value);
+  };
+
+  const handleUpdateSubmit = (productId) => {
+    if (editingProduct) {
+      if (editingProduct.action === "price") {
+        handleEditPrice(productId);
+      } else if (editingProduct.action === "stock") {
+        handleStockChange(productId);
+      }
+    }
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -66,7 +116,9 @@ export default function AllProducts() {
 
   const filteredProducts = products
     .filter((product) =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+      product.title
+        ? product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        : false
     )
     .sort((a, b) => {
       if (sortOption === "newest")
@@ -85,8 +137,7 @@ export default function AllProducts() {
 
   return (
     <div className="ml-10">
-      {" "}
-      <div className="bg-white p-4 min-h-screen ">
+      <div className="bg-white p-4 min-h-screen">
         <header className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-center md:flex-1 space-y-4 md:space-y-0 md:space-x-4">
             <h1 className="text-xl font-bold md:flex-1">All Products</h1>
@@ -133,9 +184,9 @@ export default function AllProducts() {
             <div key={product.id} className="p-4 border rounded-md">
               <div className="w-[300px] mx-auto flex justify-center items-center">
                 <img
-                  src={product.thumbnail}
+                  src={product.images}
                   alt={product.title}
-                  className="max-h-[400px] image-cover rounded-md "
+                  className="max-h-[400px] image-cover rounded-md"
                 />
               </div>
 
@@ -148,33 +199,114 @@ export default function AllProducts() {
 
               <div className="flex justify-between items-center mt-2">
                 <span className="text-lg font-bold">Ksh {product.price}</span>
-                <button
-                  onClick={() => {
-                    const newPrice = prompt("Enter new price:", product.price);
-                    if (newPrice) handleEditPrice(product.id, newPrice);
-                  }}
-                  className="bg-[#7C7C7C] text-white px-7 py-2 rounded-md"
-                >
-                  Edit Price
-                </button>
+                {currentUser.username === "admin" && (
+                  <button
+                    onClick={() => {
+                      setEditingProduct({
+                        id: product.id,
+                        action: "price",
+                      });
+                      setUpdateValue(product.price);
+                    }}
+                    className="bg-[#7C7C7C] text-white px-7 py-2 rounded-md"
+                  >
+                    Edit Price
+                  </button>
+                )}
               </div>
               <div className="flex justify-between items-center mt-2">
-                <button
-                  onClick={() => handleStockChange(product.id, "in")}
-                  className="bg-[#24D20D] text-white px-8 py-2 rounded-md"
-                >
-                  In Stock
-                </button>
-                <button
-                  onClick={() => handleStockChange(product.id, "out")}
-                  className="bg-[#FF0F0F] text-white px-4 py-2 rounded-md"
-                >
-                  Out of Stock
-                </button>
+                {currentUser.username === "admin" && (
+                  <>
+                    <button
+                      onClick={() => {
+                        setEditingProduct({
+                          id: product.id,
+                          action: "stock",
+                          stockAction: "in",
+                        });
+                      }}
+                      className="bg-[#24D20D] text-white px-8 py-2 rounded-md"
+                    >
+                      In Stock
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingProduct({
+                          id: product.id,
+                          action: "stock",
+                          stockAction: "out",
+                        });
+                      }}
+                      className="bg-[#FF0F0F] text-white px-4 py-2 rounded-md"
+                    >
+                      Out of Stock
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))}
         </div>
+
+        {editingProduct && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div className="bg-white p-4 rounded-md shadow-lg w-80">
+              <h3 className="text-lg font-semibold mb-2">
+                {editingProduct.action === "price"
+                  ? "Update Price"
+                  : "Update Stock"}
+              </h3>
+              {editingProduct.action === "price" && (
+                <div>
+                  <label className="block mb-2">New Price:</label>
+                  <input
+                    type="number"
+                    value={updateValue}
+                    onChange={handleUpdateChange}
+                    className="p-2 border rounded-md w-full mb-2"
+                  />
+                  <button
+                    onClick={() => handleUpdateSubmit(editingProduct.id)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
+              {editingProduct.action === "stock" && (
+                <div>
+                  <label className="block mb-2">Stock Change:</label>
+                  <input
+                    type="number"
+                    value={updateValue}
+                    onChange={handleUpdateChange}
+                    className="p-2 border rounded-md w-full mb-2"
+                    placeholder="Enter stock change"
+                  />
+                  <button
+                    onClick={() => handleUpdateSubmit(editingProduct.id)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
+              <button
+                onClick={() => setEditingProduct(null)}
+                className="mt-2 text-red-500"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {notification && (
+          <div className="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-md shadow-lg">
+            {notification}
+          </div>
+        )}
+
         <footer className="flex flex-col items-center mt-4">
           {filteredProducts.length > productsPerPage && (
             <div className="flex flex-wrap justify-center mb-2">

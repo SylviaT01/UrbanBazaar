@@ -3,24 +3,42 @@ from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDe
 from app import app
 from faker import Faker
 fake = Faker()
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt(app)  # Initialize Bcrypt with your Flask app
+
 
 def load_products():
     with open('data/data.json') as file:
         data = json.load(file)
     return data['products']  # Access the 'products' array from the JSON
-
 def seed_users():
     db.session.query(User).delete()  # Clear existing users
-    for _ in range(20):
+
+    # Create a specific admin user
+    admin_user = User(
+        username='admin',  # Predefined username for admin
+        email='admin@example.com',  # Predefined email for admin
+        password=bcrypt.generate_password_hash('admin_password').decode('utf-8'),  # Hashed password
+        is_admin=True,
+        phone_number=fake.phone_number()
+    )
+    db.session.add(admin_user)
+
+    # Create other random users
+    for _ in range(19):
         user = User(
             username=fake.user_name(),
             email=fake.email(),
-            password=fake.password(),
+            password=bcrypt.generate_password_hash(fake.password()).decode('utf-8'),  # Hashed password
             is_admin=fake.boolean(),
-            phone_number=fake.phone_number()  # Add phone number field if needed
+            phone_number=fake.phone_number()
         )
         db.session.add(user)
+
     db.session.commit()
+
+
 
 def seed_products():
     db.session.query(Product).delete() 
