@@ -1,4 +1,3 @@
-
 // import React, { useContext, useState } from "react";
 // import mpesa from "../assets/mpesa.png";
 // import pesapal from "../assets/pesapal.png";
@@ -374,11 +373,11 @@
 // }
 
 // export default Checkout;
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
-import mpesa from "../assets/mpesa.png";
+//import mpesa from "../assets/mpesa.png";
 import pesapal from "../assets/pesapal.png";
-import Paypal from "../assets/Paypal.png";
+//import Paypal from "../assets/Paypal.png";
 import { UserContext } from "../contexts/userContext";
 
 function Checkout() {
@@ -410,7 +409,7 @@ function Checkout() {
     );
     setTotalPrice(total.toFixed(2)); // Fixed to two decimal places
   }, []);
- 
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [paypalEmail, setPaypalEmail] = useState("");
@@ -425,7 +424,7 @@ function Checkout() {
     const token = authToken || localStorage.getItem("access_token");
 
     const shippingData = {
-      name: `${firstName} ${lastName}`,
+      name: name,
       street_address: streetAddress,
       apartment_number: apartmentNumber,
       city,
@@ -604,7 +603,9 @@ function Checkout() {
               </div>
               <div className="flex justify-between mb-2">
                 <span>Before Tax</span>
-                <span>Ksh.{(parseFloat(totalprice) + shippingCost).toFixed(2)}</span>
+                <span>
+                  Ksh.{(parseFloat(totalprice) + shippingCost).toFixed(2)}
+                </span>
               </div>
               <div className="flex justify-between mb-2">
                 <span>Tax Collected</span>
@@ -618,58 +619,11 @@ function Checkout() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6  h-[1000px]">
+
+        <div className="flex justify-center">
+        <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6 w-[1000px] h-[1000px] space-y-96 " >
           <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
           <form className="mx-auto max-w-sm space-y-32 flex flex-col items-center">
-            <div className="flex items-center mb-4 s">
-              <section className="flex flex-col rounded-none max-w-[731px]">
-                <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
-                  <div className="flex gap-6 my-auto">
-                    <input
-                      type="radio"
-                      id="mpesa"
-                      name="paymentMethod"
-                      value="mpesa"
-                      checked={paymentMethod === "mpesa"}
-                      onChange={() => handlePaymentMethodChange("mpesa")}
-                      className="mr-2"
-                    />
-                    <div
-                      className="flex justify-center"
-                      style={{ gap: "450px" }}
-                    >
-                      <h2 className="my-auto text-2xl font-light text-black">
-                        M-Pesa
-                      </h2>
-                      <img src={mpesa} alt="M-pesa" />
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-            {paymentMethod === "mpesa" && (
-              <div className="mb-4 space-y-6">
-                <input
-                  type="text"
-                  placeholder="Phone Number"
-                  className="border p-2 rounded w-full"
-                />
-                <div className="flex justify-between gap-4">
-                  <button
-                    type="button"
-                    className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white py-2 px-4 rounded"
-                  >
-                    Confirm Payment
-                  </button>
-                </div>
-              </div>
-            )}
             <div className="flex items-center mt-4">
               <section className="flex flex-col rounded-none max-w-[731px]">
                 <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
@@ -720,56 +674,8 @@ function Checkout() {
                 </div>
               </div>
             )}
-            <div className="flex flex-col items-center mt-4 gap-4">
-              <section className="flex flex-col rounded-none max-w-[731px]">
-                <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[731px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
-                  <div className="flex gap-6 my-auto">
-                    <input
-                      type="radio"
-                      id="paypal"
-                      name="paymentMethod"
-                      value="paypal"
-                      checked={paymentMethod === "paypal"}
-                      onChange={() => handlePaymentMethodChange("paypal")}
-                      className="mr-2"
-                    />
-                    <div
-                      className="flex justify-center"
-                      style={{ gap: "450px" }}
-                    >
-                      <h2 className="my-auto text-2xl font-light text-black">
-                        Paypal
-                      </h2>
-                      <img src={Paypal} alt="Paypal" />
-                    </div>
-                  </div>
-                </div>
-              </section>
-              {paymentMethod === "paypal" && (
-                <div className="mb-4 space-y-6">
-                  <input
-                    type="text"
-                    placeholder="Email Address"
-                    className="border p-2 rounded w-full"
-                  />
-                  <div className="flex justify-between gap-4">
-                    <button
-                      type="button"
-                      className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white py-2 px-4 rounded"
-                    >
-                      Confirm Payment
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
           </form>
+        </div>
         </div>
       </div>
     </div>
