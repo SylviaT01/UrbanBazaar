@@ -39,7 +39,7 @@ const UserProfile = () => {
             <img
               src={profile}
               alt="User Profile"
-              className="rounded-full w-20 h-20 mr-2"
+              className="rounded-full w-20 h-20 mr-2 py-3 px-3 bg-blue-300"
             />
             <h2 className="text-md text-gray-700">
               {currentUser.username || "User"}
