@@ -91,15 +91,24 @@ def refresh():
     new_access_token = create_access_token(identity=current_user_id)
     return jsonify({"access_token": new_access_token}), 200
 
+
 @app.route("/current_user", methods=["GET"])
 @jwt_required()
 def get_current_user():
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
     if current_user:
-        return jsonify({"id":current_user.id, "username":current_user.username, "email":current_user.email}), 200
-    else: 
-        return jsonify({"message":"User not found"}), 404
+        return jsonify({
+            "id": current_user.id, 
+            "username": current_user.username, 
+            "email": current_user.email,
+            "is_admin": current_user.is_admin
+        }), 200
+    else:
+        return jsonify({"message": "User not found"}), 404
+
+
+
     
 BLACKLIST = set()
 # @jwt.token_in_blocklist_loader
@@ -182,6 +191,7 @@ def delete_user(user_id):
     db.session.commit()
 
     return jsonify({'message': 'User deleted successfully'})
+
 
 @app.route('/profile', methods=['GET'])
 @jwt_required()
@@ -855,6 +865,24 @@ def view_contact_submissions():
 
     return jsonify({'submissions': output})
 
+@app.route('/admin/messages', methods=['GET'])
+def view_messages():
+    # Add authentication/authorization checks if needed
+    messages = ContactUs.query.order_by(ContactUs.submitted_at.desc()).limit(5).all()
+    output = []
+
+    for message in messages:
+        message_data = {
+            'id': message.id,
+            'name': message.name,
+            'email': message.email,
+            'message': message.message,
+            'submittedAt': message.submitted_at
+        }
+        output.append(message_data)
+
+    return jsonify({'messages': output})
+
 
 @app.route('/products/category/<string:category>', methods=['GET'])
 def get_products_by_category(category):
@@ -900,6 +928,7 @@ def some_function():
     current_user_id = get_jwt_identity()
     # Verify current_user_id is being used as expected
     print(current_user_id)
+
 
 
 #Enable Flask application to run in debug mode

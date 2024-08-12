@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/userContext";
 import home from "../assets/home.svg";
-import logout from "../assets/logout.svg";
+import logoutIcon from "../assets/logout.svg";
 import orders from "../assets/order.svg";
 import payments from "../assets/payments.svg";
 import product from "../assets/product.svg";
@@ -9,10 +10,22 @@ import profile from "../assets/Profile.svg";
 import reviews from "../assets/reviews.svg";
 
 const Dashboard = () => {
+  const { currentUser, logout } = useContext(UserContext);
   const [isProductsOpen, setProductsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleProductsClick = () => {
     setProductsOpen(!isProductsOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // This assumes you have a logout function to handle the process
+      alert("Logged out successfully");
+      navigate("/");
+    } catch (error) {
+      alert("Failed to log out. Please try again.");
+    }
   };
 
   return (
@@ -157,24 +170,20 @@ const Dashboard = () => {
               </NavLink>
             </li>
             <li className="mb-4">
-              <NavLink
-                to="logout"
-                className={({ isActive }) =>
-                  isActive
-                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
-                    : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
-                }
+              <button
+                onClick={handleLogout}
+                className="w-full text-left flex items-center px-4 py-6 block bg-[#FFFFFF] hover:bg-[#d1d5db] rounded"
               >
-                <img src={logout} className="mr-3" alt="logout" />
+                <img src={logoutIcon} className="mr-3" alt="logout" />
                 Logout
-              </NavLink>
+              </button>
             </li>
           </ul>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1  bg-[#F0F9FF]">
+      <main className="flex-1 bg-[#F0F9FF]">
         <Outlet />
       </main>
     </div>
