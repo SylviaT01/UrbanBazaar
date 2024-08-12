@@ -64,7 +64,7 @@ export const UserProvider = ({ children }) => {
           if (data.is_admin) {
             nav("/dashboard/dashboardAdmin"); // Redirect to admin dashboard if the user is an admin
           } else {
-            nav("/"); // Redirect to user dashboard if not an admin
+            nav("/"); 
           }
         } else {
           console.error("Failed to fetch current user:", data.message);
