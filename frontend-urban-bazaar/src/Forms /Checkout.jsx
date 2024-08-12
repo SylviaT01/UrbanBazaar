@@ -432,7 +432,7 @@ function Checkout() {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/orders", {
+      const response = await fetch("http://127.0.0.1:5000/shipping-details", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
