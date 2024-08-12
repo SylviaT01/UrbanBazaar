@@ -1,9 +1,12 @@
-// export default AddProductPage;
 import React, { useState, useContext } from "react";
 import { UserContext } from "../contexts/userContext";
+import axios from "axios";
+
+const CLOUDINARY_UPLOAD_PRESET = "zyzsn08y"; // Replace with your actual Cloudinary upload preset name
+const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/dhxwbv56x/image/upload`; // Replace with your Cloudinary cloud name
 
 function AddProductPage() {
-  const { currentUser, authToken } = useContext(UserContext); // Get currentUser and authToken from context
+  const { currentUser, authToken } = useContext(UserContext);
   const [image, setImage] = useState(null);
   const [additionalImages, setAdditionalImages] = useState([null, null]);
   const [formData, setFormData] = useState({
@@ -14,9 +17,12 @@ function AddProductPage() {
     discount: "",
     tags: "",
     publishCategory: "",
-    sku: "default-sku", // Provide default values
-    stock: 0, // Provide default values
-    weight: 0.0, // Provide default values
+    sku: "default-sku",
+    stock: 0,
+    weight: 0.0,
+    warrantyInformation: "1 year warranty",
+    shippingInformation: "Ships in 1 weeks",
+    returnPolicy: "30 days return policy",
   });
 
   const handleInputChange = (e) => {
@@ -26,20 +32,67 @@ function AddProductPage() {
     });
   };
 
-  const handleImageChange = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
+  const uploadImageToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const response = await axios.post(CLOUDINARY_URL, formData);
+      if (response.status === 200) {
+        return response.data.secure_url;
+      } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(
+        "Error uploading image:",
+        error.response ? error.response.data : error.message
+      );
+      throw new Error("Image upload failed.");
+    }
   };
 
-  const handleAdditionalImageChange = (e, index) => {
-    const newImages = [...additionalImages];
-    newImages[index] = URL.createObjectURL(e.target.files[0]);
-    setAdditionalImages(newImages);
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const imageUrl = await uploadImageToCloudinary(file);
+        setImage(imageUrl);
+      } catch (error) {
+        console.error("Failed to upload image:", error.message);
+      }
+    }
   };
 
-  const handleDrop = (e) => {
+  const handleAdditionalImageChange = async (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const imageUrl = await uploadImageToCloudinary(file);
+        const newImages = [...additionalImages];
+        newImages[index] = imageUrl;
+        setAdditionalImages(newImages);
+      } catch (error) {
+        console.error(
+          `Failed to upload additional image ${index + 1}:`,
+          error.message
+        );
+      }
+    }
+  };
+
+  const handleDrop = async (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    setImage(URL.createObjectURL(file));
+    if (file) {
+      try {
+        const imageUrl = await uploadImageToCloudinary(file);
+        setImage(imageUrl);
+      } catch (error) {
+        console.error("Failed to upload dropped image:", error.message);
+      }
+    }
   };
 
   const handleDragOver = (e) => {
@@ -58,13 +111,15 @@ function AddProductPage() {
       description: formData.description,
       price: formData.price,
       discountPercentage: formData.discount,
-      tags: formData.tags.split(","), // Ensure tags is an array
+      tags: formData.tags.split(","),
       images: [image, ...additionalImages.filter((img) => img !== null)],
       category: formData.publishCategory,
       sku: formData.sku,
       stock: formData.stock,
       weight: formData.weight,
-      // Add default values or empty strings if fields are optional
+      warrantyInformation: formData.warrantyInformation,
+      shippingInformation: formData.shippingInformation,
+      returnPolicy: formData.returnPolicy,
     };
 
     console.log("Sending data to server:", data);
@@ -91,7 +146,6 @@ function AddProductPage() {
       console.log("Server response:", result);
       alert(result.message);
 
-      // Clear form data and images
       setFormData({
         title: "",
         brand: "",

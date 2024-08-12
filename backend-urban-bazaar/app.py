@@ -412,8 +412,8 @@ def partial_update_product(id):
         product.category = data['category']
     if 'price' in data:
         product.price = data['price']
-    if 'discountPercentage' in data:
-        product.discount_percentage = data['discountPercentage']
+    if 'discount_percentage' in data:
+        product.discount_percentage = data['discount_percentage']
     if 'rating' in data:
         product.rating = data['rating']
     if 'stock' in data:

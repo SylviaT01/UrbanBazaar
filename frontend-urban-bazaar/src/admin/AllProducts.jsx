@@ -12,18 +12,34 @@ export default function AllProducts() {
   const [notification, setNotification] = useState(null);
   const productsPerPage = 6;
   const { currentUser, authToken } = useContext(UserContext);
-  console.log("Current User:", currentUser);
-  console.log("Auth Token:", authToken);
 
-  useEffect(() => {
+  // Function to fetch product data
+  const fetchData = () => {
     fetch("http://127.0.0.1:5000/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.products);
       })
       .catch((error) => console.error("Error fetching products:", error));
+  };
+
+  useEffect(() => {
+    fetchData(); // Initial data fetch
   }, []);
 
+  useEffect(() => {
+    if (notification) {
+      // Set up a timer to clear the notification after 2 seconds
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 2000);
+
+      // Cleanup the timer on component unmount
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
+  // Handle price update
   const handleEditPrice = (productId) => {
     if (currentUser.username !== "admin") {
       alert("You do not have permission to edit prices.");
@@ -49,10 +65,58 @@ export default function AllProducts() {
         setNotification(`Price updated to Ksh ${updateValue}`);
         setEditingProduct(null);
         setUpdateValue("");
+        fetchData(); // Refresh the product list
       })
       .catch((error) => console.error("Error updating price:", error));
   };
 
+  // Handle discount percentage update
+  const handleDiscountPercentage = (productId) => {
+    if (currentUser.username !== "admin") {
+      alert("You do not have permission to update discounts.");
+      return;
+    }
+
+    const token = authToken || localStorage.getItem("access_token");
+    const discount_percentage = Number(updateValue);
+
+    if (
+      isNaN(discount_percentage) ||
+      discount_percentage < 0 ||
+      discount_percentage > 100
+    ) {
+      alert("Please enter a valid discount percentage between 0 and 100.");
+      return;
+    }
+
+    fetch(`http://127.0.0.1:5000/products/${productId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ discount_percentage: discount_percentage }),
+    })
+      .then((response) => response.json())
+      .then((updatedProduct) => {
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
+            product.id === productId ? updatedProduct : product
+          )
+        );
+        setNotification(
+          `Discount percentage updated to ${discount_percentage}%`
+        );
+        setEditingProduct(null);
+        setUpdateValue("");
+        fetchData(); // Refresh the product list
+      })
+      .catch((error) =>
+        console.error("Error updating discount percentage:", error)
+      );
+  };
+
+  // Handle stock update
   const handleStockChange = (productId) => {
     if (currentUser.username !== "admin") {
       alert("You do not have permission to change stock.");
@@ -62,7 +126,7 @@ export default function AllProducts() {
     const token = authToken || localStorage.getItem("access_token");
     const stockChange = Number(updateValue);
 
-    if (isNaN(stockChange) || stockChange === 0) {
+    if (isNaN(stockChange) || stockChange < 0) {
       alert("Please enter a valid number for stock change.");
       return;
     }
@@ -83,37 +147,45 @@ export default function AllProducts() {
           )
         );
         setNotification(`Stock updated to ${stockChange}`);
-        console.log(stockChange);
         setEditingProduct(null);
         setUpdateValue("");
+        fetchData(); // Refresh the product list
       })
       .catch((error) => console.error("Error updating stock:", error));
   };
 
+  // Handle input changes for update
   const handleUpdateChange = (e) => {
     setUpdateValue(e.target.value);
   };
 
+  // Handle form submission for updates
   const handleUpdateSubmit = (productId) => {
     if (editingProduct) {
       if (editingProduct.action === "price") {
         handleEditPrice(productId);
+      } else if (editingProduct.action === "discount_percentage") {
+        handleDiscountPercentage(productId);
       } else if (editingProduct.action === "stock") {
         handleStockChange(productId);
       }
     }
   };
 
+  // Handle pagination
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  // Handle search input changes
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
+  // Handle sorting option changes
   const handleSort = (e) => {
     setSortOption(e.target.value);
   };
 
+  // Filter and sort products
   const filteredProducts = products
     .filter((product) =>
       product.title
@@ -128,6 +200,7 @@ export default function AllProducts() {
       return 0;
     });
 
+  // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
@@ -184,9 +257,9 @@ export default function AllProducts() {
             <div key={product.id} className="p-4 border rounded-md">
               <div className="w-[300px] mx-auto flex justify-center items-center">
                 <img
-                  src={product.images}
+                  src={product.images[0]}
                   alt={product.title}
-                  className="max-h-[400px] image-cover rounded-md"
+                  className="max-h-[300px] h-[300px] object-cover"
                 />
               </div>
 
@@ -221,25 +294,25 @@ export default function AllProducts() {
                       onClick={() => {
                         setEditingProduct({
                           id: product.id,
-                          action: "stock",
-                          stockAction: "in",
+                          action: "discount_percentage",
                         });
+                        setUpdateValue(product.discount_percentage);
                       }}
                       className="bg-[#24D20D] text-white px-8 py-2 rounded-md"
                     >
-                      In Stock
+                      Discount
                     </button>
                     <button
                       onClick={() => {
                         setEditingProduct({
                           id: product.id,
                           action: "stock",
-                          stockAction: "out",
                         });
+                        setUpdateValue(product.stock);
                       }}
-                      className="bg-[#FF0F0F] text-white px-4 py-2 rounded-md"
+                      className="bg-[#FF0F0F] text-white px-11 py-2 rounded-md"
                     >
-                      Out of Stock
+                      Stock
                     </button>
                   </>
                 )}
@@ -254,6 +327,8 @@ export default function AllProducts() {
               <h3 className="text-lg font-semibold mb-2">
                 {editingProduct.action === "price"
                   ? "Update Price"
+                  : editingProduct.action === "discount_percentage"
+                  ? "Update Discount Percentage"
                   : "Update Stock"}
               </h3>
               {editingProduct.action === "price" && (
@@ -264,6 +339,26 @@ export default function AllProducts() {
                     value={updateValue}
                     onChange={handleUpdateChange}
                     className="p-2 border rounded-md w-full mb-2"
+                  />
+                  <button
+                    onClick={() => handleUpdateSubmit(editingProduct.id)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
+              {editingProduct.action === "discount_percentage" && (
+                <div>
+                  <label className="block mb-2">Discount Percentage:</label>
+                  <input
+                    type="number"
+                    value={updateValue}
+                    onChange={handleUpdateChange}
+                    className="p-2 border rounded-md w-full mb-2"
+                    placeholder="Enter discount percentage"
+                    min="0"
+                    max="100"
                   />
                   <button
                     onClick={() => handleUpdateSubmit(editingProduct.id)}
