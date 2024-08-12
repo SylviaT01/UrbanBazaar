@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import OrdersIcons from "../assets/OrdersIcons.svg";
 import SignupsIcons from "../assets/SignupsIcon.svg";
 import EarningsIcons from "../assets/earningsIcon.svg";
-import SalesChart from "./SalesChart"; // Import the SalesChart component
+import SalesChart from "./SalesChart";
 
 function AdminDashboard() {
   const [orders, setOrders] = useState([]);
@@ -80,7 +80,7 @@ function AdminDashboard() {
           </div>
           <div className="flex flex-col">
             <div className="text-lg font-semibold">SignUps</div>
-            <div className="text-3xl mt-2">123</div>
+            <div className="text-3xl mt-2">20</div>
           </div>
         </div>
       </div>

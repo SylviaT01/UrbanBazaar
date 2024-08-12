@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faSearch } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/logo.svg";
-import search from "../assets/search.svg";
 import darkmode from "../assets/darkmode.svg";
 import bell from "../assets/bell.svg";
-import profile1 from "../assets/profile1.svg";
+import { UserContext } from "../contexts/userContext";
 
 const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
   return (
@@ -14,9 +16,8 @@ const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
     >
       <img
         src={darkmode}
-        className={`object-contain w-6 aspect-square ${
-          isDarkMode ? "filter invert" : ""
-        }`}
+        className={`object-contain w-6 aspect-square ${isDarkMode ? "filter invert" : ""
+          }`}
         alt="Darkmode"
       />
     </button>
@@ -25,47 +26,52 @@ const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const { authToken } = useContext(UserContext);
 
   const toggleDarkMode = () => {
     setIsDarkMode((prevMode) => !prevMode);
     document.body.classList.toggle("dark-mode", !isDarkMode);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
-    <div
-      className={`flex overflow-hidden flex-col items-center px-20 pb-8 ${
-        isDarkMode ? "bg-gray-800" : "bg-sky-50"
-      } max-md:px-5`}
-    >
-      <div className="flex gap-5 justify-between px-5 pt-2 w-full bg-white max-w-[1440px] max-md:max-w-full items-center">
-        <div className="flex gap-5 justify-between items-start self-start text-base tracking-widest leading-none whitespace-nowrap text-neutral-400 max-md:max-w-full">
-          <img
-            src={logo}
-            className="object-contain shrink-0 mt-1.5 aspect-[1.83] w-[75px]"
-            alt="Logo"
-          />
-          <div className="flex flex-col items-start h-[41px] gap-50">
-            <div className="flex px-20 flex-wrap gap-50 justify-between items-center w-full max-w-[301px]">
-              <div className="flex items-center bg-stone-300 rounded h-[42px] min-w-[240px] w-[301px] px-2">
-                <button
-                  type="button"
-                  className="flex items-center justify-center bg-transparent border-none p-0"
-                >
-                  <img
-                    src={search}
-                    className="object-contain w-6 aspect-square mr-2"
-                    alt="Search"
-                  />
-                </button>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="flex-grow bg-transparent border-none outline-none"
-                />
-              </div>
-              <div className="flex absolute right-2 z-0 gap-5 items-center self-start bottom-[9px] min-w-[240px] w-[285px]"></div>
-            </div>
-          </div>
+    <div className={`flex flex-col items-center w-full pb-8 ${isDarkMode ? "bg-gray-800" : "bg-sky-50"}`}>
+      <div className="flex justify-between items-center w-full px-5 pt-2 bg-white max-w-[1440px]">
+        <div className="flex gap-5 items-center">
+          <Link to="/" className="flex items-center">
+            <img
+              src={logo}
+              alt="UrbanBazaar Logo"
+              className="w-32 h-auto p-2"
+            />
+          </Link>
+        </div>
+        <div className="flex items-center gap-5 flex-grow justify-center">
+          <form onSubmit={handleSearchSubmit} className="flex items-center">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="px-2 py-1 border border-gray-300 rounded-md"
+            />
+            <button type="submit" className="ml-2">
+              <FontAwesomeIcon icon={faSearch} className="text-gray-700 text-lg" />
+            </button>
+          </form>
+          
         </div>
         <div className="flex gap-4">
           <div className="flex gap-5 items-start px-2.5 pt-2.5 pb-4 min-h-[50px]">
@@ -81,12 +87,18 @@ const Navbar = () => {
               />
             </div>
           </div>
-          <div className="flex gap-2.5 justify-center items-center self-start px-1 py-1.5 min-h-[43px]">
-            <img
-              src={profile1}
-              className="object-contain self-stretch my-auto w-8 rounded-full aspect-square"
-              alt="Profile"
-            />
+          <div className="flex items-center space-x-6">
+            {authToken ? (
+              <Link to="/userprofile/dashboarduser" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
+                <FontAwesomeIcon icon={faUser} className="text-lg" />
+                <span className="ml-1">My Account</span>
+              </Link>
+            ) : (
+              <Link to="/login" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
+                <FontAwesomeIcon icon={faUser} className="text-lg" />
+                <span className="ml-1 text-md">Login</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>

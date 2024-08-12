@@ -91,15 +91,24 @@ def refresh():
     new_access_token = create_access_token(identity=current_user_id)
     return jsonify({"access_token": new_access_token}), 200
 
+
 @app.route("/current_user", methods=["GET"])
 @jwt_required()
 def get_current_user():
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
     if current_user:
-        return jsonify({"id":current_user.id, "username":current_user.username, "email":current_user.email}), 200
-    else: 
-        return jsonify({"message":"User not found"}), 404
+        return jsonify({
+            "id": current_user.id, 
+            "username": current_user.username, 
+            "email": current_user.email,
+            "is_admin": current_user.is_admin
+        }), 200
+    else:
+        return jsonify({"message": "User not found"}), 404
+
+
+
     
 BLACKLIST = set()
 # @jwt.token_in_blocklist_loader
