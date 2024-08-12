@@ -45,7 +45,7 @@ const Reviews = () => {
   };
 
   return (
-    <div className="flex flex-col items-center px-4 sm:px-6 lg:px-4 -mt-20">
+    <div className="flex flex-col items-center px-4 sm:px-6 lg:px-4 ">
       <div className="self-start -mt-4 ml-6 text-2xl font-bold tracking-tight leading-loose text-gray-800 max-md:mt-10 max-md:ml-2.5">
         Reviews
       </div>

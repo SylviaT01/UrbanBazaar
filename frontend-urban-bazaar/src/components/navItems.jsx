@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart, faShoppingCart, faSearch } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/logo.svg';
 import { useCart } from '../contexts/cartContext';
-import { UserContext } from '../contexts/userContext'; // Adjust the import path accordingly
+import { UserContext } from '../contexts/userContext'; 
 
 export default function NavItems() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const { cart, wishlist } = useCart(); // Access wishlist from context
-  const { authToken } = useContext(UserContext); // Access authentication state
+  const { cart, wishlist } = useCart(); 
+  const { authToken, currentUser } = useContext(UserContext); 
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -22,6 +22,13 @@ export default function NavItems() {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
+
+  // Determine the correct path for "My Account"
+  const accountLink = authToken
+    ? currentUser?.is_admin
+      ? "/dashboard/dashboardAdmin"
+      : "/userprofile/dashboarduser"
+    : "/login";
 
   return (
     <nav className="bg-blue-100 border-b border-gray-300 relative">
@@ -65,17 +72,10 @@ export default function NavItems() {
             </button>
           </form>
           <div className="flex items-center space-x-6">
-            {authToken ? (
-              <Link to="userprofile/dashboarduser" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
-                <FontAwesomeIcon icon={faUser} className="text-lg" />
-                <span className="ml-1">My Account</span>
-              </Link>
-            ) : (
-              <Link to="/login" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
-                <FontAwesomeIcon icon={faUser} className="text-lg" />
-                <span className="ml-1 text-md">Login</span>
-              </Link>
-            )}
+            <Link to={accountLink} className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
+              <FontAwesomeIcon icon={faUser} className="text-lg" />
+              <span className="ml-1">{authToken ? 'My Account' : 'Login'}</span>
+            </Link>
             <Link to="/wishlist" className="text-gray-700 hover:text-blue-700 flex items-center relative">
               <FontAwesomeIcon icon={faHeart} className="text-lg border border-gray-400 rounded-full p-1" />
               {wishlist.length > 0 && (
