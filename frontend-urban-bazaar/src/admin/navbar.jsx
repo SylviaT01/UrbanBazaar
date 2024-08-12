@@ -3,37 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faSearch } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/logo.svg";
-import darkmode from "../assets/darkmode.svg";
 import bell from "../assets/bell.svg";
 import { UserContext } from "../contexts/userContext";
 
-const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
-  return (
-    <button
-      type="button"
-      onClick={toggleDarkMode}
-      className="flex items-center justify-center bg-transparent border-none p-0"
-    >
-      <img
-        src={darkmode}
-        className={`object-contain w-6 aspect-square ${isDarkMode ? "filter invert" : ""
-          }`}
-        alt="Darkmode"
-      />
-    </button>
-  );
-};
 
 const Navbar = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const { authToken } = useContext(UserContext);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-    document.body.classList.toggle("dark-mode", !isDarkMode);
-  };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -47,7 +24,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`flex flex-col items-center w-full pb-8 ${isDarkMode ? "bg-gray-800" : "bg-sky-50"}`}>
+    <div className={`flex flex-col items-center w-full pb-8`}>
       <div className="flex justify-between items-center w-full px-5 pt-2 bg-white max-w-[1440px]">
         <div className="flex gap-5 items-center">
           <Link to="/" className="flex items-center">
@@ -75,10 +52,10 @@ const Navbar = () => {
         </div>
         <div className="flex gap-4">
           <div className="flex gap-5 items-start px-2.5 pt-2.5 pb-4 min-h-[50px]">
-            <DarkModeToggle
+            {/* <DarkModeToggle
               isDarkMode={isDarkMode}
               toggleDarkMode={toggleDarkMode}
-            />
+            /> */}
             <div className="flex gap-5 items-center w-6">
               <img
                 src={bell}
@@ -89,7 +66,7 @@ const Navbar = () => {
           </div>
           <div className="flex items-center space-x-6">
             {authToken ? (
-              <Link to="/userprofile/dashboarduser" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
+              <Link to="/dashboard/dashboardAdmin" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
                 <FontAwesomeIcon icon={faUser} className="text-lg" />
                 <span className="ml-1">My Account</span>
               </Link>
