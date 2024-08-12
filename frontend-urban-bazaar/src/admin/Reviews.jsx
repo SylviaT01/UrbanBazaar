@@ -21,7 +21,7 @@ const Reviews = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const pageNumbersToShow = 5; // Number of page buttons to show
+  const pageNumbersToShow = 5;
   const halfPageNumbersToShow = Math.floor(pageNumbersToShow / 2);
 
   const getPageNumbers = () => {
