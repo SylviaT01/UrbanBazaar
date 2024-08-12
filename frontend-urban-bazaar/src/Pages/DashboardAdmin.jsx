@@ -29,9 +29,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F0F9FF] py-20">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF]">
       {/* Sidebar */}
-      <aside className="ml-20 w-64 text-[#747474]">
+      <aside className="w-full md:w-64 bg-white text-[#747474] shadow-md md:py-10 md:px-4">
         <nav className="p-4">
           <ul>
             <li className="mb-4">
@@ -39,11 +39,11 @@ const Dashboard = () => {
                 to="dashboardAdmin"
                 className={({ isActive }) =>
                   isActive
-                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center text-white"
                     : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                 }
               >
-                <img src={home} className="mr-3" alt="Home" />
+                <img src={home} className="mr-3 w-6 h-6" alt="Home" />
                 Dashboard
               </NavLink>
             </li>
@@ -52,12 +52,11 @@ const Dashboard = () => {
                 onClick={handleProductsClick}
                 className="w-full text-left flex items-center px-4 py-6 block bg-[#FFFFFF] hover:bg-[#d1d5db] rounded"
               >
-                <img src={product} className="mr-3" alt="product" />
+                <img src={product} className="mr-3 w-6 h-6" alt="product" />
                 Products
                 <span
-                  className={`ml-auto transition-transform ${
-                    isProductsOpen ? "rotate-180" : ""
-                  }`}
+                  className={`ml-auto transition-transform ${isProductsOpen ? "rotate-180" : ""
+                    }`}
                 >
                   <svg
                     className="w-4 h-4"
@@ -82,7 +81,7 @@ const Dashboard = () => {
                       to="products/all"
                       className={({ isActive }) =>
                         isActive
-                          ? "block px-4 py-4 bg-[#45B1E8] rounded flex items-center"
+                          ? "block px-4 py-4 bg-[#45B1E8] rounded flex items-center text-white"
                           : "block px-4 py-4 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                       }
                     >
@@ -94,7 +93,7 @@ const Dashboard = () => {
                       to="products/add"
                       className={({ isActive }) =>
                         isActive
-                          ? "block px-4 py-4 bg-[#45B1E8] rounded flex items-center"
+                          ? "block px-4 py-4 bg-[#45B1E8] rounded flex items-center text-white"
                           : "block px-4 py-4 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                       }
                     >
@@ -109,11 +108,11 @@ const Dashboard = () => {
                 to="orders"
                 className={({ isActive }) =>
                   isActive
-                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center text-white"
                     : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                 }
               >
-                <img src={orders} className="mr-3" alt="order" />
+                <img src={orders} className="mr-3 w-6 h-6" alt="order" />
                 Orders
               </NavLink>
             </li>
@@ -122,11 +121,11 @@ const Dashboard = () => {
                 to="reviews"
                 className={({ isActive }) =>
                   isActive
-                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center text-white"
                     : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                 }
               >
-                <img src={reviews} className="mr-3" alt="reviews" />
+                <img src={reviews} className="mr-3 w-6 h-6" alt="reviews" />
                 Reviews
               </NavLink>
             </li>
@@ -135,11 +134,11 @@ const Dashboard = () => {
                 to="customers"
                 className={({ isActive }) =>
                   isActive
-                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center text-white"
                     : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                 }
               >
-                <img src={profile} className="mr-3" alt="profile" />
+                <img src={profile} className="mr-3 w-6 h-6" alt="profile" />
                 Customers
               </NavLink>
             </li>
@@ -148,11 +147,11 @@ const Dashboard = () => {
                 to="payments"
                 className={({ isActive }) =>
                   isActive
-                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center text-white"
                     : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                 }
               >
-                <img src={payments} className="mr-3" alt="payments" />
+                <img src={payments} className="mr-3 w-6 h-6" alt="payments" />
                 Payments
               </NavLink>
             </li>
@@ -161,11 +160,11 @@ const Dashboard = () => {
                 to="contacts"
                 className={({ isActive }) =>
                   isActive
-                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center"
+                    ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center text-white"
                     : "block px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                 }
               >
-                <img src={profile} className="mr-3" alt="logout" />
+                <img src={profile} className="mr-3 w-6 h-6" alt="contacts" />
                 Contacts
               </NavLink>
             </li>
@@ -174,7 +173,7 @@ const Dashboard = () => {
                 onClick={handleLogout}
                 className="w-full text-left flex items-center px-4 py-6 block bg-[#FFFFFF] hover:bg-[#d1d5db] rounded"
               >
-                <img src={logoutIcon} className="mr-3" alt="logout" />
+                <img src={logoutIcon} className="mr-3 w-6 h-6" alt="logout" />
                 Logout
               </button>
             </li>
@@ -183,7 +182,7 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 bg-[#F0F9FF]">
+      <main className="flex-1 bg-[#F0F9FF] p-4 md:p-8">
         <Outlet />
       </main>
     </div>

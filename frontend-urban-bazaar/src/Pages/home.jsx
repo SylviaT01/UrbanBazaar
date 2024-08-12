@@ -77,110 +77,109 @@ const Home = () => {
   };
 
   return (
-    <section>
-      <div className="relative">
-        <div className="flex items-center justify-center">
-          <div className="w-full max-w-full overflow-hidden relative">
-            <div className="slider-container h-full">
-              <Slider ref={sliderRef} {...settings}>
-                <div className="relative">
-                  <img
-                    src={slide1}
-                    alt="Woman after shopping"
-                    className="w-full h-[400px] object-cover"
-                  />
-                </div>
-                <div className="relative">
-                  <img
-                    src={slide2}
-                    alt="Enjoy the view"
-                    className="w-full h-[400px] object-cover"
-                  />
-                </div>
-                <div className="relative">
-                  <img
-                    src={slide3}
-                    alt="Smile after shopping"
-                    className="w-full h-[400px] object-cover"
-                  />
-                </div>
-              </Slider>
-              <button
-                onClick={goToPrevSlide}
-                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10"
-              >
-                <GoChevronLeft />
-              </button>
-              <button
-                onClick={goToNextSlide}
-                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10"
-              >
-                <GoChevronRight />
-              </button>
-            </div>
+    <section className="relative">
+      <div className="flex items-center justify-center">
+        <div className="w-full max-w-full overflow-hidden relative">
+          <div className="slider-container h-full">
+            <Slider ref={sliderRef} {...settings}>
+              <div className="relative">
+                <img
+                  src={slide1}
+                  alt="Woman after shopping"
+                  className="w-full h-[300px] md:h-[400px] object-cover"
+                />
+              </div>
+              <div className="relative">
+                <img
+                  src={slide2}
+                  alt="Enjoy the view"
+                  className="w-full h-[300px] md:h-[400px] object-cover"
+                />
+              </div>
+              <div className="relative">
+                <img
+                  src={slide3}
+                  alt="Smile after shopping"
+                  className="w-full h-[300px] md:h-[400px] object-cover"
+                />
+              </div>
+            </Slider>
+            <button
+              onClick={goToPrevSlide}
+              className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10 text-white"
+            >
+              <GoChevronLeft />
+            </button>
+            <button
+              onClick={goToNextSlide}
+              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-blue-300 p-2 rounded-full shadow-md z-10 text-white"
+            >
+              <GoChevronRight />
+            </button>
           </div>
         </div>
-        <div className="absolute top-[15%] w-full flex justify-center bg-transparent z-20">
-          <div className="w-full max-w-screen-xl flex gap-[30px] py-4 px-6 overflow-x-auto">
-            {categoryImages.map((category, index) => (
-              <div
-                key={index}
-                className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white aos-init"
-              >
-                <div className="flex-grow border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
-                  <div className="w-full h-full flex justify-center items-center">
-                    <div className="w-[200px] mx-auto flex justify-center items-center">
-                      <img
-                        src={category.imageUrl}
-                        alt={category.category}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+      </div>
+      <div className="absolute top-[10%] w-full flex justify-center bg-transparent z-20 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-screen-xl flex gap-4 sm:gap-6 lg:gap-8 py-4 overflow-x-auto">
+          {categoryImages.map((category, index) => (
+            <div
+              key={index}
+              className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white transition transform hover:scale-105"
+            >
+              <div className="flex-grow border border-[#e4e4e4] h-[200px] sm:h-[250px] lg:h-[300px] mb-4 relative overflow-hidden group">
+                <div className="w-full h-full flex justify-center items-center">
+                  <div className="w-[150px] sm:w-[200px] mx-auto flex justify-center items-center">
+                    <img
+                      src={category.imageUrl}
+                      alt={category.category}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
-                <h3 className="font-medium text-sm mb-1 capitalize">
-                  {category.category}
-                </h3>
               </div>
-            ))}
-          </div>
+              <h3 className="font-medium text-sm sm:text-base mb-1 capitalize text-center">
+                {category.category}
+              </h3>
+            </div>
+          ))}
         </div>
-        <div className="pt-[200px]">
-          <div className="flex justify-center py-10 mt-12">
+      </div>
+      <div className="pt-[150px] sm:pt-[200px] lg:pt-[250px]">
+        <div className="flex justify-center py-10 mt-12">
+          <Link
+            to="/products"
+            className="bg-blue-300 text-gray-600 text-sm sm:text-base px-4 py-2 rounded-md "
+          >
+            View All Categories
+          </Link>
+        </div>
+        <div className="4-items">
+          <h1 className="mb-2 flex justify-center text-xl sm:text-2xl font-semibold">Weekly Offers</h1>
+          <WeeklyOffersFour />
+          <div className="flex justify-center py-4">
             <Link
-              to="/products"
-              className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md "
+              to="/weeklyoffers"
+              className="bg-blue-300 text-gray-600 text-sm sm:text-base px-4 py-2 rounded-md "
             >
-              View All Categories
+              View All Offers
             </Link>
           </div>
           <div className="4-items">
-            <h1 className="mb-2 flex justify-center text-xl font-semibold">Weekly Offers</h1>
-            <WeeklyOffersFour />
-            <div className="flex justify-center py-4">
-              <Link
-                to="/weeklyoffers"
-                className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md "
-              >
-                View All Offers
-              </Link>
-            </div>
-            <div className="4-items">
-              <h1 className="mb-2 flex justify-center text-xl font-semibold">Top picks</h1>
-              <TopPicksFour />
-            </div>
-            <div className="flex justify-center py-4">
-              <Link
-                to="/toppicks"
-                className="bg-blue-300 text-gray-600 text-sm px-2 py-2 rounded-md "
-              >
-                View Top Picks
-              </Link>
-            </div>
+            <h1 className="mb-2 flex justify-center text-xl sm:text-2xl font-semibold">Top Picks</h1>
+            <TopPicksFour />
+          </div>
+          <div className="flex justify-center py-4">
+            <Link
+              to="/toppicks"
+              className="bg-blue-300 text-gray-600 text-sm sm:text-base px-4 py-2 rounded-md "
+            >
+              View Top Picks
+            </Link>
           </div>
         </div>
       </div>
     </section>
+
   );
 };
 
