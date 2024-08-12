@@ -64,7 +64,7 @@ export const UserProvider = ({ children }) => {
           if (data.is_admin) {
             nav("/dashboard/dashboardAdmin"); // Redirect to admin dashboard if the user is an admin
           } else {
-            nav("/userprofile/dashboarduser"); // Redirect to user dashboard if not an admin
+            nav("/"); // Redirect to user dashboard if not an admin
           }
         } else {
           console.error("Failed to fetch current user:", data.message);
@@ -81,13 +81,6 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     fetchCurrentUser();
   }, [authToken]);
-
-
-
-
-
-
-
 
 
   const signup = async (username, email, phone_number, password) => {
