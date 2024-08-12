@@ -20,7 +20,7 @@ const Navbar = () => {
         const response = await fetch("http://127.0.0.1:5000/admin/messages");
         if (response.ok) {
           const data = await response.json();
-          setNotifications(data.messages.slice(0, 5)); // Get the latest 5 messages
+          setNotifications(data.messages.slice(0, 5));
         } else {
           console.error("Failed to fetch notifications");
         }
