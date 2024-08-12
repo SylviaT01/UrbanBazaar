@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from "react";
 import profile2 from "../assets/profile2.svg";
 import members from "../assets/members.svg";
-import active from "../assets/active.svg";
 import arrowup from "../assets/arrowup .svg";
 import arrowdown from "../assets/arrowdown.svg";
 
 const Customer = () => {
   const [users, setUsers] = useState([]);
+  const [totalCustomers, setTotalCustomers] = useState(0);
+  const [totalMembers, setTotalMembers] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
 
   useEffect(() => {
+    // Fetch users (members)
     fetch("http://127.0.0.1:5000/user")
       .then((response) => response.json())
-      .then((data) => setUsers(data))
+      .then((data) => {
+        setUsers(data);
+        setTotalMembers(data.length); // Set total members count
+      })
       .catch((error) => console.error("Error fetching users:", error));
+
+    // Fetch total customers
+    fetch("http://127.0.0.1:5000/order")
+      .then((response) => response.json())
+      .then((data) => setTotalCustomers(data.length)) // Assuming the API returns an array of customers
+      .catch((error) => console.error("Error fetching customers:", error));
   }, []);
 
   const indexOfLastUser = currentPage * usersPerPage;
@@ -28,19 +39,19 @@ const Customer = () => {
   return (
     <div className="flex flex-col ml-5 w-[80%] max-md:ml-0 max-md:w-full -mt-20">
       <div className="flex flex-col w-full max-md:mt-10 max-md:max-w-full">
-        <div className="flex gap-5 justify-between items-start px-4 py-6 w-full bg-white rounded-lg max-md:max-w-full">
-          <div className="flex gap-6 mt-1">
+        <div className="flex gap-10 justify-between items-start px-6 py-8 w-full bg-white rounded-lg max-md:max-w-full">
+          <div className="flex gap-6 mt-1 ml-32">
             <img
               src={profile2}
               className="object-contain shrink-0 w-24 aspect-[1.14]"
               alt="TotalCustomers"
             />
-            <div className="flex flex-col self-start mt-1.5">
+            <div className="flex flex-col mt-1.5">
               <div className="text-sm tracking-normal text-neutral-400 max-md:mr-0.5">
                 Total Customers
               </div>
               <div className="self-start mt-3.5 text-3xl font-semibold tracking-tight leading-none text-zinc-800">
-                5,423
+                {totalCustomers}
               </div>
               <div className="flex gap-1 mt-2 text-xs tracking-normal text-zinc-800">
                 <img
@@ -55,19 +66,19 @@ const Customer = () => {
               </div>
             </div>
           </div>
-          <div className="shrink-0 w-px h-24" />
-          <div className="flex gap-1 items-start self-stretch">
+          <div className="shrink-0 w-px h-24 bg-gray-200" />
+          <div className="flex gap-6 items-start self-stretch mt-1 mr-32">
             <img
               src={members}
               className="object-contain shrink-0 w-24 aspect-[1.14]"
               alt="Members"
             />
-            <div className="flex flex-col items-start mt-1.5 mr-16">
+            <div className="flex flex-col items-start mt-1.5">
               <div className="text-sm tracking-normal text-neutral-400">
                 Members
               </div>
               <div className="mt-3.5 text-3xl font-semibold tracking-tight leading-none text-zinc-800">
-                1,893
+                {totalMembers}
               </div>
               <div className="flex gap-1 self-stretch mt-2 text-xs tracking-normal text-zinc-800">
                 <img
@@ -81,25 +92,9 @@ const Customer = () => {
                 </div>
               </div>
             </div>
-            <div className="shrink-0 self-stretch w-px h-[95px]" />
-          </div>
-          <div className="flex gap-6">
-            <img
-              loading="lazy"
-              src={active}
-              className="object-contain shrink-0 w-24 aspect-[1.14]"
-              alt="Active"
-            />
-            <div className="flex flex-col self-start mt-1">
-              <div className="text-sm tracking-normal text-neutral-400">
-                Active Now
-              </div>
-              <div className="self-start mt-3.5 text-3xl font-semibold tracking-tight leading-none text-zinc-800">
-                189
-              </div>
-            </div>
           </div>
         </div>
+
         <div className="flex flex-col pt-7 pb-10 mt-5 w-full bg-white rounded-lg max-md:max-w-full">
           <div className="flex flex-wrap gap-5 justify-between mr-7 ml-5 max-md:mr-2.5 max-md:max-w-full">
             <div className="flex flex-col">
