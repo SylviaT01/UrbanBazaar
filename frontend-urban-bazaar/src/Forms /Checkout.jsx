@@ -378,6 +378,7 @@ import mpesa from "../assets/mpesa.png";
 import pesapal from "../assets/pesapal.png";
 import Paypal from "../assets/Paypal.png";
 import { UserContext } from "../contexts/userContext";
+import { Link } from "react-router-dom";
 
 function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -560,9 +561,11 @@ function Checkout() {
           </div>
           <div className="w-1/2">
             <h2 className="text-lg font-semibold mb-4">Place your order</h2>
-            <button className="bg-blue-500 text-white py-2 px-4 w-full rounded mb-4">
-              Place Order
-            </button>
+            <Link to="/ordercomplete">
+              <button className="bg-blue-500 text-white py-2 px-4 w-full rounded mb-4">
+                Place Order
+              </button>
+            </Link>
             <p className="text-sm text-gray-600 mb-4">
               By placing your order, you agree to our company's Privacy Policy
               and Conditions of Use.
