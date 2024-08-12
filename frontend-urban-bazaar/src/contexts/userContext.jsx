@@ -62,9 +62,9 @@ export const UserProvider = ({ children }) => {
         if (response.ok) {
           setCurrentUser(data);
           if (data.is_admin) {
-            nav("/dashboard/dashboardAdmin"); // Redirect to admin dashboard if the user is an admin
+            nav("/dashboard/dashboardAdmin");
           } else {
-            nav("/"); 
+            nav("/");
           }
         } else {
           console.error("Failed to fetch current user:", data.message);
@@ -76,7 +76,7 @@ export const UserProvider = ({ children }) => {
       }
     }
     setLoading(false);
-};
+  };
 
   useEffect(() => {
     fetchCurrentUser();
