@@ -85,7 +85,7 @@ const Navbar = () => {
           <div className="relative flex gap-5 items-center px-2.5 pt-2.5 pb-4 min-h-[50px]">
             <img
               src={bell}
-              className="object-contain self-stretch my-auto w-6 aspect-square cursor-pointer"
+              className="object-contain self-stretch my-auto w-6 aspect-square cursor-pointer "
               alt="Notifications"
               onClick={handleBellClick}
             />
