@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/userContext";
-import userimage from "../assets/userimage.svg";
-import userdashboard from "../assets/userdashboard.svg";
-import orderhistory from "../assets/orderhistory.svg";
-import userprofile from "../assets/userprofile.svg";
-import whishlist from "../assets/wishlist.svg";
-import logoutuser from "../assets/logoutuser.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import the FontAwesomeIcon component
+import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Import the faHeart icon
+import profile from "../assets/Profile.svg";
+import orders from "../assets/order.svg";
+import logoutIcon from "../assets/logout.svg";
 
 const UserProfile = () => {
   const { currentUser, logout } = useContext(UserContext);
@@ -38,9 +37,9 @@ const UserProfile = () => {
           {/* User Profile */}
           <div className="flex items-center mb-4 border-b-2 border-gray-200">
             <img
-              src={userimage}
+              src={profile}
               alt="User Profile"
-              className="rounded-full w-24 h-24 mr-2"
+              className="rounded-full w-20 h-20 mr-2"
             />
             <h2 className="text-md text-gray-700">
               {currentUser.username || "User"}
@@ -59,11 +58,7 @@ const UserProfile = () => {
                       : " px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                   }
                 >
-                  <img
-                    src={userdashboard}
-                    className="mr-3"
-                    alt="User Dashboard"
-                  />
+                  <img src={profile} className="mr-3" alt="User Dashboard" />
                   Dashboard
                 </NavLink>
               </li>
@@ -76,11 +71,7 @@ const UserProfile = () => {
                       : " px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                   }
                 >
-                  <img
-                    src={orderhistory}
-                    className="mr-3"
-                    alt="Order History"
-                  />
+                  <img src={orders} className="mr-3" alt="Order History" />
                   Order History
                 </NavLink>
               </li>
@@ -93,7 +84,7 @@ const UserProfile = () => {
                       : " px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                   }
                 >
-                  <img src={whishlist} className="mr-3" alt="Wishlist" />
+                  <FontAwesomeIcon icon={faHeart} className="mr-3" /> {/* Updated to use faHeart icon */}
                   Wishlist
                 </NavLink>
               </li>
@@ -106,11 +97,7 @@ const UserProfile = () => {
                       : " px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                   }
                 >
-                  <img
-                    src={userprofile}
-                    className="mr-3"
-                    alt="Update Profile"
-                  />
+                  <img src={profile} className="mr-3" alt="Update Profile" />
                   Update Profile
                 </NavLink>
               </li>
@@ -119,7 +106,7 @@ const UserProfile = () => {
                   onClick={handleLogout}
                   className=" px-4 py-6 w-full text-left flex items-center bg-[#FFFFFF] hover:bg-[#d1d5db] rounded"
                 >
-                  <img src={logoutuser} className="mr-3" alt="Logout" />
+                  <img src={logoutIcon} className="mr-3" alt="Logout" />
                   Logout
                 </button>
               </li>
