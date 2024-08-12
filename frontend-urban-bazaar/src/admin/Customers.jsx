@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import profile2 from "../assets/profile2.svg";
 import members from "../assets/members.svg";
 import active from "../assets/active.svg";
 import arrowup from "../assets/arrowup .svg";
 import arrowdown from "../assets/arrowdown.svg";
+import { UserContext } from "../contexts/userContext";
 
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
+  const { currentUser, authToken } = useContext(UserContext);
+  const token = authToken || localStorage.getItem("access_token");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/admin/users")
+    fetch("http://127.0.0.1:5000/admin/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setUsers(data.users))
       .catch((error) => console.error("Error fetching users:", error));
-  }, []);
+  }, [token]);
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -24,6 +31,27 @@ const Customers = () => {
   const totalPages = Math.ceil(users.length / usersPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleAdminToggle = (userId, isAdmin) => {
+    fetch(`http://127.0.0.1:5000/admin/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ is_admin: isAdmin }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Update user list in state
+        setUsers(
+          users.map((user) =>
+            user.id === userId ? { ...user, is_admin: isAdmin } : user
+          )
+        );
+      })
+      .catch((error) => console.error("Error updating admin status:", error));
+  };
 
   return (
     <div className="flex flex-col ml-5 w-[80%] max-md:ml-0 max-md:w-full">
@@ -120,11 +148,13 @@ const Customers = () => {
                         Email
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Password
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Is_Admin
                       </th>
+                      {currentUser.is_admin && (
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      )}
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -140,11 +170,20 @@ const Customers = () => {
                           {user.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {user.password}
+                          {user.is_admin ? "Yes" : "No"}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {user.is_admin}
-                        </td>
+                        {currentUser.is_admin && (
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <button
+                              className="px-2 py-1 bg-blue-500 text-white rounded"
+                              onClick={() =>
+                                handleAdminToggle(user.id, !user.is_admin)
+                              }
+                            >
+                              {user.is_admin ? "Revoke Admin" : "Make Admin"}
+                            </button>
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
