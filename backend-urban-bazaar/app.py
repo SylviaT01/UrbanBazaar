@@ -192,6 +192,7 @@ def delete_user(user_id):
 
     return jsonify({'message': 'User deleted successfully'})
 
+
 @app.route('/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
@@ -864,6 +865,24 @@ def view_contact_submissions():
 
     return jsonify({'submissions': output})
 
+@app.route('/admin/messages', methods=['GET'])
+def view_messages():
+    # Add authentication/authorization checks if needed
+    messages = ContactUs.query.order_by(ContactUs.submitted_at.desc()).limit(5).all()
+    output = []
+
+    for message in messages:
+        message_data = {
+            'id': message.id,
+            'name': message.name,
+            'email': message.email,
+            'message': message.message,
+            'submittedAt': message.submitted_at
+        }
+        output.append(message_data)
+
+    return jsonify({'messages': output})
+
 
 @app.route('/products/category/<string:category>', methods=['GET'])
 def get_products_by_category(category):
@@ -909,6 +928,7 @@ def some_function():
     current_user_id = get_jwt_identity()
     # Verify current_user_id is being used as expected
     print(current_user_id)
+
 
 
 #Enable Flask application to run in debug mode
