@@ -6,7 +6,6 @@ const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [reviewsPerPage] = useState(6);
-  const [selectedReviews, setSelectedReviews] = useState([]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/review")
@@ -54,11 +53,8 @@ const Reviews = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-md:flex-col">
           {currentReviews.map((review) => (
             <div
-              className={`flex flex-col p-6 bg-white rounded shadow-[0px_10px_60px_rgba(226,236,249,0.5)] ${
-                selectedReviews.includes(review.id)
-                  ? "border-2 border-blue-500"
-                  : ""
-              }`}
+              className="flex flex-col p-6 bg-white rounded shadow-[0px_10px_60px_rgba(226,236,249,0.5)"
+                
               key={review.id}
             >
               <div className="flex items-center gap-3">
