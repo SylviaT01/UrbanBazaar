@@ -49,51 +49,6 @@ export default function NavItems() {
       </div>
 
       <div className="bg-slate-100 border-b border-gray-300">
-        {/* <div className="flex justify-between h-16 items-center px-4 sm:px-6 lg:px-8">
-          <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="flex items-center">
-              <img
-                src={logo}
-                alt="UrbanBazaar Logo"
-                className="w-32 h-auto p-2"
-              />
-            </Link>
-          </div>
-          <form onSubmit={handleSearchSubmit} className="flex items-center">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="px-2 py-1 border border-gray-300 rounded-md"
-            />
-            <button type="submit" className="ml-2">
-              <FontAwesomeIcon icon={faSearch} className="text-gray-700 text-lg" />
-            </button>
-          </form>
-          <div className="flex items-center space-x-6">
-            <Link to={accountLink} className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
-              <FontAwesomeIcon icon={faUser} className="text-lg" />
-              <span className="ml-1">{authToken ? 'My Account' : 'Login'}</span>
-            </Link>
-            <Link to="/wishlist" className="text-gray-700 hover:text-blue-700 flex items-center relative">
-              <FontAwesomeIcon icon={faHeart} className="text-lg border border-gray-400 rounded-full p-1" />
-              {wishlist.length > 0 && (
-                <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full text-center">
-                  {wishlist.length}
-                </span>
-              )}
-            </Link>
-            <Link to="/cart" className="text-gray-700 hover:text-blue-700 flex items-center relative">
-              <FontAwesomeIcon icon={faShoppingCart} className="text-lg border border-gray-400 rounded-full p-1" />
-              {cart.length > 0 && (
-                <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs font-bold text-white bg-red-600 rounded-full text-center">
-                  {cart.length}
-                </span>
-              )}
-            </Link>
-          </div>
-        </div> */}
         <div className="flex flex-col sm:flex-row justify-between h-auto sm:h-16 items-center px-4 sm:px-6 lg:px-8 py-4 sm:py-0">
          
           <div className="flex-shrink-0 flex items-center mb-4 sm:mb-0">

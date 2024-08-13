@@ -87,22 +87,22 @@ const ProductDetailPage = () => {
       {/* Login prompt modal */}
       {showLoginPrompt && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white rounded-lg w-[400px] p-6">
-            <h2 className="text-xl font-semibold mb-4">Login Required</h2>
-            <p className="mb-4">
+          <div className="bg-white rounded-lg w-full max-w-sm p-6">
+            <h2 className="text-xl font-semibold mb-4 text-center">Login Required</h2>
+            <p className="mb-4 text-center">
               You need to log in to add items to the cart or wishlist. Please
               log in to continue.
             </p>
-            <div className="flex justify-between">
+            <div className="flex flex-col md:flex-row justify-between gap-4">
               <Link
                 to="/login"
-                className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400"
+                className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400 text-center"
               >
                 Log In
               </Link>
               <button
                 onClick={closeLoginPrompt}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 text-center"
               >
                 Close
               </button>
@@ -111,9 +111,9 @@ const ProductDetailPage = () => {
         </div>
       )}
 
-      <div className="flex flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Thumbnail images */}
-        <div className="w-1/8 flex flex-col space-y-4">
+        <div className="flex flex-wrap lg:flex-col lg:w-1/6 gap-4 mb-4 lg:mb-0">
           {product.images.map((image, index) => (
             <img
               key={index}
@@ -128,17 +128,17 @@ const ProductDetailPage = () => {
         </div>
 
         {/* Main product image */}
-        <div className="flex-1">
+        <div className="flex-1 mb-4 lg:mb-0">
           <img
             src={selectedImage}
             alt="Main Product"
-            className="w-50 h-50 image-cover rounded-lg shadow-md"
+            className="w-full h-auto object-cover rounded-lg shadow-md"
           />
         </div>
 
         {/* Product details */}
-        <div className="w-1/2 flex flex-col">
-          <h1 className="text-3xl font-medium mb-2">{product.title}</h1>
+        <div className="flex-1">
+          <h1 className="text-2xl lg:text-3xl font-medium mb-2">{product.title}</h1>
           <h2 className="mb-2 capitalize text-lg">
             <span className="font-medium text-gray-900">Category:</span>
             <span className="font-normal text-gray-700">
@@ -177,7 +177,7 @@ const ProductDetailPage = () => {
             <span className="font-normal text-red-500"> {product.stock}</span>
           </p>
 
-          <div className="flex flex-row gap-6 mb-4 items-center">
+          <div className="flex flex-col gap-4 mb-4 lg:flex-row lg:items-center lg:gap-6">
             <button
               onClick={handleAddToCart}
               className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400"
@@ -263,17 +263,17 @@ const ProductDetailPage = () => {
       </div>
 
       {/* Reviews Section */}
-      <div className="mt-8">
+      <div className="mt-8 p-4 md:p-8 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4">Customer Reviews</h2>
         {reviews.length > 0 ? (
           reviews.map((review, index) => (
-            <div key={index} className="border-t pt-4">
-              <div className="flex items-center mb-2">
+            <div key={index} className="border-t pt-4 last:border-0">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4">
                 <span className="font-medium text-gray-900">{review.reviewer_name}</span>
-                <span className="ml-2 text-yellow-500">{"★".repeat(review.rating)}</span>
+                <span className="ml-2 text-yellow-500 text-sm sm:text-base">{"★".repeat(review.rating)}</span>
                 <span className="ml-2 text-gray-500 text-sm">{review.date}</span>
               </div>
-              <p className="text-gray-700">{review.comment}</p>
+              <p className="text-gray-700 text-sm sm:text-base">{review.comment}</p>
             </div>
           ))
         ) : (
