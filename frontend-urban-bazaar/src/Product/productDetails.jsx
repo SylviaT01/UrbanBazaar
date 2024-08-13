@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -14,10 +14,12 @@ const ProductDetailPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [reviews, setReviews] = useState([]);
   const { addToCart, addToWishlist, notification } = useCart();
   const { currentUser } = useContext(UserContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    // Fetch product details
     fetch(`https://backend-urbanbazaar.onrender.com/products/${id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -27,6 +29,7 @@ const ProductDetailPage = () => {
         if (data.product.images.length > 0) {
           setSelectedImage(data.product.images[0]);
         }
+
         // Fetch related products
         fetch(
           `https://backend-urbanbazaar.onrender.com/products/category/${data.product.category}`
@@ -40,6 +43,16 @@ const ProductDetailPage = () => {
       })
       .catch((error) =>
         console.error("Error fetching product details:", error)
+      );
+
+    // Fetch reviews
+    fetch(`https://backend-urbanbazaar.onrender.com/reviews/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setReviews(data.reviews);
+      })
+      .catch((error) =>
+        console.error("Error fetching product reviews:", error)
       );
   }, [id]);
 
@@ -247,6 +260,25 @@ const ProductDetailPage = () => {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-semibold mb-4">Customer Reviews</h2>
+        {reviews.length > 0 ? (
+          reviews.map((review, index) => (
+            <div key={index} className="border-t pt-4">
+              <div className="flex items-center mb-2">
+                <span className="font-medium text-gray-900">{review.reviewer_name}</span>
+                <span className="ml-2 text-yellow-500">{"★".repeat(review.rating)}</span>
+                <span className="ml-2 text-gray-500 text-sm">{review.date}</span>
+              </div>
+              <p className="text-gray-700">{review.comment}</p>
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet.</p>
+        )}
       </div>
 
       {/* Related Products */}
