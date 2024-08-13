@@ -20,10 +20,14 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
+        // Retrieve processed message IDs from localStorage
+        const processedIds = JSON.parse(localStorage.getItem('processedMessageIds')) || [];
         const response = await fetch("https://backend-urbanbazaar.onrender.com/admin/messages");
         if (response.ok) {
           const data = await response.json();
-          setNotifications(data.messages.slice(0, 5)); 
+          // Filter out messages that have already been processed
+          const newNotifications = data.messages.filter(message => !processedIds.includes(message.id));
+          setNotifications(newNotifications.slice(0, 5));
         } else {
           console.error("Failed to fetch notifications");
         }
@@ -52,6 +56,7 @@ const Navbar = () => {
 
   const closeModal = () => {
     setShowNotifications(false);
+    setReplyTo(null); 
   };
 
   const handleViewMore = (id) => {
@@ -62,8 +67,8 @@ const Navbar = () => {
     setExpandedNotificationId(null);
   };
 
-  const handleReplyClick = (email) => {
-    setReplyTo(email); 
+  const handleReplyClick = (id, email) => {
+    setReplyTo({ id, email });
   };
 
   const handleReplyChange = (event) => {
@@ -72,27 +77,39 @@ const Navbar = () => {
 
   const handleReplySubmit = async (event) => {
     event.preventDefault();
-    
+
     if (replyTo && replyMessage.trim()) {
       try {
         const templateParams = {
-          to_email: replyTo, 
-          from_email: userEmail, 
-          message: replyMessage, 
+          to_email: replyTo.email,
+          from_email: userEmail,
+          message: replyMessage,
         };
 
         const response = await emailjs.send(
           "service_7ed26cb",
           "template_vdvc57e",
           templateParams,
-          "WzSdVClszLi88tfI-" 
+          "WzSdVClszLi88tfI-"
         );
 
         if (response.status === 200) {
           alert("Reply sent successfully!");
-          setReplyTo(null); 
-          setReplyMessage(""); 
-          closeModal(); 
+
+          // Mark the replied notification as processed
+          localStorage.setItem('processedMessageIds', JSON.stringify([
+            ...JSON.parse(localStorage.getItem('processedMessageIds') || '[]'),
+            replyTo.id
+          ]));
+
+          // Remove the replied notification from the list
+          setNotifications((prevNotifications) =>
+            prevNotifications.filter((notification) => notification.id !== replyTo.id)
+          );
+          
+          // Clear reply input and message
+          setReplyTo(null);
+          setReplyMessage("");
         } else {
           console.error("Failed to send reply:", response.text);
         }
@@ -102,6 +119,11 @@ const Navbar = () => {
     } else {
       alert("Please provide a valid recipient email and message.");
     }
+  };
+
+  const handleCancelReply = () => {
+    setReplyTo(null); // Close the reply input without sending the reply
+    setReplyMessage(""); // Clear the reply message
   };
 
   return (
@@ -173,34 +195,58 @@ const Navbar = () => {
 
                 return (
                   <div key={notification.id} className="p-4 border-b">
-                    <p className="font-semibold">
-                      {notification.name} ({notification.email})
-                    </p>
-                    <p>
-                      {isExpanded
-                        ? notification.message
-                        : notification.message.length > maxLength
-                        ? `${notification.message.slice(0, maxLength)}...`
-                        : notification.message}
-                    </p>
-                    {notification.message.length > maxLength && (
-                      <button
-                        onClick={() =>
-                          isExpanded
-                            ? handleViewLess()
-                            : handleViewMore(notification.id)
-                        }
-                        className="text-blue-600 hover:underline"
+                    <div className="flex flex-col">
+                      <p className="font-semibold">
+                        {notification.name} ({notification.email})
+                      </p>
+                      <p
+                        onClick={() => handleReplyClick(notification.id, notification.email)}
+                        className="cursor-pointer"
                       >
-                        {isExpanded ? "View less" : "View more"}
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleReplyClick(notification.email)}
-                      className="text-blue-600 hover:underline mt-2"
-                    >
-                      Reply
-                    </button>
+                        {isExpanded
+                          ? notification.message
+                          : notification.message.length > maxLength
+                          ? `${notification.message.slice(0, maxLength)}...`
+                          : notification.message}
+                      </p>
+                      {notification.message.length > maxLength && (
+                        <button
+                          onClick={() =>
+                            isExpanded
+                              ? handleViewLess()
+                              : handleViewMore(notification.id)
+                          }
+                          className="text-blue-600 hover:underline"
+                        >
+                          {isExpanded ? "View less" : "View more"}
+                        </button>
+                      )}
+                      {replyTo?.id === notification.id && (
+                        <div className="mt-4">
+                          <textarea
+                            value={replyMessage}
+                            onChange={handleReplyChange}
+                            placeholder="Type your reply here..."
+                            rows="4"
+                            className="w-full px-2 py-1 border border-gray-300 rounded-md"
+                          />
+                          <div className="mt-2 flex gap-2">
+                            <button
+                              onClick={handleReplySubmit}
+                              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            >
+                              Send Reply
+                            </button>
+                            <button
+                              onClick={handleCancelReply}
+                              className="px-4 py-2 bg-gray-300 text-white rounded-md hover:bg-gray-400"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })
@@ -210,38 +256,8 @@ const Navbar = () => {
           </div>
         </div>
       )}
-
-      {replyTo && (
-        <div className="fixed top-1/4 right-1/4 bg-white border border-gray-300 rounded shadow-lg w-80 max-w-full z-50">
-          <div className="p-4 relative">
-            <button
-              onClick={() => setReplyTo(null)}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl"
-            >
-              &times;
-            </button>
-            <h2 className="text-lg font-semibold mb-4">Reply to {replyTo}</h2>
-            <form onSubmit={handleReplySubmit}>
-              <textarea
-                value={replyMessage}
-                onChange={handleReplyChange}
-                placeholder="Type your reply here..."
-                rows="4"
-                className="w-full px-2 py-1 border border-gray-300 rounded-md"
-              />
-              <button
-                type="submit"
-                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              >
-                Send Reply
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 export default Navbar;
-

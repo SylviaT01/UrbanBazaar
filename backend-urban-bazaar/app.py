@@ -920,12 +920,36 @@ def view_contact_submissions():
 
     return jsonify({'submissions': output})
 
+# @app.route('/admin/messages', methods=['GET'])
+# def view_messages():
+#     # Add authentication/authorization checks if needed
+#     messages = ContactUs.query.order_by(ContactUs.submitted_at.desc()).limit(5).all()
+#     output = []
+
+#     for message in messages:
+#         message_data = {
+#             'id': message.id,
+#             'name': message.name,
+#             'email': message.email,
+#             'message': message.message,
+#             'submittedAt': message.submitted_at
+#         }
+#         output.append(message_data)
+
+#     return jsonify({'messages': output})
+
+
+# Global variable to keep track of processed message IDs
+processed_message_ids = set()
+
 @app.route('/admin/messages', methods=['GET'])
 def view_messages():
     # Add authentication/authorization checks if needed
-    messages = ContactUs.query.order_by(ContactUs.submitted_at.desc()).limit(5).all()
+    # Query for messages excluding those already processed
+    messages = ContactUs.query.filter(ContactUs.id.notin_(processed_message_ids)) \
+        .order_by(ContactUs.submitted_at.desc()).limit(5).all()
+    
     output = []
-
     for message in messages:
         message_data = {
             'id': message.id,
@@ -935,8 +959,37 @@ def view_messages():
             'submittedAt': message.submitted_at
         }
         output.append(message_data)
+        # Mark this message as processed
+        processed_message_ids.add(message.id)
 
     return jsonify({'messages': output})
+
+@app.route('/admin/messages/<int:message_id>', methods=['DELETE'])
+def delete_message(message_id):
+    # Add authentication/authorization checks if needed
+    message = ContactUs.query.get(message_id)
+    if message:
+        db.session.delete(message)
+        db.session.commit()
+        return jsonify({'message': 'Message deleted successfully'}), 200
+    else:
+        return jsonify({'error': 'Message not found'}), 404
+    
+
+@app.route('/admin/messages/delete', methods=['DELETE'])
+def delete_multiple_messages():
+    message_ids = request.json.get('ids')
+    if not message_ids:
+        return jsonify({'error': 'No message IDs provided'}), 400
+
+    messages = ContactUs.query.filter(ContactUs.id.in_(message_ids)).all()
+    if messages:
+        for message in messages:
+            db.session.delete(message)
+        db.session.commit()
+        return jsonify({'message': 'Messages deleted successfully'}), 200
+    else:
+        return jsonify({'error': 'No messages found'}), 404
 
 
 @app.route('/products/category/<string:category>', methods=['GET'])
