@@ -57,22 +57,24 @@ const Wishlist = () => {
   if (!authToken) {
     return (
       <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-        <div className="bg-white rounded-lg w-[500px] max-h-[80vh] p-6">
+        <div className="bg-white rounded-lg w-full max-w-sm p-6">
           <div className="flex flex-col items-center">
             <h3 className="text-xl font-semibold mb-4">You need to log in</h3>
             <p className="text-center mb-4">Please log in to view and manage your wishlist.</p>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded mb-2"
-              onClick={() => navigate("/login")}
-            >
-              Log In
-            </button>
-            <button
-              className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
-              onClick={() => navigate("/")}
-            >
-              Close
-            </button>
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+              <button
+                className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400 text-center"
+                onClick={() => navigate("/login")}
+              >
+                Log In
+              </button>
+              <button
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 text-center"
+                onClick={() => navigate("/")}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>
