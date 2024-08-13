@@ -287,7 +287,7 @@ export default function AllProducts() {
                   </button>
                 )}
               </div>
-              <div className="flex justify-between items-center mt-2">
+              <div className="flex justify-between items-center mt-2 gap-2">
                 {currentUser.username === "admin" && (
                   <>
                     <button
@@ -310,7 +310,7 @@ export default function AllProducts() {
                         });
                         setUpdateValue(product.stock);
                       }}
-                      className="bg-[#FF0F0F] text-white px-11 py-2 rounded-md"
+                      className="bg-[#FF0F0F] text-white px-8 py-2 rounded-md"
                     >
                       Stock
                     </button>

@@ -85,12 +85,12 @@ const Reviews = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-between items-center p-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center p-4">
           <span className="text-sm text-gray-500">
             Showing {indexOfFirstReview + 1} to {indexOfLastReview} of{" "}
             {reviews.length} entries
           </span>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 sm:mt-0">
             <button
               className={`px-3 py-1 rounded ${
                 currentPage === 1 ? "bg-neutral-300" : "bg-neutral-100"

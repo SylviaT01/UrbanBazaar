@@ -167,27 +167,27 @@ function AddProductPage() {
   };
 
   return (
-    <div className="w-full relative bg-aliceblue h-[1024px] overflow-hidden text-left text-base text-black font-poppins p-8">
-      <h2 className="text-2xl mb-4">General Information</h2>
-      <div className="grid grid-cols-2 gap-8">
+    <div className="w-full relative bg-aliceblue min-h-screen overflow-hidden text-left text-base text-black font-poppins p-4 sm:p-6 md:p-8">
+      <h2 className="text-xl sm:text-2xl mb-4">General Information</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
         <div>
-          <div className="flex space-x-4 mb-4">
-            <div className="w-1/2">
+          <div className="flex flex-col sm:flex-row sm:space-x-4 mb-4">
+            <div className="w-full sm:w-1/2 mb-4 sm:mb-0">
               <label className="block mb-2">Product name:</label>
               <input
                 name="title"
                 type="text"
-                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full"
                 placeholder="Product Name"
                 value={formData.title}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="w-1/2">
+            <div className="w-full sm:w-1/2 mb-4 sm:mb-0">
               <label className="block mb-2">Brand:</label>
               <input
                 name="brand"
-                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full"
                 type="text"
                 placeholder="Brand"
                 value={formData.brand}
@@ -195,32 +195,34 @@ function AddProductPage() {
               />
             </div>
           </div>
-          <label className="block mb-2">Description:</label>
-          <input
-            name="description"
-            className="border py-2 px-4 border-gray-300 rounded-md w-full h-[100px] mb-4"
-            type="text"
-            placeholder="Description"
-            value={formData.description}
-            onChange={handleInputChange}
-          />
-          <div className="flex space-x-4 mb-4">
-            <div className="w-1/2">
+          <div className="mb-4">
+            <label className="block mb-2">Description:</label>
+            <input
+              name="description"
+              className="border py-2 px-4 border-gray-300 rounded-md w-full h-32"
+              type="text"
+              placeholder="Description"
+              value={formData.description}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row sm:space-x-4 mb-4">
+            <div className="w-full sm:w-1/2 mb-4 sm:mb-0">
               <label className="block mb-2">Price:</label>
               <input
                 name="price"
-                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full"
                 type="text"
                 placeholder="Price"
                 value={formData.price}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="w-1/2">
+            <div className="w-full sm:w-1/2">
               <label className="block mb-2">Discount:</label>
               <input
                 name="discount"
-                className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px]"
+                className="border py-2 px-4 border-gray-300 rounded-md w-full"
                 type="text"
                 placeholder="Discount"
                 value={formData.discount}
@@ -229,11 +231,11 @@ function AddProductPage() {
             </div>
           </div>
         </div>
-        <div>
+        <div className="mb-4">
           <label className="block mb-2">Tags:</label>
           <input
             name="tags"
-            className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px] mb-4"
+            className="border py-2 px-4 border-gray-300 rounded-md w-full"
             type="text"
             placeholder="Tags (comma-separated)"
             value={formData.tags}
@@ -265,18 +267,18 @@ function AddProductPage() {
                     className="max-h-full max-w-full"
                   />
                 ) : (
-                  <span className="text-md">
+                  <span className="text-md text-center">
                     Drag and drop <span className="text-blue-500">or</span>{" "}
                     click to browse
                   </span>
                 )}
               </label>
             </div>
-            <div className="flex space-x-4">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               {additionalImages.map((img, index) => (
                 <div
                   key={index}
-                  className="border py-2 px-4 border-black w-30 h-30 flex items-center justify-center"
+                  className="border py-2 px-4 border-black w-full h-30 flex items-center justify-center"
                   style={{ borderStyle: "dashed", cursor: "pointer" }}
                 >
                   <input
@@ -304,15 +306,17 @@ function AddProductPage() {
               ))}
             </div>
           </div>
-          <label className="block mb-2">Publish Category:</label>
-          <input
-            name="publishCategory"
-            className="border py-2 px-4 border-gray-300 rounded-md w-full h-[40px] mb-4"
-            type="text"
-            placeholder="Publish Category"
-            value={formData.publishCategory}
-            onChange={handleInputChange}
-          />
+          <div className="mb-4">
+            <label className="block mb-2">Publish Category:</label>
+            <input
+              name="publishCategory"
+              className="border py-2 px-4 border-gray-300 rounded-md w-full "
+              type="text"
+              placeholder="Publish Category"
+              value={formData.publishCategory}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
       </div>
       <div className="flex justify-center mt-8">

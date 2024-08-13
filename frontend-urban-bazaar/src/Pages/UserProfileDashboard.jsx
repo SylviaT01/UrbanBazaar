@@ -32,7 +32,7 @@ const UserProfile = () => {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF] py-20">
       {/* Sidebar */}
-      <aside className="w-full max-w-md lg:max-w-lg xl:max-w-3xl bg-white text-[#747474] shadow-md md:py-10 md:px-4 ml-10">
+      <aside className="w-full md:w-64 bg-white text-[#747474] shadow-md md:py-10 md:px-4 ml-10">
         <div className="p-4">
           {/* User Profile */}
           <div className="flex items-center mb-4 border-b-2 border-gray-200">
