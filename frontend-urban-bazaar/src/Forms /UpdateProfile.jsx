@@ -87,7 +87,7 @@ const UpdateProfile = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-50">
       <form
-        className="bg-white p-8 rounded shadow-md w-[900px] max-w-custom"
+        className="bg-white p-6 md:p-8 rounded shadow-md w-full max-w-md lg:max-w-lg xl:max-w-3xl ml-10"
         onSubmit={handleSubmit}
       >
         {errorMessage && (
