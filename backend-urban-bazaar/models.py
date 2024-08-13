@@ -26,6 +26,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    phone_number=db.Column(db.Integer, nullable=False)
 
     # Relationships to other models
     shopping_carts = db.relationship('ShoppingCart', backref='user', lazy=True)
@@ -60,6 +61,7 @@ class Product(db.Model):
     thumbnail = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
     # Relationships to other models
     reviews = db.relationship('Review', backref='product', lazy=True)
     cart_items = db.relationship('ShoppingCart', backref='product', lazy=True)
@@ -122,6 +124,7 @@ class Wishlist(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 
 # ContactUs model to store user queries and feedback
