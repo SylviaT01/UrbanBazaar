@@ -62,6 +62,7 @@ const OrderComplete = () => {
           </button>
         </header>
 
+
         {/* Main content to be printed */}
         <main ref={printRef}>
           <section className="self-center px-8 py-0.5 mt-7 bg-white rounded-lg border border-solid border-gray-200 w-full max-w-[1240px] max-md:px-5">
