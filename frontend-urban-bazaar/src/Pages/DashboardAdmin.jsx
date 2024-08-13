@@ -29,11 +29,7 @@ const Dashboard = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex min-h-screen bg-[#F0F9FF] py-20 -mt-5">
-=======
     <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF]">
->>>>>>> e598db4ec9de1a4b60528c4fb09999dae43b9e04
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-white text-[#747474] shadow-md md:py-10 md:px-4">
         <nav className="p-4">

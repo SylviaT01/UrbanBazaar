@@ -18,7 +18,7 @@ import UserProfile from "./Pages/UserProfileDashboard";
 import AllProducts from "./admin/AllProducts";
 import AddProducts from "./admin/AddProducts";
 import Reviews from "./admin/Reviews";
-import Orders from "./admin/Orders";
+import Orders from "./admin/orders";
 import Customers from "./admin/Customers";
 import Payments from "./admin/Payments";
 import ContactsUs from "./admin/Contacts";
@@ -35,6 +35,7 @@ import Navbar from "./admin/navbar";
 import PrivacyPolicy from './components/privacypolicy.jsx';
 import FAQs from './components/FAQs';
 import DeliveryAndReturns from './components/DeliveryAndReturns.jsx';
+import ForgotPassword from "./Forms /forgotpassword.jsx";
 
 // Dummy components for User Profile
 const OrderHistory = () => <div>Order History Content</div>;
@@ -58,6 +59,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgotpassword"element={<ForgotPassword />}/>  
           <Route path="/contact" element={<Contacts />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/about" element={<AboutUs />} />
