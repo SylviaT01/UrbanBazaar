@@ -157,11 +157,7 @@ const Dashboard = () => {
             </li>
             <li className="mb-4">
               <NavLink
-<<<<<<< HEAD
-                to="logout"
-=======
                 to="contacts"
->>>>>>> e598db4ec9de1a4b60528c4fb09999dae43b9e04
                 className={({ isActive }) =>
                   isActive
                     ? "block px-4 py-6 bg-[#45B1E8] rounded flex items-center text-white"
