@@ -10,7 +10,7 @@ function Payments() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/admin/orders", {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/admin/orders", {
           mode: "cors",
         });
         if (!response.ok) {

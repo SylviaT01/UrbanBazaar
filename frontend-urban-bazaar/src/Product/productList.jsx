@@ -17,7 +17,7 @@ const ProductList = () => {
   const pagesToShow = 3;
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/products')
+    fetch('https://backend-urbanbazaar.onrender.com/products')
       .then(response => response.json())
       .then(data => {
         setProducts(data.products);

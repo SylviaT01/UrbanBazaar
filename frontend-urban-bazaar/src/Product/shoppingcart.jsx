@@ -19,7 +19,7 @@ const Cart = () => {
       setLoading(true);
       try {
         console.log("Fetching cart data...");
-        const response = await fetch("http://127.0.0.1:5000/cart", {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/cart", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

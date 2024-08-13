@@ -14,7 +14,7 @@ const Contacts = () => {
   useEffect(() => {
     // Fetch contacts data from an API or local data source
     const fetchContacts = async () => {
-      const response = await fetch("http://127.0.0.1:5000/admin/contacts");
+      const response = await fetch("https://backend-urbanbazaar.onrender.com/admin/contacts");
       const data = await response.json();
       setContacts(data.submissions || []);
     };

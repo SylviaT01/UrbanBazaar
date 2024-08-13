@@ -6,7 +6,7 @@ const Orders = () => {
   const ordersPerPage = 10;
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/order")
+    fetch("https://backend-urbanbazaar.onrender.com/order")
       .then((response) => response.json())
       .then((data) => setOrders(data))
       .catch((error) => console.error("Error fetching orders:", error));

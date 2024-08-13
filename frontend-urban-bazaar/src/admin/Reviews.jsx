@@ -8,7 +8,7 @@ const Reviews = () => {
   const [reviewsPerPage] = useState(6);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/review")
+    fetch("https://backend-urbanbazaar.onrender.com/review")
       .then((response) => response.json())
       .then((data) => setReviews(data.reviews))
       .catch((error) => console.error("Error fetching reviews:", error));

@@ -14,7 +14,7 @@ const Customers = () => {
   const token = authToken || localStorage.getItem("access_token");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/admin/users", {
+    fetch("https://backend-urbanbazaar.onrender.com/admin/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,7 +33,7 @@ const Customers = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleAdminToggle = (userId, isAdmin) => {
-    fetch(`http://127.0.0.1:5000/admin/users/${userId}`, {
+    fetch(`https://backend-urbanbazaar.onrender.com/admin/users/${userId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
