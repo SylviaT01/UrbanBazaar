@@ -15,7 +15,7 @@ export default function AllProducts() {
 
   // Function to fetch product data
   const fetchData = () => {
-    fetch("http://127.0.0.1:5000/products")
+    fetch("https://backend-urbanbazaar.onrender.com/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.products);
@@ -47,7 +47,7 @@ export default function AllProducts() {
     }
 
     const token = authToken || localStorage.getItem("access_token");
-    fetch(`http://127.0.0.1:5000/products/${productId}`, {
+    fetch(`https://backend-urbanbazaar.onrender.com/products/${productId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export default function AllProducts() {
       return;
     }
 
-    fetch(`http://127.0.0.1:5000/products/${productId}`, {
+    fetch(`https://backend-urbanbazaar.onrender.com/products/${productId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ export default function AllProducts() {
       return;
     }
 
-    fetch(`http://127.0.0.1:5000/products/${productId}`, {
+    fetch(`https://backend-urbanbazaar.onrender.com/products/${productId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,

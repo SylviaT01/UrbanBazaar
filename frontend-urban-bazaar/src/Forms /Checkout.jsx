@@ -402,6 +402,40 @@ function Checkout() {
 
   const handleShippingFormSubmit = async (e) => {
     e.preventDefault();
+    const token = authToken || localStorage.getItem("access_token");
+
+    const shippingData = {
+      name: `${firstName} ${lastName}`,
+      street_address: streetAddress,
+      apartment_number: apartmentNumber,
+      city,
+      zip_code: zip,
+    };
+
+    try {
+      const response = await fetch("https://backend-urbanbazaar.onrender.com/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          shipping_address: shippingData,
+          payment_method: paymentMethod,
+          order_total: 70.44, // Replace with the actual order total calculation
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Shipping data submitted:", result);
+    } catch (error) {
+      console.error("Error submitting shipping form:", error);
+    }
+
     setCurrentStep(2); // Move to Place Your Order section
   };
 
@@ -415,7 +449,7 @@ function Checkout() {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/orders", {
+      const response = await fetch("https://backend-urbanbazaar.onrender.com/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

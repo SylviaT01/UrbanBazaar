@@ -17,7 +17,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/admin/messages");
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/admin/messages");
         if (response.ok) {
           const data = await response.json();
           setNotifications(data.messages.slice(0, 5));

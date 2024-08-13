@@ -10,7 +10,7 @@ const TopPicks = () => {
   const productsPerPage = 8;
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/products')
+    fetch('https://backend-urbanbazaar.onrender.com/products')
       .then(response => response.json())
       .then(data => {
         console.log('API response:', data);

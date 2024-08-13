@@ -19,7 +19,7 @@ const Wishlist = () => {
       setLoading(true);
       try {
         console.log("Fetching wishlist data...");
-        const response = await fetch("http://127.0.0.1:5000/wishlist", {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/wishlist", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

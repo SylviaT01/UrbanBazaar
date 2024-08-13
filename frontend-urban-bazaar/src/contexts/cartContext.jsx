@@ -22,7 +22,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
       try {
-        const response = await fetch("http://127.0.0.1:5000/cart", {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/cart", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -50,7 +50,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
       try {
-        const response = await fetch("http://127.0.0.1:5000/wishlist", {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/wishlist", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -102,7 +102,7 @@ export const CartProvider = ({ children }) => {
       setNotification(`✅ Product successfully added to your cart!`);
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/cart", {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/cart", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -144,7 +144,7 @@ export const CartProvider = ({ children }) => {
       setNotification(`✅ Product successfully added to your wishlist!`);
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/wishlist", {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/wishlist", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -172,7 +172,7 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
 
     try {
-      const response = await fetch(`http://127.0.0.1:5000/cart/${productId}`, {
+      const response = await fetch(`https://backend-urbanbazaar.onrender.com/cart/${productId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -200,7 +200,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/wishlist/${productId}`,
+        `https://backend-urbanbazaar.onrender.com/wishlist/${productId}`,
         {
           method: "DELETE",
           headers: {

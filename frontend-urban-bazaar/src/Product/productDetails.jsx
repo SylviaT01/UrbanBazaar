@@ -18,7 +18,7 @@ const ProductDetailPage = () => {
   const { currentUser } = useContext(UserContext);
 
   React.useEffect(() => {
-    fetch(`http://127.0.0.1:5000/products/${id}`)
+    fetch(`https://backend-urbanbazaar.onrender.com/products/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProduct(data.product);
@@ -29,7 +29,7 @@ const ProductDetailPage = () => {
         }
         // Fetch related products
         fetch(
-          `http://127.0.0.1:5000/products/category/${data.product.category}`
+          `https://backend-urbanbazaar.onrender.com/products/category/${data.product.category}`
         )
           .then((response) => response.json())
           .then((relatedData) => {
