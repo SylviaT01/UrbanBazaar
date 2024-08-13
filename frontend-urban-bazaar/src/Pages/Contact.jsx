@@ -224,7 +224,8 @@ const Contact = () => {
 
                 <p className="text-blue-600 underline underline-offset-2 flex items-center gap-2">
                   <img src={emailIcon} alt="emailIcon" />
-                  urbanbazaar@gmail.com
+                  urbanbazaar583@gmail.com
+
                 </p>
               </div>
             </div>
