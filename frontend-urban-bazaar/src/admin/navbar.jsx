@@ -20,12 +20,10 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        // Retrieve processed message IDs from localStorage
         const processedIds = JSON.parse(localStorage.getItem('processedMessageIds')) || [];
         const response = await fetch("https://backend-urbanbazaar.onrender.com/admin/messages");
         if (response.ok) {
           const data = await response.json();
-          // Filter out messages that have already been processed
           const newNotifications = data.messages.filter(message => !processedIds.includes(message.id));
           setNotifications(newNotifications.slice(0, 5));
         } else {
@@ -38,6 +36,20 @@ const Navbar = () => {
 
     fetchNotifications();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (showNotifications) {
+        setShowNotifications(false); // Hide dropdown when scrolling
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [showNotifications]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -56,7 +68,7 @@ const Navbar = () => {
 
   const closeModal = () => {
     setShowNotifications(false);
-    setReplyTo(null); 
+    setReplyTo(null);
   };
 
   const handleViewMore = (id) => {
@@ -96,18 +108,15 @@ const Navbar = () => {
         if (response.status === 200) {
           alert("Reply sent successfully!");
 
-          // Mark the replied notification as processed
           localStorage.setItem('processedMessageIds', JSON.stringify([
             ...JSON.parse(localStorage.getItem('processedMessageIds') || '[]'),
             replyTo.id
           ]));
 
-          // Remove the replied notification from the list
           setNotifications((prevNotifications) =>
             prevNotifications.filter((notification) => notification.id !== replyTo.id)
           );
           
-          // Clear reply input and message
           setReplyTo(null);
           setReplyMessage("");
         } else {
@@ -122,8 +131,8 @@ const Navbar = () => {
   };
 
   const handleCancelReply = () => {
-    setReplyTo(null); // Close the reply input without sending the reply
-    setReplyMessage(""); // Clear the reply message
+    setReplyTo(null);
+    setReplyMessage("");
   };
 
   return (
@@ -187,7 +196,7 @@ const Navbar = () => {
             >
               &times;
             </button>
-            <h2 className="text-lg font-semibold mb-4">Notifications</h2>
+            <h2 className="text-lg text-gray-500 font-medium mb-4">Notifications</h2>
             {notifications.length > 0 ? (
               notifications.map((notification) => {
                 const isExpanded = expandedNotificationId === notification.id;
@@ -196,12 +205,12 @@ const Navbar = () => {
                 return (
                   <div key={notification.id} className="p-4 border-b">
                     <div className="flex flex-col">
-                      <p className="font-semibold">
+                      <p className="text-md text-gray-700 fontnormal">
                         {notification.name} ({notification.email})
                       </p>
                       <p
                         onClick={() => handleReplyClick(notification.id, notification.email)}
-                        className="cursor-pointer"
+                        className="cursor-pointer font-light text-gray-700"
                       >
                         {isExpanded
                           ? notification.message
