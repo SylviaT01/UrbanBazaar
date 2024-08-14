@@ -22,31 +22,31 @@ const Orders = () => {
 
   return (
     <div className="flex flex-col items-center px-4 sm:px-6 lg:px-4 mt-10">
-      <div className="text-2xl font-bold text-gray-800 mb-4">Orders</div>
+      {/* <div className="text-2xl font-bold text-gray-800 mb-4">Orders</div> */}
       <div className="w-full max-w-6xl">
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
           <table className="min-w-full divide-gray-200 hidden md:table">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Id</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping Address</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Id</th>
+                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th> */}
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping Address</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {currentOrders.map((order) => (
                 <tr key={order.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.user_id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.order_date).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.shipping_address}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.payment_method}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Ksh {order.order_total}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.status}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{order.id}</td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.user_id}</td> */}
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.order_date).toLocaleDateString()}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{order.shipping_address}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{order.payment_method}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">Ksh {Math.round(order.order_total)}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{order.status}</td>
                 </tr>
               ))}
             </tbody>
@@ -61,10 +61,10 @@ const Orders = () => {
                     <span className="font-semibold text-sm text-gray-600">Id:</span>
                     <span className="text-sm text-gray-600 mb-2">{order.id}</span>
                   </div>
-                  <div className="flex flex-col">
+                  {/* <div className="flex flex-col">
                     <span className="font-semibold text-sm text-gray-600">Customer:</span>
                     <span className="text-sm text-gray-600 mb-2">{order.user_id}</span>
-                  </div>
+                  </div> */}
                   <div className="flex flex-col">
                     <span className="font-semibold text-sm text-gray-600">Order Date: </span>
                     <span className="text-sm text-gray-600 mb-2">{new Date(order.order_date).toLocaleDateString()}</span>

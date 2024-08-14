@@ -280,7 +280,7 @@ export default function AllProducts() {
                       });
                       setUpdateValue(product.price);
                     }}
-                    className="bg-[#7C7C7C] text-white px-7 py-2 rounded-md"
+                    className="bg-[#7C7C7C] text-white px-4 py-2 rounded-md"
                   >
                     Edit Price
                   </button>
