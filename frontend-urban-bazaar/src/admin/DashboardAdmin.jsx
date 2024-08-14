@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../contexts/userContext";
 import OrdersIcons from "../assets/OrdersIcons.svg";
 import SignupsIcons from "../assets/SignupsIcon.svg";
 import EarningsIcons from "../assets/earningsIcon.svg";
@@ -6,10 +7,13 @@ import SalesChart from "./SalesChart"; // Import the SalesChart component
 
 function AdminDashboard() {
   const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
+  const { currentUser, authToken } = useContext(UserContext);
+  const token = authToken || localStorage.getItem("access_token");
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -31,6 +35,18 @@ function AdminDashboard() {
 
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    fetch("https://backend-urbanbazaar.onrender.com/admin/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setUsers(data.users))
+      .catch((error) => console.error("Error fetching users:", error));
+  }, [token]);
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -84,7 +100,7 @@ function AdminDashboard() {
           <div className="flex flex-col">
             <div className="text-lg font-semibold">SignUps</div>
 
-            <div className="text-2xl md:text-3xl mt-2">20</div>
+            <div className="text-2xl md:text-3xl mt-2">{users.length}</div>
           </div>
         </div>
       </div>

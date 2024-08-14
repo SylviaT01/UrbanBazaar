@@ -39,7 +39,6 @@ import DeliveryAndReturns from './components/DeliveryAndReturns.jsx';
 // Dummy components for User Profile
 const OrderHistory = () => <div>Order History Content</div>;
 
-const Wishlist = () => <div>Wishlist Content</div>;
 
 function AppContent() {
   const { currentUser } = useContext(UserContext);

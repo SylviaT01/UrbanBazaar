@@ -53,6 +53,36 @@ const Customers = () => {
       .catch((error) => console.error("Error updating admin status:", error));
   };
 
+  // Track user activity
+  const trackActivity = () => {
+    localStorage.setItem("lastActivity", Date.now());
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousemove", trackActivity);
+    window.addEventListener("keydown", trackActivity);
+
+    return () => {
+      window.removeEventListener("mousemove", trackActivity);
+      window.removeEventListener("keydown", trackActivity);
+    };
+  }, []);
+
+  const isUserActive = (user) => {
+    const lastActivity = localStorage.getItem("lastActivity");
+    const now = Date.now();
+    const tenMinutes = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+    if (lastActivity && now - lastActivity < tenMinutes) {
+      return true;
+    }
+    return false;
+  };
+
+  // Calculate the number of active users
+  const activeUsers = users.filter(isUserActive).length;
+
+
   return (
     <div className="flex flex-col ml-5 w-[80%] max-md:ml-0 max-md:w-full">
       <div className="flex flex-col w-full max-md:mt-10 max-md:max-w-full">
@@ -68,7 +98,7 @@ const Customers = () => {
                 Total Customers
               </div>
               <div className="self-start mt-3.5 text-3xl font-semibold tracking-tight leading-none text-zinc-800">
-                5,423
+                {users.length}
               </div>
               <div className="flex gap-1 mt-2 text-xs tracking-normal text-zinc-800">
                 <img
@@ -95,7 +125,7 @@ const Customers = () => {
                 Members
               </div>
               <div className="mt-3.5 text-3xl font-semibold tracking-tight leading-none text-zinc-800">
-                1,893
+                {users.length}
               </div>
               <div className="flex gap-1 self-stretch mt-2 text-xs tracking-normal text-zinc-800">
                 <img
@@ -123,7 +153,7 @@ const Customers = () => {
                 Active Now
               </div>
               <div className="self-start mt-3.5 text-3xl font-semibold tracking-tight leading-none text-zinc-800">
-                189
+              {activeUsers}
               </div>
             </div>
           </div>
