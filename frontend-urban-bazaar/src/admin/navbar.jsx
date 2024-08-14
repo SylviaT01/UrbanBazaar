@@ -116,7 +116,7 @@ const Navbar = () => {
           setNotifications((prevNotifications) =>
             prevNotifications.filter((notification) => notification.id !== replyTo.id)
           );
-          
+
           setReplyTo(null);
           setReplyMessage("");
         } else {
@@ -136,28 +136,28 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`flex flex-col items-center w-full pb-8`}>
-      <div className="flex justify-between items-center w-full px-5 pt-2 bg-white max-w-[1440px]">
-        <div className="flex gap-5 items-center">
+    <div className="flex flex-col items-center w-full pb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-center w-full px-5 pt-2 bg-white max-w-[1440px]">
+        <div className="flex-shrink-0 flex items-center mb-4 sm:mb-0">
           <Link to="/" className="flex items-center">
             <img src={logo} alt="UrbanBazaar Logo" className="w-32 h-auto p-2" />
           </Link>
         </div>
-        <div className="flex items-center gap-5 flex-grow justify-center">
-          <form onSubmit={handleSearchSubmit} className="flex items-center">
+        <div className="flex items-center gap-5 w-full sm:w-auto justify-center mt-2 sm:mt-0">
+          <form onSubmit={handleSearchSubmit} className="flex items-center w-full sm:w-auto">
             <input
               type="text"
               placeholder="Search..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="px-2 py-1 border border-gray-300 rounded-md"
+              className="px-2 py-1 border border-gray-300 rounded-md w-full sm:w-auto"
             />
             <button type="submit" className="ml-2">
               <FontAwesomeIcon icon={faSearch} className="text-gray-700 text-lg" />
             </button>
           </form>
         </div>
-        <div className="flex gap-4">
+        <div className="flex-shrink-0 flex items-center mb-4 mt-4 sm:mb-0 gap-4">
           <div className="relative flex gap-5 items-center px-2.5 pt-2.5 pb-4 min-h-[50px]">
             <img
               src={bell}
@@ -215,8 +215,8 @@ const Navbar = () => {
                         {isExpanded
                           ? notification.message
                           : notification.message.length > maxLength
-                          ? `${notification.message.slice(0, maxLength)}...`
-                          : notification.message}
+                            ? `${notification.message.slice(0, maxLength)}...`
+                            : notification.message}
                       </p>
                       {notification.message.length > maxLength && (
                         <button
@@ -266,6 +266,7 @@ const Navbar = () => {
         </div>
       )}
     </div>
+
   );
 };
 

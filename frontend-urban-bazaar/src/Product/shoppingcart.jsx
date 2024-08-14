@@ -55,9 +55,9 @@ const Cart = () => {
     return (
       <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
         <div className="bg-white rounded-lg w-full max-w-sm p-6">
-          
-            <h3 className="text-xl font-semibold mb-4 text-center">You need to log in</h3>
-            <p className="text-center mb-4">Please log in to view and manage your shopping cart.</p>
+
+          <h3 className="text-xl font-semibold mb-4 text-center">You need to log in</h3>
+          <p className="text-center mb-4">Please log in to view and manage your shopping cart.</p>
           <div className="flex flex-col md:flex-row justify-between gap-4">
             <button
               className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400 text-center"
@@ -119,79 +119,161 @@ const Cart = () => {
               {cart.length === 0 ? (
                 <p className="text-center mt-4">Your cart is empty.</p>
               ) : (
-                <div>
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {cart.map((item) => (
-                        <tr key={item.id}>
-                          <td className="px-6 py-4 whitespace-nowrap flex items-center">
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              className="w-16 h-16 object-cover mr-4"
-                            />
-                            <div>
-                              <h4 className="text-sm font-medium">{item.title}</h4>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh {Math.round((item.price * (100 - item.discount_percentage)) / 100).toLocaleString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh {(Math.round((item.price * (100 - item.discount_percentage)) / 100) * item.quantity).toLocaleString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                // <div>
+                //   <table className="min-w-full divide-y divide-gray-200">
+                //     <thead className="bg-gray-50">
+                //       <tr>
+                //         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                //         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                //         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
+                //         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                //       </tr>
+                //     </thead>
+                //     <tbody className="bg-white divide-y divide-gray-200">
+                //       {cart.map((item) => (
+                //         <tr key={item.id}>
+                //           <td className="px-6 py-4 whitespace-nowrap flex items-center">
+                //             <img
+                //               src={item.image}
+                //               alt={item.title}
+                //               className="w-16 h-16 object-cover mr-4"
+                //             />
+                //             <div>
+                //               <h4 className="text-sm font-medium">{item.title}</h4>
+                //             </div>
+                //           </td>
+                //           <td className="px-6 py-4 whitespace-nowrap">
+                //             Ksh {Math.round((item.price * (100 - item.discount_percentage)) / 100).toLocaleString()}
+                //           </td>
+                //           <td className="px-6 py-4 whitespace-nowrap">
+                //             Ksh {(Math.round((item.price * (100 - item.discount_percentage)) / 100) * item.quantity).toLocaleString()}
+                //           </td>
+                //           <td className="px-6 py-4 whitespace-nowrap">
+                //             <button
+                //               className="text-red-600 hover:text-red-800"
+                //               onClick={() => removeFromCart(item.id)}
+                //             >
+                //               <svg
+                //                 xmlns="http://www.w3.org/2000/svg"
+                //                 fill="none"
+                //                 viewBox="0 0 24 24"
+                //                 stroke="currentColor"
+                //                 className="w-6 h-6"
+                //               >
+                //                 <path
+                //                   strokeLinecap="round"
+                //                   strokeLinejoin="round"
+                //                   strokeWidth={2}
+                //                   d="M6 18L18 6M6 6l12 12"
+                //                 />
+                //               </svg>
+                //             </button>
+                //           </td>
+                //         </tr>
+                //       ))}
+                //     </tbody>
+                //   </table>
+                //   <div className="flex justify-between items-center border-t border-gray-200 pt-4">
+                //     <h4 className="text-sm font-medium">Total Price:</h4>
+                //     <p className="text-sm font-medium">Ksh {Math.round(totalPrice).toLocaleString()}</p>
+                //   </div>
+                //   <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
+                //     <button
+                //       className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
+                //       onClick={continueShopping}
+                //     >
+                //       Continue Shopping
+                //     </button>
+                //     <button
+                //       className="bg-black hover:bg-gray-800 text-white py-2 px-4 rounded"
+                //       onClick={handleCheckout}
+                //     >
+                //       Checkout
+                //     </button>
+                //   </div>
+                // </div>
+                <div className="px-4 sm:px-6 lg:px-8">
+                  <div className="flex flex-col">
+                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {cart.map((item) => (
+                                <tr key={item.id}>
+                                  <td className="px-6 py-4 whitespace-nowrap flex items-center">
+                                    <img
+                                      src={item.image}
+                                      alt={item.title}
+                                      className="w-16 h-16 object-cover mr-4 sm:w-12 sm:h-12"
+                                    />
+                                    <div>
+                                      <h4 className="text-sm font-medium">{item.title}</h4>
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    Ksh {Math.round((item.price * (100 - item.discount_percentage)) / 100).toLocaleString()}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    Ksh {(Math.round((item.price * (100 - item.discount_percentage)) / 100) * item.quantity).toLocaleString()}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <button
+                                      className="text-red-600 hover:text-red-800"
+                                      onClick={() => removeFromCart(item.id)}
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        className="w-6 h-6"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M6 18L18 6M6 6l12 12"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          <div className="flex flex-col sm:flex-row justify-between items-center border-t border-gray-200 pt-4">
+                            <h4 className="text-sm font-medium">Total Price:</h4>
+                            <p className="text-sm font-medium">Ksh {Math.round(totalPrice).toLocaleString()}</p>
+                          </div>
+                          <div className="flex flex-col sm:flex-row justify-between items-center border-t border-gray-200 pt-4 mt-4 space-y-2 sm:space-y-0">
                             <button
-                              className="text-red-600 hover:text-red-800"
-                              onClick={() => removeFromCart(item.id)}
+                              className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded w-full sm:w-auto"
+                              onClick={continueShopping}
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="w-6 h-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
+                              Continue Shopping
                             </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div className="flex justify-between items-center border-t border-gray-200 pt-4">
-                    <h4 className="text-sm font-medium">Total Price:</h4>
-                    <p className="text-sm font-medium">Ksh {Math.round(totalPrice).toLocaleString()}</p>
-                  </div>
-                  <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
-                    <button
-                      className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
-                      onClick={continueShopping}
-                    >
-                      Continue Shopping
-                    </button>
-                    <button
-                      className="bg-black hover:bg-gray-800 text-white py-2 px-4 rounded"
-                      onClick={handleCheckout}
-                    >
-                      Checkout
-                    </button>
+                            <button
+                              className="bg-black hover:bg-gray-800 text-white py-2 px-4 rounded w-full sm:w-auto"
+                              onClick={handleCheckout}
+                            >
+                              Checkout
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
               )}
             </div>
           </div>
