@@ -54,9 +54,9 @@ const UserProfile = () => {
       </button>
       {/* Sidebar */}
       <aside
-        className={`fixed md:relative top-0 left-0 w-64 bg-white text-[#747474] shadow-md transition-transform duration-300 ease-in-out md:translate-x-0 ${
+        className={`fixed md:relative top-0 left-0 w-64 text-[#747474] bg-white transition-transform duration-300 ease-in-out md:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
+        } h-full md:h-auto pt-16`}
       >
         <div className="p-4">
           {/* User Profile */}

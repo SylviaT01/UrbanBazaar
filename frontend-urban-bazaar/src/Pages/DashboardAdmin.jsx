@@ -30,7 +30,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF] py-2">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF]">
       {/* Toggle Button */}
       <button
         className="md:hidden p-4 bg-[#45B1E8] text-white"
