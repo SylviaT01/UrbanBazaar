@@ -1,4 +1,4 @@
-![homepage](/frontend-urban-bazaar/src/assests/homepage.png)
+![HomePage Screenshot](/frontend-urban-bazaar/src/assets/HomePage.png)
 
 # UrbanBazaar
 
