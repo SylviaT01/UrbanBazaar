@@ -50,26 +50,26 @@ The MVP of UrbanBazaar will include the following features:
   - Figma designed Wireframes to visualize the layout and user flow before implementation.
 
 ## Get Started
-    1. Clone the repository
+1. Clone the repository
     ```bash
     git clone git@github.com:SylviaT01/UrbanBazaar.git
     ```
-    2. Install dependencies
+2. Install dependencies
     ```bash
     npm install
     ```
     ```bash
     pipenv install
     ```
-    3. Enter virtual environment(Backend)
+3. Enter virtual environment(Backend)
     ```bash
     pipenv shell
     ```
-    4. Start the Flask server
+4. Start the Flask server
     ```bash
-    python run.py
+    python app.py
     ```
-    5. Start the React development server
+5. Start the React development server
     ```bash
     npm start
     ```
