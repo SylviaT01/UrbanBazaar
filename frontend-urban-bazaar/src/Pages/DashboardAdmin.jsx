@@ -56,7 +56,7 @@ const Dashboard = () => {
       <aside
         className={`fixed md:relative top-0 left-0 w-64 bg-white text-[#747474] shadow-md transition-transform duration-300 ease-in-out md:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 z-20`}
+        } h-full md:h-auto pt-16 z-20`}
       >
         <nav className="p-4">
           <ul>
@@ -81,8 +81,9 @@ const Dashboard = () => {
                 <img src={product} className="mr-3 w-6 h-6" alt="product" />
                 Products
                 <span
-                  className={`ml-auto transition-transform ${isProductsOpen ? "rotate-180" : ""
-                    }`}
+                  className={`ml-auto transition-transform ${
+                    isProductsOpen ? "rotate-180" : ""
+                  }`}
                 >
                   <svg
                     className="w-4 h-4"
