@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically call an API to handle the password reset
-    // For this example, we'll just simulate an error
-    setError('We cannot find your email.');
+    setError('');
+    setMessage('');
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/user', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'An error occurred');
+      }
+
+      setMessage(data.message || 'Password reset link sent to your email.');
+    } catch (err) {
+      setError(err.message || 'We cannot find your email.');
+    }
   };
 
   return (
@@ -35,6 +56,7 @@ const ForgotPassword = () => {
             />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
+          {message && <p className="text-sm text-green-600">{message}</p>}
           <div>
             <button
               type="submit"
@@ -45,9 +67,9 @@ const ForgotPassword = () => {
           </div>
         </form>
         <div className="text-center">
-          <a href="#" className="text-sm text-blue-600 hover:underline">
+          <Link to="/login" className="text-sm text-blue-600 hover:underline">
             Back to Login
-          </a>
+          </Link>
         </div>
       </div>
     </div>

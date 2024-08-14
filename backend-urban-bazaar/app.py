@@ -713,7 +713,9 @@ def get_user():
         }
         for user in users
     ]
-    return jsonify(users_data)          
+    return jsonify(users_data)
+    
+              
 
 # Route to add an item to the wishlist
 @app.route('/wishlist', methods=['POST'])
