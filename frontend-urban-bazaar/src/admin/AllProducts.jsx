@@ -209,7 +209,6 @@ export default function AllProducts() {
   );
 
   return (
-    <div className="ml-10">
       <div className="bg-white p-4 min-h-screen">
         <header className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
           <div className="flex flex-col md:flex-row md:items-center md:justify-center md:flex-1 space-y-4 md:space-y-0 md:space-x-4">
@@ -446,6 +445,6 @@ export default function AllProducts() {
           )}
         </footer>
       </div>
-    </div>
+    
   );
 }

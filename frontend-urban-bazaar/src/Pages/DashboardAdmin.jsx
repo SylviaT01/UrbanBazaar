@@ -31,7 +31,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF]">
       {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-white text-[#747474] shadow-md md:py-10 md:px-4 ml-10">
+      <aside className="w-full md:w-64 bg-white text-[#747474] shadow-md py-4 md:py-10 px-4 md:px-4">
         <nav className="p-4">
           <ul>
             <li className="mb-4">
@@ -55,8 +55,7 @@ const Dashboard = () => {
                 <img src={product} className="mr-3 w-6 h-6" alt="product" />
                 Products
                 <span
-                  className={`ml-auto transition-transform ${isProductsOpen ? "rotate-180" : ""
-                    }`}
+                  className={`ml-auto transition-transform ${isProductsOpen ? "rotate-180" : ""}`}
                 >
                   <svg
                     className="w-4 h-4"
@@ -186,6 +185,7 @@ const Dashboard = () => {
         <Outlet />
       </main>
     </div>
+
   );
 };
 
