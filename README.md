@@ -1,3 +1,5 @@
+![Homepagescreenshot](/frontend-urban-bazaar/src/assets/homepage.png)
+
 # UrbanBazaar
 
 ## Introduction
@@ -50,7 +52,7 @@ The MVP of UrbanBazaar will include the following features:
 ## Get Started
     1. Clone the repository
     ```bash
-    git clone [git@github.com:SylviaT01/MediMart.git](https://github.com/SylviaT01/UrbanBazaar)
+    git clone git@github.com:SylviaT01/UrbanBazaar.git
     ```
     2. Install dependencies
     ```bash
