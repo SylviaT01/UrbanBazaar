@@ -15,6 +15,18 @@ export const CartProvider = ({ children }) => {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
+    if (notification) {
+      // Set up a timer to clear the notification after 2 seconds
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 2000);
+
+      // Cleanup the timer on component unmount
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
+  useEffect(() => {
     const fetchCartData = async () => {
       const token = authToken || localStorage.getItem("access_token");
       if (!token) {

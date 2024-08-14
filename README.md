@@ -3,7 +3,7 @@
 # UrbanBazaar
 
 ## Introduction
-UrbanBazaar is a platform that connects buyers and sellers of second-hand goods. UrbanBazaar is a web-based e-commerce platform that offers a comprehensive list of products across various categories like electronics, mobiles, clothes, and groceries.
+UrbanBazaar is a web-based e-commerce platform that offers a comprehensive list of products across various categories like electronics, mobiles, clothes, and groceries.
 
 ## Minimum Viable Product(MVP) Features
 The MVP of UrbanBazaar will include the following features:

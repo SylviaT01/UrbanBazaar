@@ -16,10 +16,23 @@ export default function NavItems() {
     setSearchQuery(event.target.value);
   };
 
-  const handleSearchSubmit = (event) => {
+  // const handleSearchSubmit = (event) => {
+  //   event.preventDefault();
+  //   if (searchQuery.trim()) {
+  //     navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+  //   }
+  // };
+
+  const handleSearchSubmit = async (event) => {
     event.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      try {
+        const response = await fetch(`https://backend-urbanbazaar.onrender.com/products?q=${encodeURIComponent(searchQuery)}`);
+        const products = await response.json();
+        navigate('/products', { state: { products } });
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
     }
   };
 
