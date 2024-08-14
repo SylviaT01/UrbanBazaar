@@ -73,13 +73,14 @@ The MVP of UrbanBazaar will include the following features:
     ```bash
     npm start
     ```
+    
 ## Requirements
-    - Programming knowledge (HTML, JavaScript, Python and SQL)
-    - Visual Studio as code editor
-    - Basic understanding of web development and design principles
-    - Familiarity with React and Flask frameworks
-    - Experience with databases and SQL queries
-
+- Programming knowledge (HTML, JavaScript, Python and SQL)
+- Visual Studio as code editor
+- Basic understanding of web development and design principles
+- Familiarity with React and Flask frameworks
+- Experience with databases and SQL queries
+  
 ## Contributions
 
 Contributions are welcome! If you'd like to contribute, please fork the repository and submit a pull request.
