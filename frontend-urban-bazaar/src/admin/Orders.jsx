@@ -21,7 +21,7 @@ const Orders = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="flex flex-col items-center px-4 sm:px-6 lg:px-4 -mt-20">
+    <div className="flex flex-col items-center px-4 sm:px-6 lg:px-4 mt-10">
       <div className="text-2xl font-bold text-gray-800 mb-4">Orders</div>
       <div className="w-full max-w-6l">
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
