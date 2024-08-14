@@ -50,7 +50,7 @@ export default function NavItems() {
 
       <div className="bg-slate-100 border-b border-gray-300">
         <div className="flex flex-col sm:flex-row justify-between h-auto sm:h-16 items-center px-4 sm:px-6 lg:px-8 py-4 sm:py-0">
-         
+
           <div className="flex-shrink-0 flex items-center mb-4 sm:mb-0">
             <Link to="/" className="flex items-center">
               <img
@@ -61,21 +61,20 @@ export default function NavItems() {
             </Link>
           </div>
 
-          
-          <form onSubmit={handleSearchSubmit} className="flex items-center mb-4 sm:mb-0 w-full sm:w-auto">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="px-3 py-1 border border-gray-300 rounded-md w-full sm:w-64"
-            />
-            <button type="submit" className="ml-2 text-gray-700">
-              <FontAwesomeIcon icon={faSearch} className="text-lg" />
-            </button>
-          </form>
-
-          
+          <div className="flex items-center gap-5 w-full sm:w-auto justify-center mt-2 sm:mt-0">
+            <form onSubmit={handleSearchSubmit} className="flex items-center mb-4 sm:mb-0 w-full sm:w-auto">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="px-3 py-1 border border-gray-300 rounded-md w-full sm:w-64"
+              />
+              <button type="submit" className="ml-2 text-gray-700">
+                <FontAwesomeIcon icon={faSearch} className="text-lg" />
+              </button>
+            </form>
+          </div>
           <div className="flex items-center space-x-4 sm:space-x-6">
             <Link to={accountLink} className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
               <FontAwesomeIcon icon={faUser} className="text-lg" />

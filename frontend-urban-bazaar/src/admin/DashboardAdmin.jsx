@@ -92,64 +92,73 @@ function AdminDashboard() {
       <SalesChart orders={orders} /> {/* Add the SalesChart component */}
       {/* Orders Table */}
       <div className="w-full max-w-6xl">
-        <h2 className="text-2xl font-medium text-gray-800 mb-4">
-          Recent Orders
-        </h2>
+        <h2 className="text-2xl font-medium text-gray-800 mb-4">Recent Orders</h2>
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
+          {/* Table for larger screens */}
+          <table className="min-w-full divide-y divide-gray-200 hidden md:table">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                  Id
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Customer Name
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Order Date
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Item
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Quantity
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Id</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer Name</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {currentOrders.map((order) => (
                 <tr key={order.id}>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    {order.id}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    {order.user.username}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    {new Date(order.order_date).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    {order.item}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    {order.quantity}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    Ksh {order.order_total.toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    {order.status}
-                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{order.id}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{order.user.username}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{new Date(order.order_date).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{order.item}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{order.quantity}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">Ksh {order.order_total.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{order.status}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {/* Column format for smaller screens */}
+          <div className="block md:hidden">
+            {currentOrders.map((order) => (
+              <div key={order.id} className="border-b p-4 flex flex-col space-y-2">
+                <div className="flex justify-between">
+                  <span className="font-semibold text-sm text-gray-600">Id:</span>
+                  <span className="text-sm text-gray-600 mb-2">{order.id}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-semibold text-sm text-gray-600">Customer Name:</span>
+                  <span>{order.user.username}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-semibold text-sm text-gray-600">Order Date:</span>
+                  <span className="text-sm text-gray-600 mb-2">{new Date(order.order_date).toLocaleDateString()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-semibold text-sm text-gray-600">Item:</span>
+                  <span className="text-sm text-gray-600 mb-2">{order.item}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-semibold text-sm text-gray-600">Quantity:</span>
+                  <span className="text-sm text-gray-600 mb-2">{order.quantity}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-semibold text-sm text-gray-600">Amount:</span>
+                  <span className="text-sm text-gray-600 mb-2">Ksh {order.order_total.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-semibold text-sm text-gray-600">Status:</span>
+                  <span className="text-sm text-gray-600 mb-2">{order.status}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
           <div className="flex justify-between p-4">
             <button
               onClick={() => paginate(currentPage - 1)}
@@ -160,9 +169,7 @@ function AdminDashboard() {
             </button>
             <button
               onClick={() => paginate(currentPage + 1)}
-              disabled={
-                currentPage === Math.ceil(orders.length / ordersPerPage)
-              }
+              disabled={currentPage === Math.ceil(orders.length / ordersPerPage)}
               className="px-4 py-2 bg-gray-200 text-gray-800 rounded disabled:bg-gray-300"
             >
               Next
@@ -170,6 +177,7 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
+
     </div>
   );
 }

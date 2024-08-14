@@ -56,90 +56,203 @@ function Payments() {
   };
 
   return (
+    // <div className="w-full bg-aliceblue min-h-screen overflow-hidden text-left text-base text-black font-poppins p-4 sm:p-6 md:p-8">
+    //   <div className="mt-1 text-2xl font-bold text-gray-800 lg:ml-28">
+    //     Payment
+    //   </div>
+    //   <div className="flex flex-col mt-5 w-full">
+    //     <div className="flex flex-col lg:flex-row gap-5">
+    //       <div className="flex flex-col w-full lg:w-[22%]">
+    //         {/* Optional sidebar content */}
+    //       </div>
+    //       <div className="flex flex-col w-full lg:ml-5 bg-white rounded p-4 lg:p-6">
+    //         <div className="overflow-x-auto">
+    //           <table className="min-w-full divide-gray-200">
+    //             <thead className="bg-gray-50">
+    //               <tr>
+    //                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">No.</th>
+    //                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+    //                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
+    //                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping Address</th>
+    //                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+    //                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+    //                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+    //               </tr>
+    //             </thead>
+    //             <tbody className="bg-white divide-y divide-gray-200">
+    //               {currentPayments.map((payment, index) => (
+    //                 <tr key={payment.id}>
+    //                   <td className="px-4 py-2 text-sm text-gray-500">{index + indexOfFirstPayment + 1}</td>
+    //                   <td className="px-4 py-2 text-sm text-gray-500">{payment.user_email}</td>
+    //                   <td className="px-4 py-2 text-sm text-gray-500">
+    //                     {payment.created_at ? new Date(payment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'Invalid Date'}
+    //                   </td>
+    //                   <td className="px-4 py-2 text-sm text-gray-500">{payment.shipping_address}</td>
+    //                   <td className="px-4 py-2 text-sm text-gray-500">{payment.payment_method}</td>
+    //                   <td className="px-4 py-2 text-sm text-gray-500">Kshs. {payment.order_total.toFixed(2)}</td>
+    //                   <td className="px-4 py-2 text-sm text-gray-500">{payment.status}</td>
+    //                 </tr>
+    //               ))}
+    //             </tbody>
+    //             <tfoot>
+    //               <tr>
+    //                 <td colSpan="5" className="px-4 py-2 text-right text-sm font-bold text-gray-700">Total:</td>
+    //                 <td colSpan="2" className="px-4 py-2 text-sm font-bold text-gray-700 bg-gray-100">Kshs. {totalPayment.toFixed(2)}</td>
+    //               </tr>
+    //             </tfoot>
+    //           </table>
+    //         </div>
+    //         <div className="flex justify-center mt-4">
+    //           <nav>
+    //             <ul className="flex list-none gap-2">
+    //               <li>
+    //                 <button
+    //                   onClick={handlePrevious}
+    //                   className={`px-4 py-2 border ${currentPage === 1 ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+    //                   disabled={currentPage === 1}
+    //                 >
+    //                   Previous
+    //                 </button>
+    //               </li>
+    //               {Array.from({ length: Math.ceil(payments.length / paymentsPerPage) }, (_, index) => (
+    //                 <li key={index}>
+    //                   <button
+    //                     onClick={() => paginate(index + 1)}
+    //                     className={`px-4 py-2 border ${currentPage === index + 1 ? 'bg-blue-400 text-white' : 'bg-white text-gray-800'}`}
+    //                   >
+    //                     {index + 1}
+    //                   </button>
+    //                 </li>
+    //               ))}
+    //               <li>
+    //                 <button
+    //                   onClick={handleNext}
+    //                   className={`px-4 py-2 border ${currentPage === Math.ceil(payments.length / paymentsPerPage) ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+    //                   disabled={currentPage === Math.ceil(payments.length / paymentsPerPage)}
+    //                 >
+    //                   Next
+    //                 </button>
+    //               </li>
+    //             </ul>
+    //           </nav>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
     <div className="w-full bg-aliceblue min-h-screen overflow-hidden text-left text-base text-black font-poppins p-4 sm:p-6 md:p-8">
-      <div className="mt-1 text-2xl font-bold text-gray-800 lg:ml-28">
-        Payment
+  <div className="mt-1 text-2xl font-bold text-gray-800 lg:ml-28">
+    Payment
+  </div>
+  <div className="flex flex-col mt-5 w-full">
+    <div className="flex flex-col lg:flex-row gap-5">
+      <div className="flex flex-col w-full lg:w-[22%]">
+        {/* Optional sidebar content */}
       </div>
-      <div className="flex flex-col mt-5 w-full">
-        <div className="flex flex-col lg:flex-row gap-5">
-          <div className="flex flex-col w-full lg:w-[22%]">
-            {/* Optional sidebar content */}
-          </div>
-          <div className="flex flex-col w-full lg:ml-5 bg-white rounded p-4 lg:p-6">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">No.</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping Address</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+      <div className="flex flex-col w-full lg:ml-5 bg-white rounded p-4 lg:p-6">
+        {/* Responsive Table */}
+        <div className="hidden md:block">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">No.</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping Address</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {currentPayments.map((payment, index) => (
+                  <tr key={payment.id}>
+                    <td className="px-4 py-2 text-sm text-gray-500">{index + indexOfFirstPayment + 1}</td>
+                    <td className="px-4 py-2 text-sm text-gray-500">{payment.user_email}</td>
+                    <td className="px-4 py-2 text-sm text-gray-500">
+                      {payment.created_at ? new Date(payment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'Invalid Date'}
+                    </td>
+                    <td className="px-4 py-2 text-sm text-gray-500">{payment.shipping_address}</td>
+                    <td className="px-4 py-2 text-sm text-gray-500">{payment.payment_method}</td>
+                    <td className="px-4 py-2 text-sm text-gray-500">Kshs. {payment.order_total.toFixed(2)}</td>
+                    <td className="px-4 py-2 text-sm text-gray-500">{payment.status}</td>
                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {currentPayments.map((payment, index) => (
-                    <tr key={payment.id}>
-                      <td className="px-4 py-2 text-sm text-gray-500">{index + indexOfFirstPayment + 1}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.user_email}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">
-                        {payment.created_at ? new Date(payment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'Invalid Date'}
-                      </td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.shipping_address}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.payment_method}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">Kshs. {payment.order_total.toFixed(2)}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colSpan="5" className="px-4 py-2 text-right text-sm font-bold text-gray-700">Total:</td>
-                    <td colSpan="2" className="px-4 py-2 text-sm font-bold text-gray-700 bg-gray-100">Kshs. {totalPayment.toFixed(2)}</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-            <div className="flex justify-center mt-4">
-              <nav>
-                <ul className="flex list-none gap-2">
-                  <li>
-                    <button
-                      onClick={handlePrevious}
-                      className={`px-4 py-2 border ${currentPage === 1 ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
-                      disabled={currentPage === 1}
-                    >
-                      Previous
-                    </button>
-                  </li>
-                  {Array.from({ length: Math.ceil(payments.length / paymentsPerPage) }, (_, index) => (
-                    <li key={index}>
-                      <button
-                        onClick={() => paginate(index + 1)}
-                        className={`px-4 py-2 border ${currentPage === index + 1 ? 'bg-blue-400 text-white' : 'bg-white text-gray-800'}`}
-                      >
-                        {index + 1}
-                      </button>
-                    </li>
-                  ))}
-                  <li>
-                    <button
-                      onClick={handleNext}
-                      className={`px-4 py-2 border ${currentPage === Math.ceil(payments.length / paymentsPerPage) ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
-                      disabled={currentPage === Math.ceil(payments.length / paymentsPerPage)}
-                    >
-                      Next
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colSpan="5" className="px-4 py-2 text-right text-sm font-bold text-gray-700">Total:</td>
+                  <td colSpan="2" className="px-4 py-2 text-sm font-bold text-gray-700 bg-gray-100">Kshs. {totalPayment.toFixed(2)}</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
+        </div>
+
+        {/* Responsive Cards */}
+        <div className="block md:hidden">
+          {currentPayments.map((payment, index) => (
+            <div className="flex flex-col bg-white p-4 mb-4 rounded-lg shadow" key={payment.id}>
+              <div className="flex flex-col">
+                <div className="font-semibold text-lg">No. {index + indexOfFirstPayment + 1}</div>
+                <div className="font-semibold text-sm text-gray-600">Customer:</div>
+                <div className="text-sm text-gray-600 mb-2">{payment.user_email}</div>
+                <div className="font-semibold text-sm text-gray-600">Order Date:</div>
+                <div className="text-sm text-gray-600 mb-2">{payment.created_at ? new Date(payment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'Invalid Date'}</div>
+                <div className="font-semibold text-sm text-gray-600">Shipping Address:</div>
+                <div className="text-sm text-gray-600 mb-2">{payment.shipping_address}</div>
+                <div className="font-semibold text-sm text-gray-600">Payment Method:</div>
+                <div className="text-sm text-gray-600 mb-2">{payment.payment_method}</div>
+                <div className="font-semibold text-sm text-gray-600">Amount:</div>
+                <div className="text-sm text-gray-600 mb-2">Kshs. {payment.order_total.toFixed(2)}</div>
+                <div className="font-semibold text-sm text-gray-600">Status:</div>
+                <div className="text-sm text-gray-600">{payment.status}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="flex justify-center mt-4">
+          <nav>
+            <ul className="flex list-none gap-2">
+              <li>
+                <button
+                  onClick={handlePrevious}
+                  className={`px-4 py-2 border ${currentPage === 1 ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+              </li>
+              {Array.from({ length: Math.ceil(payments.length / paymentsPerPage) }, (_, index) => (
+                <li key={index}>
+                  <button
+                    onClick={() => paginate(index + 1)}
+                    className={`px-4 py-2 border ${currentPage === index + 1 ? 'bg-blue-400 text-white' : 'bg-white text-gray-800'}`}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li>
+                <button
+                  onClick={handleNext}
+                  className={`px-4 py-2 border ${currentPage === Math.ceil(payments.length / paymentsPerPage) ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+                  disabled={currentPage === Math.ceil(payments.length / paymentsPerPage)}
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
 
   );
 }

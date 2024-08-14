@@ -85,31 +85,31 @@ const Contacts = () => {
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-4 md:space-y-0">
         <h1 className="text-2xl font-bold">Contacts</h1>
-        <div className="flex space-x-4">
+        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
           <input
             type="text"
             placeholder="Search contacts..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full md:w-auto"
           />
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full md:w-auto"
           />
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border p-2 rounded"
+            className="border p-2 rounded w-full md:w-auto"
           />
           <button
-            onClick={() => filterContacts()} // Trigger filtering
-            className="border px-4 py-2 rounded bg-blue-500 text-white"
+            onClick={filterContacts} // Trigger filtering
+            className="border px-4 py-2 rounded bg-blue-500 text-white w-full md:w-auto"
           >
             Filter
           </button>
@@ -118,7 +118,7 @@ const Contacts = () => {
 
       {/* Contacts Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border">
+        <table className="min-w-full bg-white border hidden md:table">
           <thead>
             <tr className="border-b">
               <th
@@ -129,8 +129,7 @@ const Contacts = () => {
                 }}
               >
                 Date{" "}
-                {sortColumn === "submittedAt" &&
-                  (sortDirection === "asc" ? "▲" : "▼")}
+                {sortColumn === "submittedAt" && (sortDirection === "asc" ? "▲" : "▼")}
               </th>
               <th
                 className="p-4 text-left cursor-pointer"
@@ -167,23 +166,50 @@ const Contacts = () => {
             )}
           </tbody>
         </table>
+
+        {/* Mobile View */}
+        <div className="block md:hidden">
+          {currentContacts.length ? (
+            currentContacts.map((contact, index) => (
+              <div key={index} className="border-b p-4 flex flex-col space-y-2">
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm text-gray-600">Date:</span>
+                  <span className="text-sm text-gray-600">{new Date(contact.submittedAt).toLocaleDateString()}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm text-gray-600">Name: </span>
+                  <span className="text-sm text-gray-600">{contact.name}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm text-gray-600">Email: </span>
+                  <span className="text-sm text-gray-600">{contact.email}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm text-gray-600">Message: </span>
+                  <span className="text-sm text-gray-600">{contact.message}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-4 text-center">
+              No contacts found
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Pagination */}
       <div className="mt-4 flex justify-end items-center">
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-          (number) => (
-            <button
-              key={number}
-              onClick={() => paginate(number)}
-              className={`border px-4 py-2 mx-1 ${
-                number === currentPage ? "bg-blue-500 text-white" : ""
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
+          <button
+            key={number}
+            onClick={() => paginate(number)}
+            className={`border px-4 py-2 mx-1 ${number === currentPage ? "bg-blue-500 text-white" : ""
               }`}
-            >
-              {number}
-            </button>
-          )
-        )}
+          >
+            {number}
+          </button>
+        ))}
         {totalPages > 10 && currentPage < totalPages && (
           <button
             onClick={() => paginate(currentPage + 1)}
@@ -194,6 +220,8 @@ const Contacts = () => {
         )}
       </div>
     </div>
+
+
   );
 };
 
