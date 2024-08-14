@@ -48,47 +48,47 @@ The MVP of UrbanBazaar will include the following features:
   - Figma designed Wireframes to visualize the layout and user flow before implementation.
 
 ## Get Started
-1. Clone the repository
-```bash
-git clone [git@github.com:SylviaT01/MediMart.git](https://github.com/SylviaT01/UrbanBazaar)
-```
-2. Install dependencies
-```bash
-npm install
-```
-```bash
-pipenv install
-```
-3. Enter virtual environment(Backend)
-```bash
-pipenv shell
-```
-4. Start the Flask server
-```bash
-python run.py
-```
-5. Start the React development server
-```bash
-npm start
-``
+    1. Clone the repository
+    ```bash
+    git clone [git@github.com:SylviaT01/MediMart.git](https://github.com/SylviaT01/UrbanBazaar)
+    ```
+    2. Install dependencies
+    ```bash
+    npm install
+    ```
+    ```bash
+    pipenv install
+    ```
+    3. Enter virtual environment(Backend)
+    ```bash
+    pipenv shell
+    ```
+    4. Start the Flask server
+    ```bash
+    python run.py
+    ```
+    5. Start the React development server
+    ```bash
+    npm start
+    ```
 ## Requirements
-- Programming knowledge (HTML, JavaScript, Python and SQL)
-- Visual Studio as code editor
-- Basic understanding of web development and design principles
-- Familiarity with React and Flask frameworks
-- Experience with databases and SQL queries
+    - Programming knowledge (HTML, JavaScript, Python and SQL)
+    - Visual Studio as code editor
+    - Basic understanding of web development and design principles
+    - Familiarity with React and Flask frameworks
+    - Experience with databases and SQL queries
 
 ## Contributions
 
 Contributions are welcome! If you'd like to contribute, please fork the repository and submit a pull request.
 
 ## Authors
-- [Sylvia Chebet](https://github.com/SylviaT01)
-- [Wilfred Ketere](https://github.com/WLemmy)
-- [Morris Mburu](https://github.com/mrrsmburu)
-- [Lewis Wambugu](https://github.com/Wambuguu)
-- [Uwes Ahabab](https://github.com/ahabab23/ahabab23)
+    - [Sylvia Chebet](https://github.com/SylviaT01)
+    - [Wilfred Ketere](https://github.com/WLemmy)
+    - [Morris Mburu](https://github.com/mrrsmburu)
+    - [Lewis Wambugu](https://github.com/Wambuguu)
+    - [Uwes Ahabab](https://github.com/ahabab23/ahabab23)
 
 ## Copyright and License Information
-The project is licensed under [MIT License](LICENSE)
+    The project is licensed under [MIT License](LICENSE)
 
