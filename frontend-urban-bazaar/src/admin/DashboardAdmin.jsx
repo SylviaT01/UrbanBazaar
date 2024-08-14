@@ -47,7 +47,6 @@ function AdminDashboard() {
       .catch((error) => console.error("Error fetching users:", error));
   }, [token]);
 
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -73,9 +72,7 @@ function AdminDashboard() {
             <div className="text-2xl md:text-3xl mt-2">
               Ksh{" "}
               {Math.round(
-                orders
-                  .reduce((total, order) => total + order.order_total, 0)
-                  .toFixed(2)
+                (orders || []).reduce((total, order) => total + order.order_total, 0).toFixed(2)
               )}
             </div>
           </div>
@@ -88,7 +85,7 @@ function AdminDashboard() {
           />
           <div className="flex flex-col">
             <div className="text-lg font-semibold">Orders</div>
-            <div className="text-2xl md:text-3xl mt-2">{orders.length}</div>
+            <div className="text-2xl md:text-3xl mt-2">{orders ? orders.length : 0}</div>
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-6 bg-yellow-500 text-white rounded-lg shadow-md p-6 md:p-8 items-center">
@@ -100,7 +97,7 @@ function AdminDashboard() {
           <div className="flex flex-col">
             <div className="text-lg font-semibold">SignUps</div>
 
-            <div className="text-2xl md:text-3xl mt-2">{users.length}</div>
+            <div className="text-2xl md:text-3xl mt-2">{users ? users.length : 0}</div>
           </div>
         </div>
       </div>
@@ -173,27 +170,31 @@ function AdminDashboard() {
               </div>
             ))}
           </div>
-
-          {/* Pagination */}
-          <div className="flex justify-between p-4">
-            <button
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded disabled:bg-gray-300"
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(orders.length / ordersPerPage)}
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded disabled:bg-gray-300"
-            >
-              Next
-            </button>
-          </div>
+        </div>
+        {/* Pagination */}
+        <div className="flex justify-center mt-4">
+          {orders && orders.length > 0 && (
+            <nav className="flex justify-center">
+              <ul className="flex items-center space-x-2">
+                {[...Array(Math.ceil(orders.length / ordersPerPage)).keys()].map((number) => (
+                  <li key={number + 1}>
+                    <button
+                      onClick={() => paginate(number + 1)}
+                      className={`px-3 py-1 rounded-md ${
+                        currentPage === number + 1
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-gray-800 border border-gray-300"
+                      }`}
+                    >
+                      {number + 1}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </div>
       </div>
-
     </div>
   );
 }

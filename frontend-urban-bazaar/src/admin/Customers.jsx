@@ -125,7 +125,7 @@ const Customers = () => {
                 Members
               </div>
               <div className="mt-3.5 text-3xl font-semibold tracking-tight leading-none text-zinc-800">
-                {users.length}
+                {users.length - 15}
               </div>
               <div className="flex gap-1 self-stretch mt-2 text-xs tracking-normal text-zinc-800">
                 <img
@@ -262,7 +262,7 @@ const Customers = () => {
                         {currentUser.is_admin && (
                           <td className="px-4 py-4 text-sm text-gray-500">
                             <button
-                              className="px-2 py-1 bg-blue-500 text-white rounded"
+                              className={user.is_admin? "px-2 py-2 text-white rounded bg-blue-500 " : "px-4 py-2 bg-green-400 text-white rounded "}
                               onClick={() => handleAdminToggle(user.id, !user.is_admin)}
                             >
                               {user.is_admin ? "Revoke Admin" : "Make Admin"}
