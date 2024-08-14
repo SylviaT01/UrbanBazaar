@@ -142,6 +142,8 @@ export const UserProvider = ({ children }) => {
       });
   };
 
+  
+
   const handleLogout = () => {
     setAuthToken(null);
     setCurrentUser(null);

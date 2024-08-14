@@ -24,6 +24,7 @@ export default function SignUp() {
   const navigate = useNavigate();
 
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
