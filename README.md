@@ -23,10 +23,7 @@ The MVP of UrbanBazaar will include the following features:
     - Simulate a payment process internally
     - Display order summary
     - Generate address, billing information, and invoices for every order submitted
-## Admin Features
 
-- **Product Management**
-  - Perform CRUD (Create, Read, Update, D
 ## Admin Features
 
 - **Product Management**
