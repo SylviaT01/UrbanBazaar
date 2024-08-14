@@ -1,4 +1,4 @@
-![Homepagescreenshot](/frontend-urban-bazaar/src/assets/homepage.png)
+![homepage](/frontend-urban-bazaar/src/assests/homepage.png)
 
 # UrbanBazaar
 
@@ -93,7 +93,4 @@ Contributions are welcome! If you'd like to contribute, please fork the reposito
 
 ## Copyright and License Information
 The project is licensed under [MIT License](LICENSE)
-
-## Copyright and License Information
-    The project is licensed under [MIT License](LICENSE)
 
