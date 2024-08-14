@@ -12,6 +12,7 @@ import reviews from "../assets/reviews.svg";
 const Dashboard = () => {
   const { currentUser, logout } = useContext(UserContext);
   const [isProductsOpen, setProductsOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleProductsClick = () => {
@@ -29,9 +30,34 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF]">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF] py-2">
+      {/* Toggle Button */}
+      <button
+        className="md:hidden p-4 bg-[#45B1E8] text-white"
+        onClick={() => setSidebarOpen(!isSidebarOpen)}
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+
       {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-white text-[#747474] shadow-md py-4 md:py-10 px-4 md:px-4">
+      <aside
+        className={`fixed md:relative top-0 left-0 w-64 bg-white text-[#747474] shadow-md transition-transform duration-300 ease-in-out md:translate-x-0 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 z-20`}
+      >
         <nav className="p-4">
           <ul>
             <li className="mb-4">
@@ -55,7 +81,8 @@ const Dashboard = () => {
                 <img src={product} className="mr-3 w-6 h-6" alt="product" />
                 Products
                 <span
-                  className={`ml-auto transition-transform ${isProductsOpen ? "rotate-180" : ""}`}
+                  className={`ml-auto transition-transform ${isProductsOpen ? "rotate-180" : ""
+                    }`}
                 >
                   <svg
                     className="w-4 h-4"
@@ -185,7 +212,6 @@ const Dashboard = () => {
         <Outlet />
       </main>
     </div>
-
   );
 };
 

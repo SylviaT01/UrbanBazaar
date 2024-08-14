@@ -140,7 +140,7 @@ const Reviews = () => {
           </div>
         </div>
       </div> */}
-      <div className="-mt-12 w-full max-w-[1239px] max-md:max-w-full">
+      <div className="mt-12 w-full max-w-[1239px] max-md:max-w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-md:flex-col">
           {currentReviews.map((review) => (
             <div
@@ -160,7 +160,7 @@ const Reviews = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-4 ">
                 <Rating
                   value={review.rating}
                   size={24}

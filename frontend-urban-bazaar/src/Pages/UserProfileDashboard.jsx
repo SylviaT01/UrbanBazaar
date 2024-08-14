@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/userContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import the FontAwesomeIcon component
@@ -10,6 +10,7 @@ import logoutIcon from "../assets/logout.svg";
 const UserProfile = () => {
   const { currentUser, logout } = useContext(UserContext);
   const navigate = useNavigate();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -30,9 +31,33 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF] py-20">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#F0F9FF] py-5">
+      {/* Toggle Button */}
+      <button
+        className="md:hidden p-4 bg-[#45B1E8] text-white"
+        onClick={() => setSidebarOpen(!isSidebarOpen)}
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
       {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-white text-[#747474] shadow-md md:py-10 md:px-4">
+      <aside
+        className={`fixed md:relative top-0 left-0 w-64 bg-white text-[#747474] shadow-md transition-transform duration-300 ease-in-out md:translate-x-0 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
+      >
         <div className="p-4">
           {/* User Profile */}
           <div className="flex items-center mb-4 border-b-2 border-gray-200">
@@ -84,7 +109,8 @@ const UserProfile = () => {
                       : " px-4 py-6 bg-[#FFFFFF] hover:bg-[#d1d5db] rounded flex items-center"
                   }
                 >
-                  <FontAwesomeIcon icon={faHeart} className="mr-3" /> {/* Updated to use faHeart icon */}
+                  <FontAwesomeIcon icon={faHeart} className="mr-3" />{" "}
+                  {/* Updated to use faHeart icon */}
                   Wishlist
                 </NavLink>
               </li>
