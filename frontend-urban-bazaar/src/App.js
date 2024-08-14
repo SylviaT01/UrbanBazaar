@@ -35,9 +35,9 @@ import Navbar from "./admin/navbar";
 import PrivacyPolicy from './components/privacypolicy.jsx';
 import FAQs from './components/FAQs';
 import DeliveryAndReturns from './components/DeliveryAndReturns.jsx';
-
+import OrderHistory from "./Product/orderHistory.jsx";
 // Dummy components for User Profile
-const OrderHistory = () => <div>Order History Content</div>;
+// const OrderHistory = () => <div>Order History Content</div>;
 
 
 function AppContent() {
