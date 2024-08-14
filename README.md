@@ -83,11 +83,14 @@ The MVP of UrbanBazaar will include the following features:
 Contributions are welcome! If you'd like to contribute, please fork the repository and submit a pull request.
 
 ## Authors
-    - [Sylvia Chebet](https://github.com/SylviaT01)
-    - [Wilfred Ketere](https://github.com/WLemmy)
-    - [Morris Mburu](https://github.com/mrrsmburu)
-    - [Lewis Wambugu](https://github.com/Wambuguu)
-    - [Uwes Ahabab](https://github.com/ahabab23/ahabab23)
+- [Sylvia Chebet](https://github.com/SylviaT01)
+- [Wilfred Ketere](https://github.com/WLemmy)
+- [Morris Mburu](https://github.com/mrrsmburu)
+- [Lewis Wambugu](https://github.com/Wambuguu)
+- [Uwes Ahabab](https://github.com/ahabab23/ahabab23)
+
+## Copyright and License Information
+The project is licensed under [MIT License](LICENSE)
 
 ## Copyright and License Information
     The project is licensed under [MIT License](LICENSE)
