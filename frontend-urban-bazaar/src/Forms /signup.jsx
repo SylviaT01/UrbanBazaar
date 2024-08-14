@@ -7,6 +7,8 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import mall from '../assets/mall.jpg';
 import googleIcon from '../assets/google icon.png';
 import facebookIcon from '../assets/facebookIcon.png';
+import { auth, googleProvider, facebookProvider } from '../firebase'; // Import the providers and auth from your Firebase config
+import { signInWithPopup } from 'firebase/auth';
 
 
 export default function SignUp() {
@@ -40,6 +42,28 @@ export default function SignUp() {
     } catch (error) {
       console.error('Error during signup:', error);
       setError('Something went wrong');
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log('Google Sign up successful:', result.user);
+      navigate('/'); // Redirect after successful signup
+    } catch (error) {
+      console.error('Google sign-up error:', error);
+      setError('Failed to sign up with Google');
+    }
+  };
+
+  const handleFacebookSignUp = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      console.log('Facebook Sign up successful:', result.user);
+      navigate('/'); // Redirect after successful signup
+    } catch (error) {
+      console.error('Facebook sign-up error:', error);
+      setError('Failed to sign up with Facebook');
     }
   };
   const handleGoHome = () => {
@@ -169,11 +193,17 @@ export default function SignUp() {
                     <div className="mt-6 text-center">
                       <div className="text-gray-500">or</div>
                       <div className="flex items-center justify-center mt-4 space-x-4 ">
-                        <button className="flex items-center justify-center py-1 px-3 w-auto text-black rounded-md shadow-sm text-sm border border-gray-200">
+                        <button
+                         type="button"
+                         onClick={handleGoogleSignUp}
+                         className="flex items-center justify-center py-1 px-3 w-auto text-black rounded-md shadow-sm text-sm border border-gray-200">
                           <img src={googleIcon} alt="Google" className="w-6 h-6 mr-2" />
                           Sign up with Google
                         </button>
-                        <button className="flex items-center justify-center py-1 px-3 w-auto text-black  rounded-md shadow-sm text-sm border border-gray-200">
+                        <button 
+                        type="button"
+                        onClick={handleFacebookSignUp}
+                        className="flex items-center justify-center py-1 px-3 w-auto text-black  rounded-md shadow-sm text-sm border border-gray-200">
                           <img src={facebookIcon} alt="Facebook" className="w-5 h-5 mr-2" />
                           Sign up with Facebook
                         </button>

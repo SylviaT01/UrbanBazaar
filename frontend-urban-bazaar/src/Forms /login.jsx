@@ -7,7 +7,8 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import supermarket from "../assets/supermarket.jpg.jpg";
 import googleIcon from '../assets/google icon.png';
 import facebookIcon from '../assets/facebookIcon.png';
-
+import { auth, googleProvider, facebookProvider } from '../firebase'; // Import Firebase authentication and providers
+import { signInWithPopup } from 'firebase/auth';
 
 export default function Login() {
   const { login } = useContext(UserContext);
@@ -21,10 +22,31 @@ export default function Login() {
     login(email, password);
   }
 
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      // Handle the logged-in user, e.g., store the user in your context
+      console.log('Google User:', user);
+    } catch (error) {
+      console.error('Google login error:', error);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      // Handle the logged-in user
+      console.log('Facebook User:', user);
+    } catch (error) {
+      console.error('Facebook login error:', error);
+    }
+  };
+
   const handleGoHome = () => {
     navigate("/");
   };
-
 
   return (
     <div className="login-container">
@@ -99,18 +121,23 @@ export default function Login() {
                           </Link>
                         </div>
                       </div>
-                      <div>
-
-                        <div className="flex items-center justify-center mt-4 space-x-4 ">
-                          <button className="flex items-center justify-center py-1 px-3 w-auto text-black rounded-md shadow-sm text-sm border border-gray-200">
-                            <img src={googleIcon} alt="Google" className="w-5 h-5 mr-2" />
-                            Google
-                          </button>
-                          <button className="flex items-center justify-center py-1 px-3 w-auto text-black  rounded-md shadow-sm text-sm border border-gray-200">
-                            <img src={facebookIcon} alt="Facebook" className="w-4 h-4 mr-2" />
-                            Facebook
-                          </button>
-                        </div>
+                      <div className="flex items-center justify-center mt-4 space-x-4 ">
+                        <button
+                          type="button"
+                          onClick={handleGoogleLogin}
+                          className="flex items-center justify-center py-1 px-3 w-auto text-black rounded-md shadow-sm text-sm border border-gray-200"
+                        >
+                          <img src={googleIcon} alt="Google" className="w-5 h-5 mr-2" />
+                          Google
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleFacebookLogin}
+                          className="flex items-center justify-center py-1 px-3 w-auto text-black rounded-md shadow-sm text-sm border border-gray-200"
+                        >
+                          <img src={facebookIcon} alt="Facebook" className="w-4 h-4 mr-2" />
+                          Facebook
+                        </button>
                       </div>
                       <div className="text-center mt-4">
                         <span className="text-sm text-gray-600">Don't have an account?</span>{' '}
@@ -132,7 +159,6 @@ export default function Login() {
               </div>
             </div>
             {/* Left blue half */}
-
             <div className="relative flex flex-col justify-center items-center md:w-1/2 px-4 py-4 md:px-8 bg-cover bg-center opacity-70" style={{ height: '500px', backgroundImage: `url(${supermarket})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
               <div className="absolute inset-0 opacity-50"></div>
               <div className="relative z-10">
