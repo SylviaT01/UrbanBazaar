@@ -1,30 +1,52 @@
-import React, { useContext, useState } from "react";
-import pesapal from "../assets/pesapal.png";
-import Paypal from "../assets/Paypal.png";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../contexts/userContext";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Checkout() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [orderTotal, setOrderTotal] = useState(0);
+  const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [apartmentNumber, setApartmentNumber] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [paypalEmail, setPaypalEmail] = useState("");
-  const { currentUser, authToken } = useContext(UserContext);
+  const [authToken, setAuthToken] = useState("");
+  const { authToken: contextToken } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const handlePaymentMethodChange = (method) => {
-    setPaymentMethod(method);
-  };
+  useEffect(() => {
+    const fetchCartData = async () => {
+      const token =
+        authToken || contextToken || localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No auth token available");
+        return;
+      }
+      try {
+        const response = await fetch("https://backend-urbanbazaar.onrender.com/cart", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Network response was not ok");
+        const result = await response.json();
+        setOrderTotal(
+          result.cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        );
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    };
+    fetchCartData();
+  }, [authToken, contextToken]);
 
   const handleShippingFormSubmit = async (e) => {
     e.preventDefault();
-    const token = authToken || localStorage.getItem("access_token");
+    const token =
+      authToken || contextToken || localStorage.getItem("access_token");
 
     const shippingData = {
       name: `${firstName} ${lastName}`,
@@ -35,124 +57,158 @@ function Checkout() {
     };
 
     try {
-      const response = await fetch("https://backend-urbanbazaar.onrender.com/orders", {
+      const response = await fetch("https://backend-urbanbazaar.onrender.com/shipping", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          shipping_address: shippingData,
-          payment_method: paymentMethod,
-          order_total: 70.44, // Replace with the actual order total calculation
-        }),
+        body: JSON.stringify(shippingData),
       });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const result = await response.json();
-      console.log("Shipping data submitted:", result);
+      if (!response.ok) throw new Error("Network response was not ok");
+      setCurrentStep(2);
     } catch (error) {
       console.error("Error submitting shipping form:", error);
     }
-
-    setCurrentStep(2); // Move to Place Your Order section
   };
 
   const handlePaymentFormSubmit = async (e) => {
     e.preventDefault();
+    const token =
+      authToken || contextToken || localStorage.getItem("access_token");
+
     const paymentData = {
-      paymentMethod,
-      ...(paymentMethod === "mpesa" && { phoneNumber }),
-      ...(paymentMethod === "pesapal" && { emailAddress }),
-      ...(paymentMethod === "paypal" && { paypalEmail }),
+      email: email,
     };
 
     try {
-      const response = await fetch("https://backend-urbanbazaar.onrender.com/orders", {
+      const response = await fetch("https://backend-urbanbazaar.onrender.com/payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken || localStorage.getItem("access_token")}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(paymentData),
       });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const result = await response.json();
-      console.log("Payment data submitted:", result);
-      setCurrentStep(4); // Move to Complete Your Order section
+      if (!response.ok) throw new Error("Network response was not ok");
+      setCurrentStep(3); // Proceed to PayPal payment
     } catch (error) {
       console.error("Error submitting payment form:", error);
     }
   };
 
+  const handlePaymentWithPayPal = async () => {
+    const token =
+      authToken || contextToken || localStorage.getItem("access_token");
+
+    try {
+      const response = await fetch("https://backend-urbanbazaar.onrender.com/create-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ order_total: orderTotal }),
+      });
+
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      window.location.href = result.payment_link; // Redirect to PayPal for payment
+    } catch (error) {
+      console.error("Error creating payment:", error);
+    }
+  };
+
+  const handleCheckout = async () => {
+    const token =
+      authToken || contextToken || localStorage.getItem("access_token");
+
+    const checkoutData = {
+      shipping_address: {
+        name: `${firstName} ${lastName}`,
+        street_address: streetAddress,
+        apartment_number: apartmentNumber,
+        city,
+        zip_code: zip,
+      },
+      payment_method: email,
+    };
+
+    try {
+      const response = await fetch("https://backend-urbanbazaar.onrender.com/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(checkoutData),
+      });
+      if (!response.ok) throw new Error("Network response was not ok");
+      const result = await response.json();
+      console.log("Checkout successful:", result);
+      navigate("/order-complete"); // Redirect after successful checkout
+    } catch (error) {
+      console.error("Error during checkout:", error);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-5 px-5 sm:px-10 lg:px-20">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-20 px-10 sm:px-12 lg:px-16 m-10">
       <div className="container mx-auto bg-[#F0FFF5] p-6 rounded-md shadow-md">
+        {/* Shipping Address Form */}
         {currentStep === 1 && (
           <div className="w-full mr-4">
-            <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">Shipping Address</h2>
+            <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">
+              Shipping Address
+            </h2>
             <form onSubmit={handleShippingFormSubmit}>
-              <div className="flex mb-4">
-                <label className="mr-2 flex items-center">
-                  <input type="radio" name="address" className="mr-2" />
-                  Add New Address
-                </label>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                <input
-                  type="text"
-                  placeholder="First Name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-                <input
-                  type="text"
-                  placeholder="Last Name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Street Address"
-                  value={streetAddress}
-                  onChange={(e) => setStreetAddress(e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                <input
-                  type="text"
-                  placeholder="Apartment Number"
-                  value={apartmentNumber}
-                  onChange={(e) => setApartmentNumber(e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-                <input
-                  type="text"
-                  placeholder="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-                <input
-                  type="text"
-                  placeholder="Zip"
-                  value={zip}
-                  onChange={(e) => setZip(e.target.value)}
-                  className="border p-2 rounded w-full"
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="mb-4 p-2 border rounded"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="mb-4 p-2 border rounded"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Street Address"
+                value={streetAddress}
+                onChange={(e) => setStreetAddress(e.target.value)}
+                className="mb-4 p-2 border rounded"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Apartment Number"
+                value={apartmentNumber}
+                onChange={(e) => setApartmentNumber(e.target.value)}
+                className="mb-4 p-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder="City"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="mb-4 p-2 border rounded"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Zip Code"
+                value={zip}
+                onChange={(e) => setZip(e.target.value)}
+                className="mb-4 p-2 border rounded"
+                required
+              />
               <div className="flex justify-between">
                 <button
                   type="button"
@@ -171,284 +227,65 @@ function Checkout() {
           </div>
         )}
 
+        {/* Payment Method Form */}
         {currentStep === 2 && (
-          <div className="w-full mt-10">
-            <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">Place your order</h2>
-            <div className="bg-gray-100 p-4 rounded">
-              <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
-              <div className="flex justify-between mb-2">
-                <span>Items (3)</span>
-                <span>$64.23</span>
+          <div>
+            <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">
+              Payment Information
+            </h2>
+            <form onSubmit={handlePaymentFormSubmit}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mb-4 p-2 border rounded"
+                required
+              />
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
+                  onClick={() => setCurrentStep(1)}
+                >
+                  Back
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white py-2 px-4 rounded"
+                >
+                  Save Payment Info
+                </button>
               </div>
-              <div className="flex justify-between mb-2">
-                <span>Shipping & Handling</span>
-                <span>$5.99</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span>Before Tax</span>
-                <span>$70.22</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span>Tax Collected</span>
-                <span>$0.22</span>
-              </div>
-              <div className="flex justify-between font-semibold">
-                <span>Order Total</span>
-                <span>$70.44</span>
-              </div>
-            </div>
-            <button
-              className="bg-blue-500 text-white py-2 px-4 w-full rounded mb-4"
-              onClick={() => setCurrentStep(3)}
-            >
-              Place Order
-            </button>
-            <p className="text-sm text-gray-600 mb-4">
-              By placing your order, you agree to our company's Privacy Policy
-              and Conditions of Use.
-            </p>
-          </div>
-        )}
-
-        {currentStep === 3 && (
-          // <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6 mt-10">
-          //   <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
-          //   <form className="mx-auto max-w-sm space-y-10 flex flex-col items-center" onSubmit={handlePaymentFormSubmit}>
-          //     <div className="w-full">
-          //       <section className="flex flex-col rounded-none max-w-[1000px]">
-          //         <div className="flex flex-wrap gap-5 justify-between px-5 sm:px-11 py-6 w-full max-w-[1000px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-          //           <div className="flex flex-col sm:flex-row gap-6 items-center w-full">
-          //             <input
-          //               type="radio"
-          //               id="pesapal"
-          //               name="paymentMethod"
-          //               value="pesapal"
-          //               checked={paymentMethod === "pesapal"}
-          //               onChange={() => handlePaymentMethodChange("pesapal")}
-          //               className="mr-2"
-          //             />
-          //             <div className="flex justify-between items-center w-full sm:w-auto">
-          //               <h2 className="my-auto text-2xl font-light text-black">Pesapal</h2>
-          //               <img src={pesapal} alt="Pesapal" className="h-10" />
-          //             </div>
-          //           </div>
-          //         </div>
-          //       </section>
-          //     </div>
-          //     {paymentMethod === "pesapal" && (
-          //       <div className="mb-4 space-y-6">
-          //         <input
-          //           type="text"
-          //           placeholder="Email Address"
-          //           value={emailAddress}
-          //           onChange={(e) => setEmailAddress(e.target.value)}
-          //           className="border p-2 rounded w-full"
-          //         />
-          //         <div className="flex justify-between gap-4">
-          //           <button
-          //             type="button"
-          //             className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-          //             onClick={() => setCurrentStep(2)}
-          //           >
-          //             Back
-          //           </button>
-          //           <button
-          //             type="submit"
-          //             className="bg-blue-500 text-white py-2 px-4 rounded"
-          //           >
-          //             Pay Now
-          //           </button>
-          //         </div>
-          //       </div>
-          //     )}
-          //     <div className="flex items-center">
-          //       <section className="flex flex-col rounded-none max-w-[1000px]">
-          //         <div className="flex flex-wrap gap-5 justify-between px-11 py-6 w-[1000px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)] max-md:px-5 max-md:max-w-full">
-          //           <div className="flex gap-6 my-auto">
-          //             <input
-          //               type="radio"
-          //               id="paypal"
-          //               name="paymentMethod"
-          //               value="paypal"
-          //               checked={paymentMethod === "paypal"}
-          //               onChange={() => handlePaymentMethodChange("paypal")}
-          //               className="mr-2"
-          //             />
-          //             <div className="flex justify-center" style={{ gap: "450px" }}>
-          //               <h2 className="my-auto text-2xl font-light text-black">Paypal</h2>
-          //               <img src={Paypal} alt="Paypal" />
-          //             </div>
-          //           </div>
-          //         </div>
-          //       </section>
-          //     </div>
-          //     {paymentMethod === "paypal" && (
-          //       <div className="mb-4 space-y-6">
-          //         <input
-          //           type="text"
-          //           placeholder="Paypal Email"
-          //           value={paypalEmail}
-          //           onChange={(e) => setPaypalEmail(e.target.value)}
-          //           className="border p-2 rounded w-full"
-          //         />
-          //         <div className="flex justify-between gap-4">
-          //           <button
-          //             type="button"
-          //             className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-          //             onClick={() => setCurrentStep(2)}
-          //           >
-          //             Back
-          //           </button>
-          //           <button
-          //             type="submit"
-          //             className="bg-blue-500 text-white py-2 px-4 rounded"
-          //           >
-          //             Pay Now
-          //           </button>
-          //         </div>
-          //       </div>
-          //     )}
-          //   </form>
-          // </div>
-
-          <div className="bg-white p-6 rounded-md shadow-md flex flex-col items-center gap-6">
-            <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
-            <form className="mx-auto max-w-sm space-y-10 flex flex-col items-center" onSubmit={handlePaymentFormSubmit}>
-              <div className="w-full">
-                <section className="flex flex-col rounded-none ">
-                  <div className="flex flex-wrap gap-5 justify-between px-5 sm:px-11 py-6 w-full rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                    <div className="flex flex-col sm:flex-row gap-6 items-center w-full">
-                      <input
-                        type="radio"
-                        id="pesapal"
-                        name="paymentMethod"
-                        value="pesapal"
-                        checked={paymentMethod === "pesapal"}
-                        onChange={() => handlePaymentMethodChange("pesapal")}
-                        className="mr-2"
-                      />
-                      <div className="flex justify-between items-center w-full sm:w-auto">
-                        <h2 className="text-2xl font-light text-black">Pesapal</h2>
-                        <img src={pesapal} alt="Pesapal" className="h-10" />
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              {paymentMethod === "pesapal" && (
-                <div className="mb-4 space-y-6 w-full">
-                  <input
-                    type="text"
-                    placeholder="Email Address"
-                    value={emailAddress}
-                    onChange={(e) => setEmailAddress(e.target.value)}
-                    className="border p-2 rounded w-full"
-                  />
-                  <div className="flex justify-between gap-4">
-                    <button
-                      type="button"
-                      className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-                      onClick={() => setCurrentStep(2)}
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white py-2 px-4 rounded"
-                    >
-                      Pay Now
-                    </button>
-                  </div>
-                </div>
-              )}
-              <div className="w-full">
-                <section className="flex flex-col rounded-none max-w-[1000px]">
-                  <div className="flex flex-wrap gap-5 justify-between px-5 sm:px-11 py-6 w-full max-w-[1000px] rounded-xl bg-white bg-opacity-20 shadow-[0px_2px_4px_rgba(0,0,0,0.25)]">
-                    <div className="flex flex-col sm:flex-row gap-6 items-center w-full">
-                      <input
-                        type="radio"
-                        id="paypal"
-                        name="paymentMethod"
-                        value="paypal"
-                        checked={paymentMethod === "paypal"}
-                        onChange={() => handlePaymentMethodChange("paypal")}
-                        className="mr-2"
-                      />
-                      <div className="flex justify-between items-center w-full sm:w-auto">
-                        <h2 className="text-2xl font-light text-black">Paypal</h2>
-                        <img src={Paypal} alt="Paypal" className="h-10" />
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              {paymentMethod === "paypal" && (
-                <div className="mb-4 space-y-6 w-full">
-                  <input
-                    type="text"
-                    placeholder="Paypal Email"
-                    value={paypalEmail}
-                    onChange={(e) => setPaypalEmail(e.target.value)}
-                    className="border p-2 rounded w-full"
-                  />
-                  <div className="flex justify-between gap-4">
-                    <button
-                      type="button"
-                      className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-                      onClick={() => setCurrentStep(2)}
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="submit"
-                      className="bg-blue-500 text-white py-2 px-4 rounded"
-                    >
-                      Pay Now
-                    </button>
-                  </div>
-                </div>
-              )}
             </form>
           </div>
-
-
         )}
 
-        {currentStep === 4 && (
-          <div className="w-full mt-10 flex flex-col items-center">
-            <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">Complete Your Order</h2>
-            <div className="bg-gray-100 p-4 rounded">
-              <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
-              <div className="flex justify-between mb-2">
-                <span>Items (3)</span>
-                <span>$64.23</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span>Shipping & Handling</span>
-                <span>$5.99</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span>Before Tax</span>
-                <span>$70.22</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span>Tax Collected</span>
-                <span>$0.22</span>
-              </div>
-              <div className="flex justify-between font-semibold">
-                <span>Order Total</span>
-                <span>$70.44</span>
-              </div>
+        {/* Order Summary and PayPal Payment */}
+        {currentStep === 3 && (
+          <div>
+            <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">
+              Order Summary
+            </h2>
+            <div className="mb-4 flex justify-center">
+              <p>Total: ${orderTotal.toFixed(2)}</p>
             </div>
-            <Link
-              to="/thank-you"
-              className="bg-blue-500 text-white py-2 px-4 w-full rounded mb-4 text-center"
-            >
-              Complete Order
-            </Link>
-            <p className="text-sm text-gray-600 mb-4">
-              Thank you for your purchase! You will receive an email confirmation shortly.
-            </p>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
+                onClick={() => setCurrentStep(2)}
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                className="bg-green-500 text-white py-2 px-4 rounded"
+                onClick={handlePaymentWithPayPal}
+              >
+                Pay with PayPal
+              </button>
+            </div>
           </div>
         )}
       </div>
