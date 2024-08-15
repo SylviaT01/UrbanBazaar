@@ -95,7 +95,7 @@ const ProductList = () => {
   const { start, end } = getPageRange();
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container px-4 py-4 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
       <div className="mb-4">
         <h2 className="text-xl font-semibold text-center uppercase">Products</h2>
         <div className="mb-4 border-b">

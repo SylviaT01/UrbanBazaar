@@ -36,7 +36,7 @@ const RelatedProducts = ({ relatedProducts }) => {
   const end = Math.min(totalPages, currentPage + 2);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container px-4 py-8 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
       <h2 className="mb-2 flex justify-center text-xl font-semibold">
         You May Also Like This
       </h2>

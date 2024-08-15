@@ -60,7 +60,7 @@ function AdminDashboard() {
     <div className="flex flex-col items-center px-4 sm:px-6 lg:px-8 py-4">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">Admin Dashboard</h1>
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8 w-full max-w-6xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full ">
         <div className="flex flex-col md:flex-row gap-6 bg-blue-500 text-white rounded-lg shadow-md p-6 md:p-8 items-center">
           <img
             src={EarningsIcons}
@@ -102,9 +102,11 @@ function AdminDashboard() {
         </div>
       </div>
       {/* Sales Report Graph */}
+      <div className="max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
       <SalesChart orders={orders} /> {/* Add the SalesChart component */}
+      </div>
       {/* Orders Table */}
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-sm mx-auto md:max-w-none gap-4 mb-8">
         <h2 className="text-2xl font-medium text-gray-800 mb-4">Recent Orders</h2>
         <div className="overflow-x-auto bg-white shadow-md rounded-lg">
           {/* Table for larger screens */}
@@ -180,11 +182,10 @@ function AdminDashboard() {
                   <li key={number + 1}>
                     <button
                       onClick={() => paginate(number + 1)}
-                      className={`px-3 py-1 rounded-md ${
-                        currentPage === number + 1
+                      className={`px-3 py-1 rounded-md ${currentPage === number + 1
                           ? "bg-blue-500 text-white"
                           : "bg-white text-gray-800 border border-gray-300"
-                      }`}
+                        }`}
                     >
                       {number + 1}
                     </button>

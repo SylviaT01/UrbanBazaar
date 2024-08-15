@@ -85,9 +85,9 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-blue-50">
+    <div className="flex justify-center items-center bg-blue-50 ">
       <form
-        className="bg-white p-6 md:p-8 rounded shadow-md w-full max-w-md lg:max-w-lg xl:max-w-3xl "
+        className="bg-white rounded max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full "
         onSubmit={handleSubmit}
       >
         {errorMessage && (

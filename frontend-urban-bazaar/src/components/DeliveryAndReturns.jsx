@@ -2,7 +2,7 @@ import React from 'react';
 
 const DeliveryAndReturns = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container px-4 py-8 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
       <h1 className="text-3xl font-semibold mb-6">Delivery & Returns</h1>
 
       <section className="mb-8">

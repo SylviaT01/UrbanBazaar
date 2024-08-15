@@ -4,7 +4,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 const faqsData = [
   {
     question: "How do I create an account?",
-    answer: "To create an account, click on the 'Sign Up' button on the top-right corner of the page. You will be prompted to enter your details and create a password. Once submitted, you'll receive a confirmation email to activate your account."
+    answer: "To create an account, click on the 'Login' button on the top-right corner of the page and then select 'Sign up'. You will be redirected to the login page."
   },
   {
     question: "How do I reset my password?",
@@ -12,7 +12,7 @@ const faqsData = [
   },
   {
     question: "What payment methods do you accept?",
-    answer: "We accept various payment methods including Mpesa, Paypal, and Payless. You can choose your preferred payment method at checkout."
+    answer: "We currently accept only Pesapal for payments."
   },
   {
     question: "How can I track my order?",
@@ -24,7 +24,7 @@ const faqsData = [
   },
   {
     question: "How can I contact customer support?",
-    answer: "You can contact our customer support team through the 'Get in Touch' page on our website. We are available via email at urbanbazaar@gmail.com or by phone at +254712345678."
+    answer: "You can contact our customer support team through the 'Get in Touch' page on our website. We are available via email at urbanbazaar583@gmail.com or by phone at +254712345678."
   },
   {
     question: "How do I update my account information?",
@@ -44,7 +44,7 @@ const FAQ = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container px-4 py-8 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
       <h1 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h1>
       <div className="space-y-4">
         {faqsData.map((faq, index) => (

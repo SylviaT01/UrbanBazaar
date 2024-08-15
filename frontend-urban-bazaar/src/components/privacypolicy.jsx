@@ -2,7 +2,7 @@ import React from 'react';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="container mx-auto px-10 py-8">
+    <div className="container px-10 py-8 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
       <h1 className="text-2xl font-semibold mb-4">Privacy Policy</h1>
       <p className="mb-4">
         This Privacy Policy describes how UrbanBazaar collects, uses, and shares personal information of users of this website.

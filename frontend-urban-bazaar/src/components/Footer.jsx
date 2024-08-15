@@ -28,8 +28,8 @@ const Footer = () => {
     };
 
     return (
-        <footer className="text-black py-4 bg-blue-100">
-            <div className="container mx-auto px-10">
+        <footer className="text-black py-4 bg-blue-100 relative  ">
+            <div className="container px-10 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
                 <div className="flex flex-col md:flex-row md:justify-between items-center p-4">
                     <Link to="/" className="mb-4 md:mb-0">
                         <img src={logo} alt="UrbanBazaar Logo" className="h-12 md:h-16" />
@@ -54,7 +54,7 @@ const Footer = () => {
                 </div>
 
                 <hr className="my-8 border-t-2 border-gray-300" />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-10 mb-5 ">
                     <div className="footer-col-1 flex flex-col">
                         <h2 className="text-lg font-medium text-gray-700 underline">Our Company</h2>
                         <div className="link-col-left flex flex-col text-left gap-1 font-normal">
@@ -129,6 +129,7 @@ const Footer = () => {
                 </div>
             )}
         </footer>
+        
     );
 };
 
