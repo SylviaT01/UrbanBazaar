@@ -222,7 +222,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="relative top-[-60px] sm:top-[10%] w-full px-4 sm:px-6 lg:px-8 z-10">
+      <div className="relative top-[-60px] sm:top-[10%] w-full px-4 sm:px-6 lg:px-8 z-10 flex justify-center">
         <div className="w-full max-w-screen-xl flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-4 overflow-x-auto">
           {categoryImages.map((category, index) => (
             <div
