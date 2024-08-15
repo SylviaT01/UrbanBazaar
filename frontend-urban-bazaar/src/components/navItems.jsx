@@ -63,7 +63,6 @@ export default function NavItems() {
 
       <div className="bg-slate-100 border-b border-gray-300">
         <div className="flex flex-col sm:flex-row justify-between h-auto sm:h-16 items-center px-4 sm:px-6 lg:px-8 py-4 sm:py-0">
-
           <div className="flex-shrink-0 flex items-center mb-4 sm:mb-0">
             <Link to="/" className="flex items-center">
               <img

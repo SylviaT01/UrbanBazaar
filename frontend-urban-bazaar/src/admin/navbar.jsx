@@ -136,8 +136,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full pb-8">
-      <div className="flex flex-col sm:flex-row justify-between items-center w-full px-5 pt-2 bg-white max-w-[1440px]">
+    <div className="bg-slate-100 border-b border-gray-300">
+      <div className="flex flex-col sm:flex-row justify-between  h-auto sm:h-16 items-center px-4 sm:px-6 lg:px-8 py-4 sm:py-0">
         <div className="flex-shrink-0 flex items-center mb-4 sm:mb-0">
           <Link to="/" className="flex items-center">
             <img src={logo} alt="UrbanBazaar Logo" className="w-32 h-auto p-2" />
