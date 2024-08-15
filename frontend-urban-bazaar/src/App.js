@@ -36,6 +36,7 @@ import PrivacyPolicy from './components/privacypolicy.jsx';
 import FAQs from './components/FAQs';
 import DeliveryAndReturns from './components/DeliveryAndReturns.jsx';
 import OrderHistory from "./Product/orderHistory.jsx";
+import ExecutePayment from "./Forms /ExcutePayment.jsx";
 // Dummy components for User Profile
 // const OrderHistory = () => <div>Order History Content</div>;
 
@@ -59,6 +60,7 @@ function AppContent() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/contact" element={<Contacts />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/excute-payment" element={<ExecutePayment />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/wishlist" element={<WishList />} />
