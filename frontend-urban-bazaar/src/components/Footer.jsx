@@ -28,8 +28,8 @@ const Footer = () => {
     };
 
     return (
-        <footer className="text-black py-4 bg-blue-100 relative ">
-            <div className="container mx-auto px-10">
+        <footer className="text-black py-4 bg-blue-100 relative  ">
+            <div className="container px-10 max-w-sm mx-auto md:max-w-none gap-4 mb-8 w-full">
                 <div className="flex flex-col md:flex-row md:justify-between items-center p-4">
                     <Link to="/" className="mb-4 md:mb-0">
                         <img src={logo} alt="UrbanBazaar Logo" className="h-12 md:h-16" />
