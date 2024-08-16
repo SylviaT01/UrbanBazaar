@@ -4,7 +4,8 @@ import { UserContext } from "../contexts/userContext";
 import { useCart } from "../contexts/cartContext";
 
 const Wishlist = () => {
-  const { wishlist, loading, removeFromWishlist, setWishlist, setLoading } = useCart();
+  const { wishlist, loading, removeFromWishlist, setWishlist, setLoading } =
+    useCart();
   const { authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -19,7 +20,7 @@ const Wishlist = () => {
       setLoading(true);
       try {
         console.log("Fetching wishlist data...");
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/wishlist", {
+        const response = await fetch("http://127.0.0.1:5000/wishlist", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -60,7 +61,9 @@ const Wishlist = () => {
         <div className="bg-white rounded-lg w-full max-w-sm p-6">
           <div className="flex flex-col items-center">
             <h3 className="text-xl font-semibold mb-4">You need to log in</h3>
-            <p className="text-center mb-4">Please log in to view and manage your wishlist.</p>
+            <p className="text-center mb-4">
+              Please log in to view and manage your wishlist.
+            </p>
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <button
                 className="bg-blue-300 text-white px-4 py-2 rounded hover:bg-blue-400 text-center"
@@ -114,9 +117,15 @@ const Wishlist = () => {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Item
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Price
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -129,11 +138,17 @@ const Wishlist = () => {
                               className="w-16 h-16 object-cover mr-4"
                             />
                             <div>
-                              <h4 className="text-sm font-medium">{item.title}</h4>
+                              <h4 className="text-sm font-medium">
+                                {item.title}
+                              </h4>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            Ksh {Math.round((item.price * (100 - item.discount_percentage)) / 100).toLocaleString()}
+                            Ksh{" "}
+                            {Math.round(
+                              (item.price * (100 - item.discount_percentage)) /
+                                100
+                            ).toLocaleString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <button

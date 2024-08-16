@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const WeeklyOffers = () => {
   const [topProducts, setTopProducts] = useState([]);
@@ -10,7 +10,7 @@ const WeeklyOffers = () => {
   const itemsPerPage = 8;
 
   useEffect(() => {
-    fetch("https://backend-urbanbazaar.onrender.com/products")
+    fetch("http://127.0.0.1:5000/products")
       .then((response) => response.json())
       .then((data) => {
         console.log("API response:", data);
@@ -44,13 +44,16 @@ const WeeklyOffers = () => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
-  const filteredProducts = topProducts.filter(product =>
+  const filteredProducts = topProducts.filter((product) =>
     product.title.toLowerCase().includes(searchQuery)
   );
 
   const indexOfLastProduct = currentPage * itemsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -90,7 +93,11 @@ const WeeklyOffers = () => {
             <div className="flex-grow border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
               <div className="w-full h-full flex justify-center items-center">
                 <div className="w-[200px] mx-auto flex justify-center items-center">
-                  <img src={product.images[0]} alt={product.title} className="max-h-[300px] object-cover" />
+                  <img
+                    src={product.images[0]}
+                    alt={product.title}
+                    className="max-h-[300px] object-cover"
+                  />
                 </div>
               </div>
             </div>
@@ -108,7 +115,12 @@ const WeeklyOffers = () => {
               {/* <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">
                 Add to cart
               </button> */}
-              <Link to={`/products/${product.id}`} className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">View Product</Link>
+              <Link
+                to={`/products/${product.id}`}
+                className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md"
+              >
+                View Product
+              </Link>
             </div>
           </div>
         ))}
@@ -119,7 +131,11 @@ const WeeklyOffers = () => {
             <button
               key={index + 1}
               onClick={() => handlePageChange(index + 1)}
-              className={`px-4 py-2 border rounded-md ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+              className={`px-4 py-2 border rounded-md ${
+                currentPage === index + 1
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-blue-500"
+              }`}
             >
               {index + 1}
             </button>

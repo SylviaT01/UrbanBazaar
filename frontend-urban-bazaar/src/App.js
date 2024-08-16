@@ -1,5 +1,10 @@
-import React, {useContext} from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import { CartProvider } from "./contexts/cartContext.jsx";
 import { UserProvider } from "./contexts/userContext.jsx";
 import { UserContext } from "./contexts/userContext.jsx";
@@ -32,9 +37,10 @@ import OrderComplete from "./Product/orderComplete.jsx";
 import UpdateProfile from "./Forms /UpdateProfile.jsx";
 import RelatedProducts from "./Product/relatedProducts.jsx";
 import Navbar from "./admin/navbar";
-import PrivacyPolicy from './components/privacypolicy.jsx';
-import FAQs from './components/FAQs';
-import DeliveryAndReturns from './components/DeliveryAndReturns.jsx';
+import PrivacyPolicy from "./components/privacypolicy.jsx";
+import FAQs from "./components/FAQs";
+import DeliveryAndReturns from "./components/DeliveryAndReturns.jsx";
+import ExecutePayment from "./Forms /ExcutePayment.jsx";
 
 // Dummy components for User Profile
 const OrderHistory = () => <div>Order History Content</div>;
@@ -45,8 +51,9 @@ function AppContent() {
   const { currentUser } = useContext(UserContext);
   const location = useLocation();
 
-  const isAdminPage = location.pathname.startsWith('/dashboard');
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
+  const isAdminPage = location.pathname.startsWith("/dashboard");
+  const isAuthPage =
+    location.pathname === "/login" || location.pathname === "/signup";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -59,7 +66,12 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/contact" element={<Contacts />} />
+
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/execute-payment" element={<ExecutePayment />} />
+          <Route path="/order-complete" element={<OrderComplete />} />
+          {/* Add other routes here */}
+
           <Route path="/about" element={<AboutUs />} />
           <Route path="/cart" element={<ShoppingCart />} />
           <Route path="/wishlist" element={<WishList />} />
@@ -98,14 +110,11 @@ function AppContent() {
           )}
         </Routes>
       </div>
-      
+
       {!isAuthPage && <Footer />}
     </div>
   );
 }
-
-
-
 
 function App() {
   return (
@@ -120,4 +129,3 @@ function App() {
 }
 
 export default App;
-

@@ -15,7 +15,7 @@ const fetchWithAuth = async (url, options = {}) => {
 
   if (response.status === 401) {
     const refreshToken = localStorage.getItem("refresh_token");
-    const refreshResponse = await fetch("https://backend-urbanbazaar.onrender.com/refresh", {
+    const refreshResponse = await fetch("http://127.0.0.1:5000/refresh", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const UserProvider = ({ children }) => {
     if (authToken) {
       try {
         const response = await fetchWithAuth(
-          "https://backend-urbanbazaar.onrender.com/current_user",
+          "http://127.0.0.1:5000/current_user",
           {
             method: "GET",
             headers: {
@@ -82,10 +82,9 @@ export const UserProvider = ({ children }) => {
     fetchCurrentUser();
   }, [authToken]);
 
-
   const signup = async (username, email, phone_number, password) => {
     try {
-      const response = await fetch("https://backend-urbanbazaar.onrender.com/register", {
+      const response = await fetch("http://127.0.0.1:5000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +114,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const login = (email, password) => {
-    fetch("https://backend-urbanbazaar.onrender.com/login", {
+    fetch("http://127.0.0.1:5000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -151,7 +150,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const logout = () => {
-    fetchWithAuth("https://backend-urbanbazaar.onrender.com/logout", {
+    fetchWithAuth("http://127.0.0.1:5000/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

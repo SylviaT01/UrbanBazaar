@@ -125,7 +125,7 @@ function AddProductPage() {
     console.log("Sending data to server:", data);
 
     try {
-      const response = await fetch("https://backend-urbanbazaar.onrender.com/products", {
+      const response = await fetch("http://127.0.0.1:5000/products", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${authToken}`,

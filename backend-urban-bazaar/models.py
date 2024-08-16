@@ -30,9 +30,10 @@ class User(db.Model):
 
     # Relationships to other models
     shopping_carts = db.relationship('ShoppingCart', backref='user', lazy=True)
-    orders = db.relationship('Order', backref='user', lazy=True)
     wishlist = db.relationship('Wishlist', backref='user', lazy=True)
-
+    payment_methods = db.relationship('PaymentMethod', backref='user', lazy=True)
+    shipping_details = db.relationship('ShippingDetails', backref='user', lazy=True)  # Relationship to ShippingDetails
+    orders = db.relationship('Order', backref='user', lazy=True)  # Relationship to Order
 # Product model to store product information
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -66,6 +67,7 @@ class Product(db.Model):
     reviews = db.relationship('Review', backref='product', lazy=True)
     cart_items = db.relationship('ShoppingCart', backref='product', lazy=True)
     wishlist_items = db.relationship('Wishlist', backref='product', lazy=True)
+    order_items = db.relationship('OrderItem', backref='product', lazy=True)
 
 # Review model to store product reviews
 class Review(db.Model):
@@ -86,38 +88,52 @@ class ShoppingCart(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
+    total_price = db.Column(db.Float, nullable=False)  # Changed to Float
+    status = db.Column(db.String(20), nullable=False, default="unprocessed")  # New column
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    
    
-# Order model to store order details
+# ShippingDetails model to store shipping information for orders
+class ShippingDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    street_address = db.Column(db.String(255), nullable=False)
+    apartment_number = db.Column(db.String(100), nullable=True)
+    city = db.Column(db.String(100), nullable=False)
+    zip_code = db.Column(db.String(20), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+# PaymentMethod model
+class PaymentMethod(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    payment_type = db.Column(db.String(50), nullable=True,default="Paypal")
+    email = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  
+    
+# Order model to store order information
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    shipping_id = db.Column(db.Integer, db.ForeignKey('shipping_details.id'), nullable=False)
+    payment_id = db.Column(db.Integer, db.ForeignKey('payment_method.id'), nullable=False)
     order_date = db.Column(db.DateTime, default=datetime.utcnow)
-    shipping_address = db.Column(db.String(255), nullable=False)
-    payment_method = db.Column(db.String(50), nullable=False)
     order_total = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(50), default='Pending')
-
-    # Relationship to store order items
+    status = db.Column(db.String(50), default='Pending')  # e.g., Pending, Paid, Shipped
+    
+    # Relationships
+    shipping_details = db.relationship('ShippingDetails', backref='orders', lazy=True)
+    payment_method = db.relationship('PaymentMethod', backref='orders', lazy=True)
     order_items = db.relationship('OrderItem', backref='order', lazy=True)
+
 # OrderItem model to store individual items within an order
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Float, nullable=False)
-
-# ShippingDetails model to store shipping information for orders
-class ShippingDetails(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    street_address = db.Column(db.String(255), nullable=False)
-    apartment_number = db.Column(db.String(100), nullable=True)
-    city = db.Column(db.String(100), nullable=False)
-    zip_code = db.Column(db.String(20), nullable=False)
-    
+    price = db.Column(db.Float, nullable=False)  
 # Wishlist model to store a user's wishlist and items
 class Wishlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -8,7 +8,7 @@ const Reviews = () => {
   const [reviewsPerPage] = useState(6);
 
   useEffect(() => {
-    fetch("https://backend-urbanbazaar.onrender.com/review")
+    fetch("http://127.0.0.1:5000/review")
       .then((response) => response.json())
       .then((data) => setReviews(data.reviews))
       .catch((error) => console.error("Error fetching reviews:", error));
@@ -54,7 +54,6 @@ const Reviews = () => {
           {currentReviews.map((review) => (
             <div
               className="flex flex-col p-6 bg-white rounded shadow-[0px_10px_60px_rgba(226,236,249,0.5)"
-                
               key={review.id}
             >
               <div className="flex items-center gap-3">

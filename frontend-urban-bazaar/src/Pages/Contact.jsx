@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import shelf from "../assets/shelf.jpg";
 import emailIcon from "../assets/emailIcon.svg";
 import phoneIcon from "../assets/phoneIcon.svg";
-import locationIcon from "../assets/locationIcon.svg"
+import locationIcon from "../assets/locationIcon.svg";
 
 const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -30,7 +30,7 @@ const Contact = () => {
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const response = await fetch("https://backend-urbanbazaar.onrender.com/contact", {
+      const response = await fetch("http://127.0.0.1:5000/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ const Contact = () => {
       // Delay navigation to allow time for the notification to show
       setTimeout(() => {
         navigate("/");
-      }, 3500); 
+      }, 3500);
     } catch (error) {
       console.error("Error submitting contact form:", error);
     }
@@ -203,7 +203,6 @@ const Contact = () => {
                   Bilha Towers Ground Floor, Shop Number 45KE
                 </p>
 
-
                 <p className="flex items-centre gap-2">
                   <img src={locationIcon} alt="locationIcon" />
                   Postal Address P.O. Box 1852-00621, Village Market Nairobi,
@@ -220,12 +219,13 @@ const Contact = () => {
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-lg text-gray-800">Email Address</h3>
+                <h3 className="font-bold text-lg text-gray-800">
+                  Email Address
+                </h3>
 
                 <p className="text-blue-600 underline underline-offset-2 flex items-center gap-2">
                   <img src={emailIcon} alt="emailIcon" />
                   urbanbazaar583@gmail.com
-
                 </p>
               </div>
             </div>

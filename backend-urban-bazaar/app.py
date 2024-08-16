@@ -4,9 +4,11 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,create_refresh_token, get_jwt
 from flask_cors import CORS
 from functools import wraps
-from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
+from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs,PaymentMethod
 from datetime import datetime
 from flask_migrate import Migrate
+
+import paypalrestsdk
 import logging
 import os
 SECRET_KEY = os.urandom(24)
@@ -26,19 +28,15 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 CORS(app)
+# Initialize PayPal SDK
+paypalrestsdk.configure({
+    "mode": "sandbox",  # Use "live" for production
+    "client_id": 'AeGcfZKN2Ks_snnDvpGDVdiL3pE68JCnykGJg4zHJvl-5hprWI1-DXI-7yKN23yWxRmAgZL_Q3Bv4np8',
+    "client_secret": "EH8q3qqJvYbKiGTM01zOF3w-kV7BvsUYiHGXtPyJ547uSWnh7IiXB3aHNwwfcQp4IztHy30QHELqtEkS"
+})
 
 
-# Helper function to check if a user is an admin
-# def admin_required(fn):
-#     @wraps(fn)
-#     def wrapper(*args, **kwargs):
 
-#         current_user = get_jwt_identity()
-#         user = User.query.filter_by(username=current_user).first()
-#         if not user.is_admin:
-#             return jsonify({'message': 'Admin access required'}), 403
-#         return fn(*args, **kwargs)
-#     return wrapper
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -132,59 +130,7 @@ def logout():
     BLACKLIST.add(jti)
     return jsonify({"success":"Logged out successfully"}), 200
 
-# # Admin route to assign admin role
-# @app.route('/assign_admin/<int:user_id>', methods=['POST'])
-# @jwt_required()
-# @admin_required
-# def assign_admin(user_id):
-#     user = User.query.get(user_id)
-#     if not user:
-#         return jsonify({'message': 'User not found'}), 404
 
-#     user.is_admin = True
-#     db.session.commit()
-#     return jsonify({'message': f'{user.username} is now an admin'})
-
-# # Admin route to create a new user
-# @app.route('/admin/create_user', methods=['POST'])
-# @jwt_required()
-# @admin_required
-# def create_user():
-#     data = request.get_json()
-#     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-#     new_user = User(
-#         username=data['username'],
-#         email=data['email'],
-#         password=hashed_password
-#     )
-#     db.session.add(new_user)
-#     db.session.commit()
-
-#     return jsonify({'message': 'User created successfully by admin'})
-
-# # Route to view all users (Admin only)
-# @app.route('/admin/users', methods=['GET'])
-# # @jwt_required()
-# def view_users():
-#     # current_user = get_jwt_identity()
-#     # if not current_user['is_admin']:
-#     #     return jsonify({'message': 'Admin access required'}), 403
-
-#     users = User.query.all()
-#     output = []
-
-#     for user in users:
-#         user_data = {
-#             'id': user.id,
-#             'username': user.username,
-#             'email': user.email,
-#             'is_admin': user.is_admin
-#         }
-#         output.append(user_data)
-
-#     return jsonify({'users': output})
-
-# Route to delete a user (Admin only)
 @app.route('/admin/users', methods=['GET'])
 @jwt_required()
 @admin_required
@@ -504,9 +450,10 @@ def add_to_cart():
 
         if not user_id or not product_id or not quantity or not price:
             return jsonify({'error': 'Invalid data provided'}), 400
-
+                # Calculate total price
+        total_price = quantity * price
         # Create a new cart item
-        new_cart_item = ShoppingCart(user_id=user_id, product_id=product_id, quantity=quantity, price=price)
+        new_cart_item = ShoppingCart(user_id=user_id, product_id=product_id, quantity=quantity, price=price,total_price=total_price)
         db.session.add(new_cart_item)
         db.session.commit()
 
@@ -534,6 +481,7 @@ def view_cart():
                     'title': product.title,
                     'description': product.description,
                     'quantity': item.quantity,
+                    'total_price': item.total_price,
                     'price': item.price,
                     'image': product.images[0] if product.images else None,
                     'discount_percentage':product.discount_percentage
@@ -561,145 +509,197 @@ def remove_from_cart(product_id):
 
     return jsonify({'message': 'Product removed from cart successfully'})
 
-@app.route('/admin/orders', methods=['GET'])
-# @jwt_required()
-# @admin_required
-def get_all_orders():
-    orders = db.session.query(Order, User).join(User, Order.user_id == User.id).all()
-    output = []
-
-    for order, user in orders:
-        order_data = {
-            'id': order.id,
-            'user_id': order.user_id,
-            'user_email': user.email,  # Include the user's email
-            'shipping_address': order.shipping_address,
-            'payment_method': order.payment_method,
-            'order_total': order.order_total,
-            'created_at': order.order_date,
-            'status': order.status
-            
-            # 'updated_at': order.updated_at
-        }
-        output.append(order_data)
-
-    return jsonify({'orders': output})
-
-
-@app.route('/orders', methods=['POST'])
+@app.route('/shipping', methods=['POST'])
 @jwt_required()
-def create_order():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(id=current_user).first()
-
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
-
-    data = request.get_json()
-
-    # Validate shipping and payment data
-    shipping_address = data.get('shipping_address')
-    payment_method = data.get('payment_method')
-    order_total = data.get('order_total')
-
-    if not all([shipping_address, payment_method, order_total]):
-        return jsonify({'message': 'Missing data'}), 400
-
+def add_shipping_details():
     try:
-        # Create new order
-        new_order = Order(
-            user_id=user.id,
-            shipping_address=shipping_address,
-            payment_method=payment_method,
-            order_total=order_total
+        data = request.get_json()
+        user_id = get_jwt_identity()
+        name = data.get('name')
+        street_address = data.get('street_address')
+        apartment_number = data.get('apartment_number')
+        city = data.get('city')
+        zip_code = data.get('zip_code')
+
+        if not name or not street_address or not city or not zip_code:
+            return jsonify({'error': 'Invalid data provided'}), 400
+
+        new_shipping_details = ShippingDetails(
+            user_id=user_id,
+            name=name,
+            street_address=street_address,
+            apartment_number=apartment_number,
+            city=city,
+            zip_code=zip_code
         )
-        db.session.add(new_order)
+        db.session.add(new_shipping_details)
         db.session.commit()
 
-        # Process items from the shopping cart
-        cart_items = ShoppingCart.query.filter_by(user_id=user.id).all()
+        return jsonify({'message': 'Shipping details added successfully'})
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': 'An error occurred on the server'}), 500
+
+# Route to view shipping details
+@app.route('/shipping', methods=['GET'])
+@jwt_required()
+def view_shipping_details():
+    try:
+        user_id = get_jwt_identity()
+        shipping_details = ShippingDetails.query.filter_by(user_id=user_id).all()
+        shipping_data = [{
+            'id': sd.id,
+            'name': sd.name,
+            'street_address': sd.street_address,
+            'apartment_number': sd.apartment_number,
+            'city': sd.city,
+            'zip_code': sd.zip_code,
+            'created_at': sd.created_at
+        } for sd in shipping_details]
+
+        return jsonify({'shipping_details': shipping_data}), 200
+    except Exception as e:
+        logging.error(f"Error fetching shipping details: {e}")
+        return jsonify({'msg': 'Failed to fetch shipping details'}), 500
+
+# Route to add payment method
+@app.route('/payment', methods=['POST'])
+@jwt_required()
+def add_payment_method():
+    try:
+        data = request.get_json()
+        user_id = get_jwt_identity()
+        email = data.get('email')
+
+
+        if not email:
+            return jsonify({'error': 'Invalid data provided'}), 400
+
+        new_payment_method = PaymentMethod(
+            user_id=user_id,
+            email=email, # Assume the first payment method is the default one
+
+        )
+        db.session.add(new_payment_method)
+        db.session.commit()
+
+        return jsonify({'message': 'Payment method added successfully'})
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': 'An error occurred on the server'}), 500
+@app.route('/create-payment', methods=['POST'])
+@jwt_required()
+def create_payment():
+    try:
+        data = request.get_json()
+        order_total = str(data.get('order_total'))  # Ensure total is a string
+
+        payment = paypalrestsdk.Payment({
+            "intent": "sale",
+            "payer": {"payment_method": "paypal"},
+            "redirect_urls": {
+                "return_url": "http://localhost:3000/execute-payment",
+                "cancel_url": "http://localhost:3000"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "Order Total",
+                        "sku": "item",
+                        "price": order_total,
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "total": order_total,
+                    "currency": "USD"
+                },
+                "description": "Order payment."
+            }]
+        })
+
+        if payment.create():
+            approval_url = next(link.href for link in payment.links if link.rel == "approval_url")
+            return jsonify({'payment_id': payment.id, 'payment_link': approval_url})
+        else:
+            logging.error(f"Payment creation failed: {payment.error}")
+            return jsonify({'error': payment.error}), 500
+    except Exception as e:
+        logging.error(f"Error creating payment: {e}")
+        return jsonify({'error': 'An error occurred during payment creation'}), 500
+
+@app.route('/execute-payment', methods=['GET'])
+@jwt_required()
+def execute_payment():
+    payment_id = request.args.get('paymentId')
+    payer_id = request.args.get('PayerID')
+
+    try:
+        payment = paypalrestsdk.Payment.find(payment_id)
+
+        if payment.execute({"payer_id": payer_id}):
+            user_id = get_jwt_identity()
+
+            # Fetch cart items
+            cart_items = ShoppingCart.query.filter_by(user_id=user_id).all()
+            if not cart_items:
+                return jsonify({'error': 'Cart is empty'}), 400
+
+            # Create a new order
+            order = Order(user_id=user_id, total_amount=payment.transactions[0]['amount']['total'])
+            db.session.add(order)
+            db.session.commit()
+
+            # Add items to the order and remove from cart
+            for item in cart_items:
+                order_item = OrderItem(order_id=order.id, product_id=item.product_id, quantity=item.quantity, price=item.price)
+                db.session.add(order_item)
+                db.session.delete(item)
+
+            db.session.commit()
+
+            return jsonify({'message': 'Payment executed successfully'})
+        else:
+            logging.error(f"Payment execution failed: {payment.error}")
+            return jsonify({'error': payment.error}), 500
+    except Exception as e:
+        logging.error(f"Error executing payment: {e}")
+        return jsonify({'error': 'An error occurred during payment execution'}), 500
+    
+@app.route('/checkout', methods=['POST'])
+@jwt_required()
+def checkout():
+    try:
+        user_id = get_jwt_identity()
+        shipping_data = request.get_json()
+
+        # Fetch cart items
+        cart_items = ShoppingCart.query.filter_by(user_id=user_id).all()
+        if not cart_items:
+            return jsonify({'error': 'Cart is empty'}), 400
+
+        # Calculate order total
+        order_total = sum(item.total_price for item in cart_items)
+
+        # Create a new order
+        order = Order(user_id=user_id, total_amount=order_total, shipping_address=shipping_data)
+        db.session.add(order)
+        db.session.commit()
+
+        # Move items from cart to order
         for item in cart_items:
-            new_order_item = OrderItem(
-                order_id=new_order.id,
-                product_id=item.product_id,
-                quantity=item.quantity,
-                price=item.price
-            )
-            db.session.add(new_order_item)
+            order_item = OrderItem(order_id=order.id, product_id=item.product_id, quantity=item.quantity, price=item.price)
+            db.session.add(order_item)
             db.session.delete(item)
 
         db.session.commit()
-        return jsonify({'message': 'Order created successfully'}), 201
+
+        return jsonify({'message': 'Order created successfully', 'order_id': order.id})
     except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+        logging.error(f"Error during checkout: {e}")
+        return jsonify({'error': 'An error occurred during checkout'}), 500
 
-
-
-
-
-
-# @app.route('/order', methods=['GET'])
-# def get_orders():
-#     orders = Order.query.all()
-#     orders_data = [
-#         {
-#             'id': order.id,
-#             'user_id': order.user_id,
-#             'order_date': order.order_date,
-#             'shipping_address': order.shipping_address,
-#             'payment_method': order.payment_method,
-#             'order_total': order.order_total,
-#             'status': order.status
-#         }
-#         for order in orders
-#     ]
-#     return jsonify(orders_data)  
-@app.route('/order', methods=['GET'])
-def get_orders():
-    # Fetch orders along with associated users and products
-    orders = db.session.query(Order).all()
-    orders_data = []
-
-    for order in orders:
-        # Fetch the order items for the current order
-        order_items = OrderItem.query.filter_by(order_id=order.id).all()
-        
-        # Build order item details including product info
-        items_data = []
-        for item in order_items:
-            product = Product.query.get(item.product_id)
-            if product:
-                product_data = {
-                    'product_id': product.id,
-                    'title': product.title,
-                    'images': product.images,  # List of image URLs
-                    'price': item.price,
-                    'quantity': item.quantity
-                }
-                items_data.append(product_data)
-
-        # Get user info
-        user = User.query.get(order.user_id)
-        user_data = {
-            'username': user.username if user else 'Unknown User'
-        }
-
-        # Build order details
-        order_data = {
-            'id': order.id,
-            'user': user_data,
-            'order_date': order.order_date,
-            'shipping_address': order.shipping_address,
-            'payment_method': order.payment_method,
-            'order_total': order.order_total,
-            'status': order.status,
-            'items': items_data
-        }
-        
-        orders_data.append(order_data)
-
-    return jsonify(orders_data)
 @app.route('/user', methods=['GET'])
 def get_user():
     users = User.query.all()
@@ -804,22 +804,6 @@ def add_review():
     return jsonify({'message': 'Review added successfully'})
 
 
-# # Route to get all reviews for a product
-# @app.route('/reviews/<int:product_id>', methods=['GET'])
-# def get_reviews_id(product_id):
-#     reviews = Review.query.filter_by(product_id=product_id).all()
-#     output = []
-
-#     for review in reviews:
-#         review_data = {
-#             'rating': review.rating,
-#             'comment': review.comment,
-#             'reviewer_name': review.reviewer_name,
-#             'date': review.date
-#         }
-#         output.append(review_data)
-
-#     return jsonify({'reviews': output})
 
 
 @app.route('/reviews/<int:product_id>', methods=['GET'])
@@ -899,11 +883,7 @@ def contact_us():
 @app.route('/admin/contacts', methods=['GET'])
 # @jwt_required()
 def view_contact_submissions():
-    # current_user = get_jwt_identity()
-    # user = User.query.filter_by(username=current_user['username']).first()
-    
-    # if not user.is_admin:
-    #     return jsonify({'message': 'Admin access required'}), 403
+
 
     submissions = ContactUs.query.all()
     output = []
@@ -920,26 +900,7 @@ def view_contact_submissions():
 
     return jsonify({'submissions': output})
 
-# @app.route('/admin/messages', methods=['GET'])
-# def view_messages():
-#     # Add authentication/authorization checks if needed
-#     messages = ContactUs.query.order_by(ContactUs.submitted_at.desc()).limit(5).all()
-#     output = []
 
-#     for message in messages:
-#         message_data = {
-#             'id': message.id,
-#             'name': message.name,
-#             'email': message.email,
-#             'message': message.message,
-#             'submittedAt': message.submitted_at
-#         }
-#         output.append(message_data)
-
-#     return jsonify({'messages': output})
-
-
-# Global variable to keep track of processed message IDs
 processed_message_ids = set()
 
 @app.route('/admin/messages', methods=['GET'])

@@ -14,7 +14,7 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/order", {
+        const response = await fetch("http://127.0.0.1:5000/order", {
           mode: "cors",
         });
         if (!response.ok) {

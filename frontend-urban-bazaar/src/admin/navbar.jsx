@@ -20,11 +20,14 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const processedIds = JSON.parse(localStorage.getItem('processedMessageIds')) || [];
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/admin/messages");
+        const processedIds =
+          JSON.parse(localStorage.getItem("processedMessageIds")) || [];
+        const response = await fetch("http://127.0.0.1:5000/admin/messages");
         if (response.ok) {
           const data = await response.json();
-          const newNotifications = data.messages.filter(message => !processedIds.includes(message.id));
+          const newNotifications = data.messages.filter(
+            (message) => !processedIds.includes(message.id)
+          );
           setNotifications(newNotifications.slice(0, 5));
         } else {
           console.error("Failed to fetch notifications");
@@ -108,15 +111,22 @@ const Navbar = () => {
         if (response.status === 200) {
           alert("Reply sent successfully!");
 
-          localStorage.setItem('processedMessageIds', JSON.stringify([
-            ...JSON.parse(localStorage.getItem('processedMessageIds') || '[]'),
-            replyTo.id
-          ]));
+          localStorage.setItem(
+            "processedMessageIds",
+            JSON.stringify([
+              ...JSON.parse(
+                localStorage.getItem("processedMessageIds") || "[]"
+              ),
+              replyTo.id,
+            ])
+          );
 
           setNotifications((prevNotifications) =>
-            prevNotifications.filter((notification) => notification.id !== replyTo.id)
+            prevNotifications.filter(
+              (notification) => notification.id !== replyTo.id
+            )
           );
-          
+
           setReplyTo(null);
           setReplyMessage("");
         } else {
@@ -140,7 +150,11 @@ const Navbar = () => {
       <div className="flex justify-between items-center w-full px-5 pt-2 bg-white max-w-[1440px]">
         <div className="flex gap-5 items-center">
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="UrbanBazaar Logo" className="w-32 h-auto p-2" />
+            <img
+              src={logo}
+              alt="UrbanBazaar Logo"
+              className="w-32 h-auto p-2"
+            />
           </Link>
         </div>
         <div className="flex items-center gap-5 flex-grow justify-center">
@@ -153,7 +167,10 @@ const Navbar = () => {
               className="px-2 py-1 border border-gray-300 rounded-md"
             />
             <button type="submit" className="ml-2">
-              <FontAwesomeIcon icon={faSearch} className="text-gray-700 text-lg" />
+              <FontAwesomeIcon
+                icon={faSearch}
+                className="text-gray-700 text-lg"
+              />
             </button>
           </form>
         </div>
@@ -173,12 +190,18 @@ const Navbar = () => {
           </div>
           <div className="flex items-center space-x-6">
             {authToken ? (
-              <Link to="/dashboard/dashboardAdmin" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
+              <Link
+                to="/dashboard/dashboardAdmin"
+                className="text-gray-700 hover:text-blue-700 flex items-center text-xs"
+              >
                 <FontAwesomeIcon icon={faUser} className="text-lg" />
                 <span className="ml-1">My Account</span>
               </Link>
             ) : (
-              <Link to="/login" className="text-gray-700 hover:text-blue-700 flex items-center text-xs">
+              <Link
+                to="/login"
+                className="text-gray-700 hover:text-blue-700 flex items-center text-xs"
+              >
                 <FontAwesomeIcon icon={faUser} className="text-lg" />
                 <span className="ml-1 text-md">Login</span>
               </Link>
@@ -196,7 +219,9 @@ const Navbar = () => {
             >
               &times;
             </button>
-            <h2 className="text-lg text-gray-500 font-medium mb-4">Notifications</h2>
+            <h2 className="text-lg text-gray-500 font-medium mb-4">
+              Notifications
+            </h2>
             {notifications.length > 0 ? (
               notifications.map((notification) => {
                 const isExpanded = expandedNotificationId === notification.id;
@@ -209,7 +234,9 @@ const Navbar = () => {
                         {notification.name} ({notification.email})
                       </p>
                       <p
-                        onClick={() => handleReplyClick(notification.id, notification.email)}
+                        onClick={() =>
+                          handleReplyClick(notification.id, notification.email)
+                        }
                         className="cursor-pointer font-light text-gray-700"
                       >
                         {isExpanded

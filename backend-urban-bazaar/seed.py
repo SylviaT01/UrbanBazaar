@@ -1,17 +1,18 @@
+
 import json
-from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs
+from models import db, User, Product, ShoppingCart, Order, OrderItem, ShippingDetails, Wishlist, Review, ContactUs, PaymentMethod
 from app import app
 from faker import Faker
-fake = Faker()
 from flask_bcrypt import Bcrypt
 
+fake = Faker()
 bcrypt = Bcrypt(app)  # Initialize Bcrypt with your Flask app
-
 
 def load_products():
     with open('data/data.json') as file:
         data = json.load(file)
     return data['products']  # Access the 'products' array from the JSON
+
 def seed_users():
     db.session.query(User).delete()  # Clear existing users
 
@@ -38,11 +39,9 @@ def seed_users():
 
     db.session.commit()
 
-
-
 def seed_products():
     db.session.query(Product).delete() 
-    db.session.query(Review).delete()# Clear existing products
+    db.session.query(Review).delete()  # Clear existing products
     products = load_products()
     for product in products:
         db_product = Product(
@@ -74,7 +73,6 @@ def seed_products():
         db.session.flush()  # Flush to get the product ID for reviews
 
         # Add reviews for this product if available
-    
         if 'reviews' in product:
             for review in product['reviews']:
                 db_review = Review(
@@ -87,19 +85,32 @@ def seed_products():
                 db.session.add(db_review)
     db.session.commit()
 
-
 def seed_shipping_details():
     db.session.query(ShippingDetails).delete()  # Clear existing ShippingDetails entries
+    user_ids = [user.id for user in User.query.all()]
     for _ in range(20):
         shipping_detail = ShippingDetails(
-            order_id=fake.random_int(min=1, max=20),  # Adjust as per your Order seeding logic
+            user_id=fake.random_element(user_ids),
+            name=fake.name(),
             street_address=fake.address(),
+            apartment_number=fake.random_int(min=1, max=200),
             city=fake.city(),
             zip_code=fake.zipcode(),
-            name=fake.name(),
-            apartment_number=fake.random_int(min=1, max=200),
         )
         db.session.add(shipping_detail)
+    db.session.commit()
+
+def seed_payment_methods():
+    db.session.query(PaymentMethod).delete()  # Clear existing PaymentMethod entries
+    user_ids = [user.id for user in User.query.all()]
+    for _ in range(20):
+        payment_method = PaymentMethod(
+            user_id=fake.random_element(user_ids),
+            email=fake.email()
+       
+  
+        )
+        db.session.add(payment_method)
     db.session.commit()
 
 def seed_contacts():
@@ -114,14 +125,28 @@ def seed_contacts():
     db.session.commit()
 
 def seed_other_tables():
-    db.session.query(ShoppingCart).delete()  # Clear existing ShoppingCart entries
-    db.session.query(Order).delete()  # Clear existing Orders
-    db.session.query(OrderItem).delete()  # Clear existing OrderItems
-    db.session.query(Wishlist).delete()  # Clear existing Wishlists
+    # Clear existing entries
+    db.session.query(ShoppingCart).delete()  
+    db.session.query(Order).delete()  
+    db.session.query(OrderItem).delete()  
+    db.session.query(Wishlist).delete()  
     
+    # Fetch existing IDs
     user_ids = [user.id for user in User.query.all()]
     product_ids = [product.id for product in Product.query.all()]
+    shipping_ids = [shipping.id for shipping in ShippingDetails.query.all()]
+    payment_ids = [payment.id for payment in PaymentMethod.query.all()]
 
+    print(f"User IDs: {user_ids}")
+    print(f"Product IDs: {product_ids}")
+    print(f"Shipping IDs: {shipping_ids}")
+    print(f"Payment IDs: {payment_ids}")
+
+    if not user_ids or not product_ids or not shipping_ids or not payment_ids:
+        print("Not enough data to seed. Ensure users, products, shipping details, and payment methods are seeded first.")
+        return
+
+    # Seed ShoppingCart
     for _ in range(20):
         user_id = fake.random_element(user_ids)
         product_id = fake.random_element(product_ids)
@@ -130,17 +155,24 @@ def seed_other_tables():
             user_id=user_id,
             product_id=product_id,
             quantity=fake.random_int(min=1, max=5),
-            price=fake.pyfloat(left_digits=2, right_digits=2, positive=True)
+            price=fake.pyfloat(left_digits=2, right_digits=2, positive=True),
+            total_price=fake.pyfloat(left_digits=2, right_digits=2, positive=True),  # Make sure total_price is added
+            status="unprocessed"
         )
         db.session.add(cart)
 
+    # Seed Orders and OrderItems
     for _ in range(20):
         user_id = fake.random_element(user_ids)
+        shipping_id = fake.random_element(shipping_ids)
+        payment_id = fake.random_element(payment_ids)
+        order_total = fake.pyfloat(left_digits=3, right_digits=2, positive=True)
+
         order = Order(
             user_id=user_id,
-            shipping_address=fake.address(),
-            payment_method=fake.credit_card_provider(),
-            order_total=fake.pyfloat(left_digits=3, right_digits=2, positive=True)
+            shipping_id=shipping_id,
+            payment_id=payment_id,
+            order_total=order_total
         )
         db.session.add(order)
         db.session.flush()  # Ensure the order is committed so we get an ID
@@ -153,12 +185,14 @@ def seed_other_tables():
                 price=fake.pyfloat(left_digits=2, right_digits=2, positive=True)
             ))
 
+    # Seed Wishlist
     for _ in range(20):
         db.session.add(Wishlist(
             user_id=fake.random_element(user_ids),
             product_id=fake.random_element(product_ids),
         ))
 
+    # Commit all changes
     db.session.commit()
 
 if __name__ == '__main__':
@@ -167,6 +201,7 @@ if __name__ == '__main__':
         seed_users()
         seed_products()
         seed_shipping_details()
+        seed_payment_methods()  # Ensure PaymentMethods are seeded
         seed_contacts()
         seed_other_tables()
         print("Database seeded successfully.")

@@ -21,7 +21,7 @@ const Home = () => {
     AOS.refresh();
 
     // Fetch all products from API
-    fetch("https://backend-urbanbazaar.onrender.com/products")
+    fetch("http://127.0.0.1:5000/products")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data.products)) {
@@ -154,7 +154,9 @@ const Home = () => {
           </Link>
         </div>
         <div className="4-items">
-          <h1 className="mb-2 flex justify-center text-xl sm:text-2xl font-semibold">Weekly Offers</h1>
+          <h1 className="mb-2 flex justify-center text-xl sm:text-2xl font-semibold">
+            Weekly Offers
+          </h1>
           <WeeklyOffersFour />
           <div className="flex justify-center py-4">
             <Link
@@ -165,7 +167,9 @@ const Home = () => {
             </Link>
           </div>
           <div className="4-items">
-            <h1 className="mb-2 flex justify-center text-xl sm:text-2xl font-semibold">Top Picks</h1>
+            <h1 className="mb-2 flex justify-center text-xl sm:text-2xl font-semibold">
+              Top Picks
+            </h1>
             <TopPicksFour />
           </div>
           <div className="flex justify-center py-4">
@@ -179,7 +183,6 @@ const Home = () => {
         </div>
       </div>
     </section>
-
   );
 };
 

@@ -10,7 +10,7 @@ function Payments() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/admin/orders", {
+        const response = await fetch("http://127.0.0.1:5000/admin/orders", {
           mode: "cors",
         });
         if (!response.ok) {
@@ -34,10 +34,16 @@ function Payments() {
   // Calculate the current payments to display
   const indexOfLastPayment = currentPage * paymentsPerPage;
   const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
-  const currentPayments = payments.slice(indexOfFirstPayment, indexOfLastPayment);
+  const currentPayments = payments.slice(
+    indexOfFirstPayment,
+    indexOfLastPayment
+  );
 
   // Calculate total payment
-  const totalPayment = currentPayments.reduce((total, payment) => total + payment.order_total, 0);
+  const totalPayment = currentPayments.reduce(
+    (total, payment) => total + payment.order_total,
+    0
+  );
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -70,34 +76,79 @@ function Payments() {
               <table className="min-w-full divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">No.</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping Address</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      No.
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Customer
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Order Date
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Shipping Address
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Payment Method
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentPayments.map((payment, index) => (
                     <tr key={payment.id}>
-                      <td className="px-4 py-2 text-sm text-gray-500">{index + indexOfFirstPayment + 1}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.user_email}</td>
                       <td className="px-4 py-2 text-sm text-gray-500">
-                        {payment.created_at ? new Date(payment.created_at).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) : 'Invalid Date'}
+                        {index + indexOfFirstPayment + 1}
                       </td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.shipping_address}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.payment_method}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">Kshs. {payment.order_total.toFixed(2)}</td>
-                      <td className="px-4 py-2 text-sm text-gray-500">{payment.status}</td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {payment.user_email}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {payment.created_at
+                          ? new Date(payment.created_at).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              }
+                            )
+                          : "Invalid Date"}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {payment.shipping_address}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {payment.payment_method}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        Kshs. {payment.order_total.toFixed(2)}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {payment.status}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colSpan="5" className="px-4 py-2 text-right text-sm font-bold text-gray-700">Total:</td>
-                    <td colSpan="2" className="px-4 py-2 text-sm font-bold text-gray-700 bg-gray-100">Kshs. {totalPayment.toFixed(2)}</td>
+                    <td
+                      colSpan="5"
+                      className="px-4 py-2 text-right text-sm font-bold text-gray-700"
+                    >
+                      Total:
+                    </td>
+                    <td
+                      colSpan="2"
+                      className="px-4 py-2 text-sm font-bold text-gray-700 bg-gray-100"
+                    >
+                      Kshs. {totalPayment.toFixed(2)}
+                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -108,27 +159,46 @@ function Payments() {
                   <li>
                     <button
                       onClick={handlePrevious}
-                      className={`px-4 py-2 border ${currentPage === 1 ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
+                      className={`px-4 py-2 border ${
+                        currentPage === 1
+                          ? "bg-gray-200 text-gray-400"
+                          : "bg-white text-gray-800"
+                      }`}
                       disabled={currentPage === 1}
                     >
                       Previous
                     </button>
                   </li>
-                  {Array.from({ length: Math.ceil(payments.length / paymentsPerPage) }, (_, index) => (
-                    <li key={index}>
-                      <button
-                        onClick={() => paginate(index + 1)}
-                        className={`px-4 py-2 border ${currentPage === index + 1 ? 'bg-blue-400 text-white' : 'bg-white text-gray-800'}`}
-                      >
-                        {index + 1}
-                      </button>
-                    </li>
-                  ))}
+                  {Array.from(
+                    { length: Math.ceil(payments.length / paymentsPerPage) },
+                    (_, index) => (
+                      <li key={index}>
+                        <button
+                          onClick={() => paginate(index + 1)}
+                          className={`px-4 py-2 border ${
+                            currentPage === index + 1
+                              ? "bg-blue-400 text-white"
+                              : "bg-white text-gray-800"
+                          }`}
+                        >
+                          {index + 1}
+                        </button>
+                      </li>
+                    )
+                  )}
                   <li>
                     <button
                       onClick={handleNext}
-                      className={`px-4 py-2 border ${currentPage === Math.ceil(payments.length / paymentsPerPage) ? 'bg-gray-200 text-gray-400' : 'bg-white text-gray-800'}`}
-                      disabled={currentPage === Math.ceil(payments.length / paymentsPerPage)}
+                      className={`px-4 py-2 border ${
+                        currentPage ===
+                        Math.ceil(payments.length / paymentsPerPage)
+                          ? "bg-gray-200 text-gray-400"
+                          : "bg-white text-gray-800"
+                      }`}
+                      disabled={
+                        currentPage ===
+                        Math.ceil(payments.length / paymentsPerPage)
+                      }
                     >
                       Next
                     </button>
@@ -140,7 +210,6 @@ function Payments() {
         </div>
       </div>
     </div>
-
   );
 }
 

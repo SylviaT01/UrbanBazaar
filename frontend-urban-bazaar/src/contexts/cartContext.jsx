@@ -7,7 +7,7 @@ export const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const { currentUser, authToken } = useContext(UserContext); 
+  const { currentUser, authToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
@@ -22,7 +22,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
       try {
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/cart", {
+        const response = await fetch("http://127.0.0.1:5000/cart", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -50,7 +50,7 @@ export const CartProvider = ({ children }) => {
         return;
       }
       try {
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/wishlist", {
+        const response = await fetch("http://127.0.0.1:5000/wishlist", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -94,7 +94,7 @@ export const CartProvider = ({ children }) => {
     }
 
     if (isInWishlist(id)) {
-      await removeFromWishlist(id); 
+      await removeFromWishlist(id);
     }
 
     if (!isInCart(id)) {
@@ -102,7 +102,7 @@ export const CartProvider = ({ children }) => {
       setNotification(`✅ Product successfully added to your cart!`);
 
       try {
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/cart", {
+        const response = await fetch("http://127.0.0.1:5000/cart", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -144,7 +144,7 @@ export const CartProvider = ({ children }) => {
       setNotification(`✅ Product successfully added to your wishlist!`);
 
       try {
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/wishlist", {
+        const response = await fetch("http://127.0.0.1:5000/wishlist", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -172,7 +172,7 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
 
     try {
-      const response = await fetch(`https://backend-urbanbazaar.onrender.com/cart/${productId}`, {
+      const response = await fetch(`http://127.0.0.1:5000/cart/${productId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -200,7 +200,7 @@ export const CartProvider = ({ children }) => {
 
     try {
       const response = await fetch(
-        `https://backend-urbanbazaar.onrender.com/wishlist/${productId}`,
+        `http://127.0.0.1:5000/wishlist/${productId}`,
         {
           method: "DELETE",
           headers: {

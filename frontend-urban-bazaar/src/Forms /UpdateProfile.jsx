@@ -16,7 +16,7 @@ const UpdateProfile = () => {
     const fetchUserData = async () => {
       const token = authToken || localStorage.getItem("access_token");
       try {
-        const response = await fetch("https://backend-urbanbazaar.onrender.com/profile", {
+        const response = await fetch("http://127.0.0.1:5000/profile", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -62,7 +62,7 @@ const UpdateProfile = () => {
     console.log("Request body:", updatedProfile);
 
     try {
-      const response = await fetch("https://backend-urbanbazaar.onrender.com/profile", {
+      const response = await fetch("http://127.0.0.1:5000/profile", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const TopPicksFour = () => {
   const [topProducts, setTopProducts] = useState([]);
@@ -7,16 +7,16 @@ const TopPicksFour = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('https://backend-urbanbazaar.onrender.com/products')
-      .then(response => response.json())
-      .then(data => {
-        console.log('API response:', data);
+    fetch("http://127.0.0.1:5000/products")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("API response:", data);
         const products = data.products;
 
         if (Array.isArray(products)) {
           // Filter products by rating and limit to 4 items
           const filteredProducts = products
-            .filter(product => product.rating > 4.8)
+            .filter((product) => product.rating > 4.8)
             .slice(-4); // Limit to 4 items
 
           setTopProducts(filteredProducts);
@@ -25,9 +25,9 @@ const TopPicksFour = () => {
         }
         setLoading(false);
       })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-        setError('Error fetching products: ' + error.message);
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+        setError("Error fetching products: " + error.message);
         setLoading(false);
       });
   }, []);
@@ -42,7 +42,7 @@ const TopPicksFour = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0 bg-blue-50 z-100 px-4 py-4 mb-0">
-      {topProducts.map(product => (
+      {topProducts.map((product) => (
         <div
           key={product.id}
           className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white aos-init"
@@ -60,14 +60,24 @@ const TopPicksFour = () => {
           </div>
           <h3 className="font-medium text-sm mb-1">{product.title}</h3>
           <p className="text-gray-700 mb-2">
-            Ksh. {Math.round((product.price * (100 - product.discountPercentage)) / 100)}
+            Ksh.{" "}
+            {Math.round(
+              (product.price * (100 - product.discountPercentage)) / 100
+            )}
           </p>
-          <p className="text-gray-700 mb-2 line-through">Ksh. {product.price}</p>
+          <p className="text-gray-700 mb-2 line-through">
+            Ksh. {product.price}
+          </p>
           <div className="flex items-center space-x-6">
             {/* <button className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">
               Add to cart
             </button> */}
-            <Link to={`/products/${product.id}`} className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md">View Product</Link>
+            <Link
+              to={`/products/${product.id}`}
+              className="bg-slate-200 text-gray-600 text-sm px-2 py-2 rounded-md"
+            >
+              View Product
+            </Link>
           </div>
         </div>
       ))}
@@ -76,4 +86,3 @@ const TopPicksFour = () => {
 };
 
 export default TopPicksFour;
-

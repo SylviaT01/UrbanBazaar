@@ -20,7 +20,7 @@ const ProductDetailPage = () => {
 
   useEffect(() => {
     // Fetch product details
-    fetch(`https://backend-urbanbazaar.onrender.com/products/${id}`)
+    fetch(`http://127.0.0.1:5000/products/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setProduct(data.product);
@@ -32,7 +32,7 @@ const ProductDetailPage = () => {
 
         // Fetch related products
         fetch(
-          `https://backend-urbanbazaar.onrender.com/products/category/${data.product.category}`
+          `http://127.0.0.1:5000/products/category/${data.product.category}`
         )
           .then((response) => response.json())
           .then((relatedData) => {
@@ -46,7 +46,7 @@ const ProductDetailPage = () => {
       );
 
     // Fetch reviews
-    fetch(`https://backend-urbanbazaar.onrender.com/reviews/${id}`)
+    fetch(`http://127.0.0.1:5000/reviews/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setReviews(data.reviews);
@@ -88,7 +88,9 @@ const ProductDetailPage = () => {
       {showLoginPrompt && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded-lg w-full max-w-sm p-6">
-            <h2 className="text-xl font-semibold mb-4 text-center">Login Required</h2>
+            <h2 className="text-xl font-semibold mb-4 text-center">
+              Login Required
+            </h2>
             <p className="mb-4 text-center">
               You need to log in to add items to the cart or wishlist. Please
               log in to continue.
@@ -138,7 +140,9 @@ const ProductDetailPage = () => {
 
         {/* Product details */}
         <div className="flex-1">
-          <h1 className="text-2xl lg:text-3xl font-medium mb-2">{product.title}</h1>
+          <h1 className="text-2xl lg:text-3xl font-medium mb-2">
+            {product.title}
+          </h1>
           <h2 className="mb-2 capitalize text-lg">
             <span className="font-medium text-gray-900">Category:</span>
             <span className="font-normal text-gray-700">
@@ -269,11 +273,19 @@ const ProductDetailPage = () => {
           reviews.map((review, index) => (
             <div key={index} className="border-t pt-4 last:border-0">
               <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4">
-                <span className="font-medium text-gray-900">{review.reviewer_name}</span>
-                <span className="ml-2 text-yellow-500 text-sm sm:text-base">{"★".repeat(review.rating)}</span>
-                <span className="ml-2 text-gray-500 text-sm">{review.date}</span>
+                <span className="font-medium text-gray-900">
+                  {review.reviewer_name}
+                </span>
+                <span className="ml-2 text-yellow-500 text-sm sm:text-base">
+                  {"★".repeat(review.rating)}
+                </span>
+                <span className="ml-2 text-gray-500 text-sm">
+                  {review.date}
+                </span>
               </div>
-              <p className="text-gray-700 text-sm sm:text-base">{review.comment}</p>
+              <p className="text-gray-700 text-sm sm:text-base">
+                {review.comment}
+              </p>
             </div>
           ))
         ) : (
