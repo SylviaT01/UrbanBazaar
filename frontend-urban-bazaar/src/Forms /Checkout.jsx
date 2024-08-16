@@ -15,6 +15,14 @@ function Checkout() {
   const [authToken, setAuthToken] = useState("");
   const { authToken: contextToken } = useContext(UserContext);
   const navigate = useNavigate();
+  const [orderSummary, setOrderSummary] = useState({
+    numberOfItems: 0,
+    totalPrice: 0,
+    shippingAndHandling: 50, // Fixed price
+    beforeTax: 0,
+    taxCollected: 0,
+    orderTotal: 0,
+  });
 
   useEffect(() => {
     const fetchCartData = async () => {
@@ -36,12 +44,31 @@ function Checkout() {
         setOrderTotal(
           result.cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
         );
+        const totalPrice = result.cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const shippingAndHandling = 50;
+        const beforeTax = totalPrice + shippingAndHandling;
+        const taxCollected = beforeTax * 0.16; // 16% tax
+        const orderTotal = beforeTax + taxCollected;
+
+        setOrderSummary({
+          numberOfItems: result.cart.length,
+          totalPrice,
+          shippingAndHandling,
+          orderTotal,
+          beforeTax,
+        })
+    
+
       } catch (error) {
         console.error("Error fetching cart data:", error);
       }
     };
     fetchCartData();
   }, [authToken, contextToken]);
+  console.log(orderSummary)
 
   const handleShippingFormSubmit = async (e) => {
     e.preventDefault();
@@ -264,32 +291,54 @@ function Checkout() {
         {/* Order Summary and PayPal Payment */}
         {currentStep === 3 && (
           <div>
-            <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">
+            {/* <h2 className="text-lg font-semibold mb-4 flex justify-center text-center">
               Order Summary
             </h2>
             <div className="mb-4 flex justify-center">
-              <p>Total: ${orderTotal.toFixed(2)}</p>
-            </div>
-            <div className="flex justify-between">
-              <button
-                type="button"
-                className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
-                onClick={() => setCurrentStep(2)}
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                className="bg-green-500 text-white py-2 px-4 rounded"
-                onClick={handlePaymentWithPayPal}
-              >
-                Pay with PayPal
-              </button>
-            </div>
-          </div>
-        )}
+              <p>Total: Ksh. {orderTotal.toFixed(2)}</p>
+            </div> */}
+
+<div className="flex justify-between mb-2">
+                <span>Items ({orderSummary.numberOfItems})</span>
+                <span>Ksh. {orderSummary.totalPrice.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Shipping & Handling</span>
+                <span>Ksh. {orderSummary.shippingAndHandling.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Before Tax</span>
+                <span>Ksh. {orderSummary.beforeTax}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Tax Collected</span>
+                <span>Ksh. {orderSummary.taxCollected}</span>
+              </div>
+              <div className="flex justify-between font-semibold">
+                <span>Order Total</span>
+                <span>Ksh.{orderSummary.orderTotal.toFixed(2)}</span>
+                </div>
+      <div className="flex justify-between">
+        <button
+          type="button"
+          className="bg-gray-300 text-gray-700 py-2 px-4 rounded"
+          onClick={() => setCurrentStep(2)}
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          className="bg-green-500 text-white py-2 px-4 rounded"
+          onClick={handlePaymentWithPayPal}
+        >
+          Pay with PayPal
+        </button>
       </div>
     </div>
+  )
+}
+      </div >
+    </div >
   );
 }
 
